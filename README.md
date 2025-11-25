@@ -18,8 +18,9 @@ This app allows her to catalog and manage her growing collection of music sheets
 - React Context API
 - Node.js
 - Express
+- Drizzle ORM
 - PostgreSQL
-- Prisma
+
 
 ## Setup Steps
 Coming soon...
