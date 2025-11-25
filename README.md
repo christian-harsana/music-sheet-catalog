@@ -1,4 +1,4 @@
-# Music Sheet Catalog
+# Music Sheet Catalog (Front End)
 An app for organising music sheet collections, where users can search for pieces and access information such as the books they belong to, their level of difficulty, and their genre.
 
 ## Problem
@@ -16,11 +16,7 @@ This app allows her to catalog and manage her growing collection of music sheets
 - Vite
 - React Router
 - React Context API
-- Node.js
-- Express
-- Drizzle ORM
-- PostgreSQL
-
+- TypeScript
 
 ## Setup Steps
 Coming soon...
