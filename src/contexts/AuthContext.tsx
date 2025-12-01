@@ -6,7 +6,7 @@ import type { AuthUserType } from "../types/common.type";
 type AuthContextType = {
   user: AuthUserType | null,
   isAuthenticated: boolean,
-  login: () => void,
+  login: (user: AuthUserType) => void,
   logout: () => void
 }
 
@@ -24,20 +24,15 @@ export function AuthProvider({children} : {children: ReactNode}) {
     const [isAuthenticated, setIsAuthtenticated] = useState<boolean>(false);
     let navigate = useNavigate();
 
-    const login = () => {
-
-        // TODO: get the following value from real authentication
-        const user: AuthUserType = {
-            id: "1", 
-            userName: "admin"
-        }
-
-        setUser(user);
-        setIsAuthtenticated(true);
+    const login = (user: AuthUserType) => {
 
         // Store user to local storage
         localStorage.setItem(`music_sheet_catalog_user`, JSON.stringify(user));
         localStorage.setItem(`music_sheet_catalog_isAuthenticated`, "true");
+
+        // Update State
+        setUser(user);
+        setIsAuthtenticated(true);
 
         // Redirect to home
         navigate("/");

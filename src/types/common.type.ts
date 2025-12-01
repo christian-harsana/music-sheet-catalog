@@ -1,4 +1,6 @@
 export type AuthUserType = {
     id: string,
-    userName: string
+    email: string,
+    name: string,
+    token: string
 }

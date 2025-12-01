@@ -79,9 +79,10 @@ function SignUp() {
     function handleInputBlur(e: FocusEvent<HTMLInputElement>): void {
 
         const name = e.target.name as keyof signUpFormDataType;
+        const value = e.target.value;
 
         setSignUpFormTouched((prev) => ({...prev, [name]: true}));
-
+        setSignUpFormError((prev) => ({...prev, [name]: validateField(name, value )}));
     }
 
 
@@ -118,23 +119,31 @@ function SignUp() {
             setSignUpFormError({});
             setSignUpFormTouched({});
 
-            // Call the signup endpoint
-            const response = await fetch(SIGNUPURL, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(signUpFormData)
-            });
+            try {
+                // Call the signup endpoint
+                const response = await fetch(SIGNUPURL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(signUpFormData)
+                });
 
-            // On success redirect to login
-            const data = await response.json();
+                // On success redirect to login
+                const data = await response.json();
 
-            // Trigger feedback
-            alert(data.message); // TODO: Upgrade the feedback to Toast or something similar
+                // Trigger feedback
+                alert(data.message); // TODO: Upgrade the feedback to Toast or something similar
 
-            if (data.status.toLowerCase() === "success") {
-                
-                // Redirect to login
-                navigate("/login");
+                if (data.status.toLowerCase() === "success") {
+                    
+                    // Redirect to login
+                    navigate("/login");
+                }
+            }
+            catch (error: unknown) {
+
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+                console.log(errorMessage); // TODO: Implement error handling
             }
         }
     }
@@ -151,11 +160,13 @@ function SignUp() {
                     type="email" 
                     name="email" 
                     value={signUpFormData.email} 
-                    required={true} 
                     onChange={(e) => handleInputChange(e)} 
-                    onBlur={(e) => handleInputBlur(e)} />
+                    onBlur={(e) => handleInputBlur(e)} 
+                    required={true} 
+                    {...(signUpFormError.email && { "aria-invalid" : "true", "aria-describedby" : "emailError" })}
+                />
 
-                {signUpFormError.email && <div id="error-email" className="field-error">{signUpFormError.email}</div>}
+                {signUpFormError.email && <div id="emailError" className="field-error">{signUpFormError.email}</div>}
             </div>
             
             <div className="l-v-spacing-lv-3">
@@ -166,9 +177,11 @@ function SignUp() {
                     name="name"
                     value={signUpFormData.name} 
                     onChange={(e) => handleInputChange(e)}
-                    onBlur={(e) => handleInputBlur(e)} />
+                    onBlur={(e) => handleInputBlur(e)} 
+                    {...(signUpFormError.name && { "aria-invalid" : "true", "aria-describedby" : "nameError" })}
+                />
 
-                {signUpFormError.name && <div id="error-name" className="field-error">{signUpFormError.name}</div>}
+                {signUpFormError.name && <div id="nameError" className="field-error">{signUpFormError.name}</div>}
             </div>
             
             <div className="l-v-spacing-lv-3">
@@ -178,11 +191,14 @@ function SignUp() {
                     type="password" 
                     name="password" 
                     value={signUpFormData.password} 
-                    required={true} 
                     onChange={(e) => handleInputChange(e)}
-                    onBlur={(e) => handleInputBlur(e)} />
+                    onBlur={(e) => handleInputBlur(e)} 
+                    required={true}
+                    minLength={8}
+                    {...(signUpFormError.password && { "aria-invalid" : "true", "aria-describedby" : "passwordError" })}
+                />
 
-                {signUpFormError.password && <div id="error-password" className="field-error">{signUpFormError.password}</div>}
+                {signUpFormError.password && <div id="passwordError" className="field-error">{signUpFormError.password}</div>}
             </div>
 
             <div className="l-v-spacing-lv-3">
