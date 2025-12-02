@@ -4,6 +4,7 @@ import { AuthContext, AuthProvider } from './contexts/AuthContext.tsx'
 import { UIProvider } from './contexts/UIContext.tsx'
 import Home from './pages/Home.tsx'
 import Settings from './pages/Settings.tsx'
+import Profile from './pages/Profile.tsx'
 import Login from './pages/Login.tsx'
 import SignUp from './pages/SignUp.tsx'
 import Error from './pages/Error.tsx'
@@ -18,9 +19,7 @@ type ProtectedRouteProps = {
 const ProtectedRoute = ({children}: ProtectedRouteProps) => {
 
   const {user} = useContext(AuthContext);
-
-  console.log(user);
-
+  
   if (!user) {
     return <Navigate to="/login" replace />;
   }
@@ -33,27 +32,28 @@ const ProtectedRoute = ({children}: ProtectedRouteProps) => {
 
 const Navigation = () => {
 
-  const {isAuthenticated, logout} = useContext(AuthContext);
+  const {isAuthenticated} = useContext(AuthContext);
 
-  if (isAuthenticated) {
-    return (
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/settings">Settings</Link>
-        <button type="button" onClick={logout}>Logout</button>
-      </nav>
-    )
-  }
-  else
-  {
-    return (
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/signup">Sign Up</Link>
-      </nav>
-    )
-  }
+  return (
+    <nav>
+      <Link to="/">Home</Link>
+      { 
+        isAuthenticated ? 
+        (
+          <>
+            <Link to="/settings">Settings</Link>
+            <Link to="/profile">Profile</Link>
+          </>
+        ) :
+        (
+          <>
+            <Link to="/signup">Sign Up</Link>
+            <Link to="/login">Login</Link>
+          </>
+        )
+      }
+    </nav>
+  )
 }
 
 
@@ -68,14 +68,8 @@ function App() {
           
           <Routes>
             <Route index element={<Home />} />
-            <Route 
-              path="settings" 
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="*" element={<Error />} />

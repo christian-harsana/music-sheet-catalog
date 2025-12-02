@@ -51,7 +51,7 @@ export function AuthProvider({children} : {children: ReactNode}) {
     }
 
     useEffect(() => {
-        
+
         // Check local storage
         const cachedUser = localStorage.getItem(`music_sheet_catalog_user`);
 
@@ -60,7 +60,7 @@ export function AuthProvider({children} : {children: ReactNode}) {
             setUser(JSON.parse(cachedUser));
             setIsAuthtenticated(true);
         }
-        
+
         // TODO: 
         // - implement appropriate persistent user mechanism using token
         // - since useEffect is run after render, take care of the isAuthenticated state flicker

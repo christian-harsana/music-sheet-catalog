@@ -70,6 +70,13 @@ button:focus-visible {
   }
 }
 
+/* Navigation */
+
+nav a {
+  margin-inline: 1rem;
+}
+
+
 /* Layout */
 
 .l-v-spacing-lv-3 {
