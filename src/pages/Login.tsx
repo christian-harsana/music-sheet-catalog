@@ -1,6 +1,6 @@
 import { useContext, useState, type ChangeEvent, type FocusEvent } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import type { AuthUserType } from "../types/common.type";
+import type { AuthUser } from "../types/common.type";
 
 type loginFormDataType = {
     email: string;
@@ -129,15 +129,14 @@ function Login() {
                 }
 
                 // On Success, store token to Context and Local Storage
-                const user: AuthUserType = {
+                const user: AuthUser = {
                     id: responseData.data.userId,
                     email: responseData.data.email,
-                    name: responseData.data.name,
-                    token: responseData.data.token
+                    name: responseData.data.name
                 }
 
                 // Store user to Context and local Storage
-                login(user);
+                login(user, responseData.data.token);
             }
             catch (error: unknown) {
 

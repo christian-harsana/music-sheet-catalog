@@ -1,6 +1,9 @@
-export type AuthUserType = {
+export type AuthUser = {
     id: string,
     email: string,
-    name: string,
+    name: string
+}
+
+export type AuthUserWithToken = AuthUser & {
     token: string
 }
