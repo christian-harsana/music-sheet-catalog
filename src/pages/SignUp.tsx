@@ -1,5 +1,7 @@
-import { useState, type FocusEvent } from "react";
+import { useContext, useState, type FocusEvent } from "react";
 import { useNavigate } from "react-router";
+import { UIContext } from "../contexts/UIContext";
+import IconSpinner from "../components/IconSpinner";
 
 type signUpFormDataType = {
     email: string;
@@ -25,7 +27,10 @@ function SignUp() {
     const [signUpFormData, setSignUpFormData] = useState<signUpFormDataType>({email: "", name: "", password: ""});
     const [signUpFormError, setSignUpFormError] = useState<signUpFormErrorType>({});
     const [signUpFormTouched, setSignUpFormTouched] = useState<signUpFormTouched>({});
+    const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
+    const {addToast} = useContext(UIContext);
     const navigate = useNavigate();
+    
 
     function validateField(name: string, value: string): string {
 
@@ -90,6 +95,8 @@ function SignUp() {
 
         e.preventDefault();
 
+        setIsFormProcessing(true);
+
         // Validate the form
         const formSubmissionError: signUpFormErrorType = validateForm(signUpFormData);
 
@@ -112,6 +119,8 @@ function SignUp() {
                 name: true,
                 password: true
             });
+
+            setIsFormProcessing(false);
         }
         else 
         {
@@ -127,33 +136,34 @@ function SignUp() {
                     body: JSON.stringify(signUpFormData)
                 });
 
-                // On success redirect to login
                 const data = await response.json();
 
-                // Trigger feedback
-                alert(data.message); // TODO: Upgrade the feedback to Toast or something similar
-
                 if (data.status.toLowerCase() === "success") {
-                    
+
+                    addToast(data.message);
+
                     // Redirect to login
                     navigate("/login");
+                }
+                else {
+                    addToast(data.message, "error");
+                    setIsFormProcessing(false);
                 }
             }
             catch (error: unknown) {
 
                 const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-
-                console.log(errorMessage); // TODO: Implement error handling
+                addToast(errorMessage, "error");
+                setIsFormProcessing(false);
             }
         }
     }
-
 
     return (
         <form onSubmit={(e) => handleSignUpFormSubmit(e, signUpFormData)} className="u-text-align-left">
             <h1>Sign Up</h1>
 
-            <div className="l-v-spacing-lv-3">
+            <div className="mb-6">
                 <label htmlFor="email">Email *</label>
                 <input 
                     id="email" 
@@ -169,7 +179,7 @@ function SignUp() {
                 {signUpFormError.email && <div id="emailError" className="field-error">{signUpFormError.email}</div>}
             </div>
             
-            <div className="l-v-spacing-lv-3">
+            <div className="mb-6">
                 <label htmlFor="name">Name</label>
                 <input 
                     id="name" 
@@ -184,7 +194,7 @@ function SignUp() {
                 {signUpFormError.name && <div id="nameError" className="field-error">{signUpFormError.name}</div>}
             </div>
             
-            <div className="l-v-spacing-lv-3">
+            <div className="mb-6">
                 <label htmlFor="password">Password *</label>
                 <input 
                     id="password" 
@@ -201,8 +211,20 @@ function SignUp() {
                 {signUpFormError.password && <div id="passwordError" className="field-error">{signUpFormError.password}</div>}
             </div>
 
-            <div className="l-v-spacing-lv-3">
-                <button type="submit">Register</button>
+            {/* <div className="mb-6">
+                <button type="button" onClick={() => addToast("test toast")}>Test Toast</button>
+            </div> */}
+
+            <div className="mb-6">
+                {
+                    isFormProcessing ? (
+                        <button type="submit" disabled className="flex flex-nowrap gap-4 bg-gray-300 cursor-default">
+                            <IconSpinner />
+                            Registering...
+                        </button>  
+                    ) :
+                    ( <button type="submit">Register</button> )
+                }
             </div>
         </form>
     )

@@ -7,3 +7,5 @@ export type AuthUser = {
 export type AuthUserWithToken = AuthUser & {
     token: string
 }
+
+export type NotificationType = "success" | "error" | "info";

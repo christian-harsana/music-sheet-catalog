@@ -11,10 +11,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router": "^7.9.5"
+    "react-router": "^7.9.5",
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

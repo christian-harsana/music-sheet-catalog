@@ -1,6 +1,9 @@
 import { useContext, useState, type ChangeEvent, type FocusEvent } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { UIContext } from "../contexts/UIContext";
 import type { AuthUser } from "../types/common.type";
+import IconSpinner from "../components/IconSpinner";
+
 
 type loginFormDataType = {
     email: string;
@@ -25,6 +28,8 @@ function Login() {
     const [loginFormData, setLoginFormData] = useState<loginFormDataType>({email: "", password: ""});
     const [loginFormError, setLoginFormError] = useState<loginFormErrorType>({});
     const [loginFieldTouched, setLoginFieldTouched] = useState<loginFieldTouchedType>({});
+    const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
+    const {addToast} = useContext(UIContext);
 
     function validateField(name: string, value: string): string {
 
@@ -87,6 +92,8 @@ function Login() {
 
         e.preventDefault();
 
+        setIsFormProcessing(true);
+
         // Validate Form
         const formSubmissionError: loginFormErrorType = validateForm(loginFormData);
         let isErrorExist = false;
@@ -104,6 +111,7 @@ function Login() {
                 email: true,
                 password: true
             });
+            setIsFormProcessing(false);
         }
         else {
 
@@ -123,6 +131,7 @@ function Login() {
 
                 // Check if the response is successful or not
                 if (!response.ok) {
+                    setIsFormProcessing(false);
 
                     // Handle API error responses (401, 400, 500, etc.)
                     throw new Error(responseData.message);
@@ -137,14 +146,14 @@ function Login() {
 
                 // Store user to Context and local Storage
                 login(user, responseData.data.token);
+
+                setIsFormProcessing(false);
             }
             catch (error: unknown) {
 
                 const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-
-                alert(errorMessage);
-                console.log(errorMessage); // TODO: Implement error handling
-
+                addToast(errorMessage, "error");
+                setIsFormProcessing(false);
             }
         }
     }
@@ -153,7 +162,7 @@ function Login() {
         <form onSubmit={(e) => handleLoginFormSubmit(e, loginFormData)} className="u-text-align-left">
             <h1>Login</h1>
 
-            <div className="l-v-spacing-lv-3">
+            <div className="mb-6">
                 <label htmlFor="email">Email</label>
                 <input
                     id="email" 
@@ -168,7 +177,7 @@ function Login() {
                 { loginFormError.email && <div id="emailError" className="field-error">{loginFormError.email}</div> }
             </div>
 
-            <div className="l-v-spacing-lv-3">
+            <div className="mb-6">
                 <label htmlFor="password">Password</label>
                 <input 
                     id="password"
@@ -183,8 +192,16 @@ function Login() {
                 { loginFormError.password && <div id="passwordError" className="field-error">{loginFormError.password}</div> }
             </div>
 
-            <div className="l-v-spacing-lv-3">
-                <button type="submit">Login</button>
+            <div className="mb-6">
+                {
+                    isFormProcessing ? (
+                        <button type="submit" disabled className="flex flex-nowrap gap-4">
+                            <IconSpinner />
+                            Login...
+                        </button>  
+                    ) :
+                    ( <button type="submit">Login</button> )
+                }
             </div>
         </form>
     )

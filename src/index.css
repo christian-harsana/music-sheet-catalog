@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -76,13 +78,6 @@ nav a {
   margin-inline: 1rem;
 }
 
-
-/* Layout */
-
-.l-v-spacing-lv-3 {
-  margin-block-end: 1.5rem;;
-}
-
 /* Form Elements */
 
 label {
@@ -109,3 +104,19 @@ input[type="email"] {
 .u-text-align-left {
   text-align: left;
 }
+
+@theme {
+
+  --animate-fade-in-and-out: fade-in-and-out 5s ease-in-out;
+
+  @keyframes fade-in-and-out {
+    10%, 90% {
+      opacity: 1; 
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+
