@@ -167,7 +167,7 @@ function Login() {
                 <h1 className="mb-4 font-bold text-2xl text-center uppercase">Login</h1>
 
                 <div className="mb-4">
-                    <label htmlFor="email" className="block mb-1">Email</label>
+                    <label htmlFor="email" className={`block mb-1 ${loginFormError.email ? 'text-red-600' : ''}`}>Email</label>
                     <input
                         id="email" 
                         type="email"
@@ -176,14 +176,14 @@ function Login() {
                         onChange={(e) => handleInputChange(e)} 
                         onBlur={(e) => handleInputBlur(e)} 
                         required={true} 
-                        className="w-full border border-gray-500 rounded-md px-3 py-2"
+                        className={`w-full border rounded-md px-3 py-2 ${loginFormError.email ? 'border-red-600' : 'border-gray-400'}`}
                         {...(loginFormError.email && {"aria-invalid": "true", "aria-describedby": "emailError"})}
                     /> 
-                    { loginFormError.email && <div id="emailError" className="text-red-500">{loginFormError.email}</div> }
+                    { loginFormError.email && <div id="emailError" className="text-red-600">{loginFormError.email}</div> }
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="password" className="block mb-1">Password</label>
+                    <label htmlFor="password" className={`block mb-1 ${loginFormError.password ? 'text-red-600' : ''}`}>Password</label>
                     <input 
                         id="password"
                         type="password"
@@ -192,10 +192,10 @@ function Login() {
                         onChange={(e) => handleInputChange(e)} 
                         onBlur={(e) => handleInputBlur(e)} 
                         required={true} 
-                        className="w-full border border-gray-500 rounded-md px-3 py-2"
+                        className={`w-full border rounded-md px-3 py-2 ${loginFormError.password ? 'border-red-600' : 'border-gray-400'}`}
                         {...(loginFormError.password && {"aria-invalid": "true", "aria-describedby": "passwordError"})}
                     />
-                    { loginFormError.password && <div id="passwordError" className="text-red-500">{loginFormError.password}</div> }
+                    { loginFormError.password && <div id="passwordError" className="text-red-600">{loginFormError.password}</div> }
                 </div>
 
                 <div className="mb-4">
@@ -203,12 +203,17 @@ function Login() {
                         isFormProcessing ? (
                             <button type="submit" 
                                 disabled 
-                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-fuchsia-400 rounded-md bg-fuchsia-400 font-semibold uppercase cursor-default">
+                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-fuchsia-400 rounded-md bg-fuchsia-400 font-semibold uppercase cursor-progress opacity-50">
                                 <IconSpinner />
                                 Login...
                             </button>  
                         ) :
-                        ( <button type="submit" className="w-full px-3 py-2 border border-fuchsia-400 hover:border-fuchsia-500 rounded-md bg-fuchsia-400 hover:bg-fuchsia-500 font-semibold uppercase">Login</button> )
+                        ( 
+                            <button type="submit" 
+                                className="w-full px-3 py-2 border border-fuchsia-400 hover:border-fuchsia-500 rounded-md bg-fuchsia-400 hover:bg-fuchsia-500 font-semibold uppercase">
+                                Login
+                            </button> 
+                        )
                     }
                 </div>
 

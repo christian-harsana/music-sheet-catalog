@@ -1,5 +1,5 @@
 import { useContext, useState, type FocusEvent } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { UIContext } from "../contexts/UIContext";
 import IconSpinner from "../components/IconSpinner";
 
@@ -160,73 +160,97 @@ function SignUp() {
     }
 
     return (
-        <form onSubmit={(e) => handleSignUpFormSubmit(e, signUpFormData)} className="u-text-align-left">
-            <h1>Sign Up</h1>
+        <main className="flex justify-center items-center min-h-screen">
+            <form onSubmit={(e) => handleSignUpFormSubmit(e, signUpFormData)} 
+                className="w-[calc(100%-3rem)] max-w-md px-7 py-5 rounded-lg bg-gray-50 text-gray-950">
 
-            <div className="mb-6">
-                <label htmlFor="email">Email *</label>
-                <input 
-                    id="email" 
-                    type="email" 
-                    name="email" 
-                    value={signUpFormData.email} 
-                    onChange={(e) => handleInputChange(e)} 
-                    onBlur={(e) => handleInputBlur(e)} 
-                    required={true} 
-                    {...(signUpFormError.email && { "aria-invalid" : "true", "aria-describedby" : "emailError" })}
-                />
+                <h1 className="mb-4 font-bold text-2xl text-center uppercase">Sign Up</h1>
 
-                {signUpFormError.email && <div id="emailError" className="field-error">{signUpFormError.email}</div>}
-            </div>
-            
-            <div className="mb-6">
-                <label htmlFor="name">Name</label>
-                <input 
-                    id="name" 
-                    type="text" 
-                    name="name"
-                    value={signUpFormData.name} 
-                    onChange={(e) => handleInputChange(e)}
-                    onBlur={(e) => handleInputBlur(e)} 
-                    {...(signUpFormError.name && { "aria-invalid" : "true", "aria-describedby" : "nameError" })}
-                />
+                <div className="mb-4">
+                    <label htmlFor="email" 
+                        className={`block mb-1 ${signUpFormError.email ? 'text-red-600' : ''}`}>
+                        Email <span className="text-red-600" aria-hidden="true">*</span>
+                    </label>
+                    
+                    <input 
+                        id="email" 
+                        type="email" 
+                        name="email" 
+                        value={signUpFormData.email} 
+                        onChange={(e) => handleInputChange(e)} 
+                        onBlur={(e) => handleInputBlur(e)} 
+                        required={true} 
+                        className={`w-full border rounded-md px-3 py-2 ${signUpFormError.email ? 'border-red-600' : 'border-gray-400'}`} 
+                        {...(signUpFormError.email && { "aria-invalid" : "true", "aria-describedby" : "emailError" })}
+                    />
 
-                {signUpFormError.name && <div id="nameError" className="field-error">{signUpFormError.name}</div>}
-            </div>
-            
-            <div className="mb-6">
-                <label htmlFor="password">Password *</label>
-                <input 
-                    id="password" 
-                    type="password" 
-                    name="password" 
-                    value={signUpFormData.password} 
-                    onChange={(e) => handleInputChange(e)}
-                    onBlur={(e) => handleInputBlur(e)} 
-                    required={true}
-                    minLength={8}
-                    {...(signUpFormError.password && { "aria-invalid" : "true", "aria-describedby" : "passwordError" })}
-                />
+                    {signUpFormError.email && <div id="emailError" className="text-red-600">{signUpFormError.email}</div>}
+                </div>
+                
+                <div className="mb-4">
+                    <label htmlFor="name"
+                        className={`block mb-1 ${signUpFormError.name ? 'text-red-600' : ''}`}>
+                        Name
+                    </label>
+                    <input 
+                        id="name" 
+                        type="text" 
+                        name="name"
+                        value={signUpFormData.name} 
+                        onChange={(e) => handleInputChange(e)}
+                        onBlur={(e) => handleInputBlur(e)} 
+                        className={`w-full border rounded-md px-3 py-2 ${signUpFormError.name ? 'border-red-600' : 'border-gray-400'}`}
+                        {...(signUpFormError.name && { "aria-invalid" : "true", "aria-describedby" : "nameError" })}
+                    />
 
-                {signUpFormError.password && <div id="passwordError" className="field-error">{signUpFormError.password}</div>}
-            </div>
+                    {signUpFormError.name && <div id="nameError" className="text-red-600">{signUpFormError.name}</div>}
+                </div>
+                
+                <div className="mb-4">
+                    <label htmlFor="password"
+                        className={`block mb-1 ${signUpFormError.email ? 'text-red-600' : ''}`}>
+                        Password <span className="text-red-600" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        id="password" 
+                        type="password" 
+                        name="password" 
+                        value={signUpFormData.password} 
+                        onChange={(e) => handleInputChange(e)}
+                        onBlur={(e) => handleInputBlur(e)} 
+                        required={true}
+                        minLength={8}
+                        className={`w-full border rounded-md px-3 py-2 ${signUpFormError.password ? 'border-red-600' : 'border-gray-400'}`}
+                        {...(signUpFormError.password && { "aria-invalid" : "true", "aria-describedby" : "passwordError" })}
+                    />
 
-            {/* <div className="mb-6">
-                <button type="button" onClick={() => addToast("test toast")}>Test Toast</button>
-            </div> */}
+                    {signUpFormError.password && <div id="passwordError" className="text-red-600">{signUpFormError.password}</div>}
+                </div>
 
-            <div className="mb-6">
-                {
-                    isFormProcessing ? (
-                        <button type="submit" disabled className="flex flex-nowrap gap-4 bg-gray-300 cursor-default">
-                            <IconSpinner />
-                            Registering...
-                        </button>  
-                    ) :
-                    ( <button type="submit">Register</button> )
-                }
-            </div>
-        </form>
+                <div className="mb-4">
+                    {
+                        isFormProcessing ? (
+                            <button type="submit" 
+                                disabled 
+                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-fuchsia-400 rounded-md bg-fuchsia-400 font-semibold uppercase cursor-progress opacity-50">
+                                <IconSpinner />
+                                Registering...
+                            </button>  
+                        ) :
+                        ( 
+                            <button type="submit"
+                                className="w-full px-3 py-2 border border-fuchsia-400 hover:border-fuchsia-500 rounded-md bg-fuchsia-400 hover:bg-fuchsia-500 font-semibold uppercase">
+                                Register
+                            </button> 
+                        )
+                    }
+                </div>
+
+                <p className="mb-4 text-center">
+                    Have an account? <Link to="/login" className="text-sm text-fuchsia-500 font-semibold underline hover:no-underline">Login</Link>
+                </p>
+            </form>
+        </main>
     )
 }
 
