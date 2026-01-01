@@ -60,14 +60,16 @@ const Navigation = () => {
 // COMPONENT
 function App() {
 
+  const {isAuthenticated} = useContext(AuthContext);
+
   return (
     <BrowserRouter>
       <AuthProvider>
         <UIProvider>
-          <Navigation />
+          { isAuthenticated && <Navigation /> }
           
           <Routes>
-            <Route index element={<Home />} />
+            <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="login" element={<Login />} />

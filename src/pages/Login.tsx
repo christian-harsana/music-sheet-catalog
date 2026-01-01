@@ -1,4 +1,5 @@
 import { useContext, useState, type ChangeEvent, type FocusEvent } from "react";
+import { Link } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 import { UIContext } from "../contexts/UIContext";
 import type { AuthUser } from "../types/common.type";
@@ -159,51 +160,63 @@ function Login() {
     }
 
     return(
-        <form onSubmit={(e) => handleLoginFormSubmit(e, loginFormData)} className="u-text-align-left">
-            <h1>Login</h1>
+        <main className="flex justify-center items-center min-h-screen">
+            <form onSubmit={(e) => handleLoginFormSubmit(e, loginFormData)} 
+                className="w-[calc(100%-3rem)] max-w-md px-7 py-5 rounded-lg bg-gray-50 text-gray-950">
 
-            <div className="mb-6">
-                <label htmlFor="email">Email</label>
-                <input
-                    id="email" 
-                    type="email"
-                    name="email" 
-                    value={loginFormData.email} 
-                    onChange={(e) => handleInputChange(e)} 
-                    onBlur={(e) => handleInputBlur(e)} 
-                    required={true} 
-                    {...(loginFormError.email && {"aria-invalid": "true", "aria-describedby": "emailError"})}
-                /> 
-                { loginFormError.email && <div id="emailError" className="field-error">{loginFormError.email}</div> }
-            </div>
+                <h1 className="mb-4 font-bold text-2xl text-center uppercase">Login</h1>
 
-            <div className="mb-6">
-                <label htmlFor="password">Password</label>
-                <input 
-                    id="password"
-                    type="password"
-                    name="password"  
-                    value={loginFormData.password} 
-                    onChange={(e) => handleInputChange(e)} 
-                    onBlur={(e) => handleInputBlur(e)} 
-                    required={true}
-                    {...(loginFormError.password && {"aria-invalid": "true", "aria-describedby": "passwordError"})}
-                />
-                { loginFormError.password && <div id="passwordError" className="field-error">{loginFormError.password}</div> }
-            </div>
+                <div className="mb-4">
+                    <label htmlFor="email" className="block mb-1">Email</label>
+                    <input
+                        id="email" 
+                        type="email"
+                        name="email" 
+                        value={loginFormData.email} 
+                        onChange={(e) => handleInputChange(e)} 
+                        onBlur={(e) => handleInputBlur(e)} 
+                        required={true} 
+                        className="w-full border border-gray-500 rounded-md px-3 py-2"
+                        {...(loginFormError.email && {"aria-invalid": "true", "aria-describedby": "emailError"})}
+                    /> 
+                    { loginFormError.email && <div id="emailError" className="text-red-500">{loginFormError.email}</div> }
+                </div>
 
-            <div className="mb-6">
-                {
-                    isFormProcessing ? (
-                        <button type="submit" disabled className="flex flex-nowrap gap-4">
-                            <IconSpinner />
-                            Login...
-                        </button>  
-                    ) :
-                    ( <button type="submit">Login</button> )
-                }
-            </div>
-        </form>
+                <div className="mb-4">
+                    <label htmlFor="password" className="block mb-1">Password</label>
+                    <input 
+                        id="password"
+                        type="password"
+                        name="password"  
+                        value={loginFormData.password} 
+                        onChange={(e) => handleInputChange(e)} 
+                        onBlur={(e) => handleInputBlur(e)} 
+                        required={true} 
+                        className="w-full border border-gray-500 rounded-md px-3 py-2"
+                        {...(loginFormError.password && {"aria-invalid": "true", "aria-describedby": "passwordError"})}
+                    />
+                    { loginFormError.password && <div id="passwordError" className="text-red-500">{loginFormError.password}</div> }
+                </div>
+
+                <div className="mb-4">
+                    {
+                        isFormProcessing ? (
+                            <button type="submit" 
+                                disabled 
+                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-fuchsia-400 rounded-md bg-fuchsia-400 font-semibold uppercase cursor-default">
+                                <IconSpinner />
+                                Login...
+                            </button>  
+                        ) :
+                        ( <button type="submit" className="w-full px-3 py-2 border border-fuchsia-400 hover:border-fuchsia-500 rounded-md bg-fuchsia-400 hover:bg-fuchsia-500 font-semibold uppercase">Login</button> )
+                    }
+                </div>
+
+                <p className="mb-4 text-center">
+                    Don't have an account? <Link to="/signup" className="text-sm text-fuchsia-500 font-semibold underline hover:no-underline">Sign Up</Link>
+                </p>
+            </form>
+        </main>
     )
 }
 
