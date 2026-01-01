@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Routes, Route, Link, Navigate, BrowserRouter } from 'react-router'
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router'
 import { AuthContext, AuthProvider } from './contexts/AuthContext.tsx'
 import { UIProvider } from './contexts/UIContext.tsx'
 import Home from './pages/Home.tsx'
@@ -28,46 +28,13 @@ const ProtectedRoute = ({children}: ProtectedRouteProps) => {
 }
 
 
-// Navigation
-
-const Navigation = () => {
-
-  const {isAuthenticated} = useContext(AuthContext);
-
-  return (
-    <nav>
-      <Link to="/">Home</Link>
-      { 
-        isAuthenticated ? 
-        (
-          <>
-            <Link to="/settings">Settings</Link>
-            <Link to="/profile">Profile</Link>
-          </>
-        ) :
-        (
-          <>
-            <Link to="/signup">Sign Up</Link>
-            <Link to="/login">Login</Link>
-          </>
-        )
-      }
-    </nav>
-  )
-}
-
-
 // COMPONENT
 function App() {
-
-  const {isAuthenticated} = useContext(AuthContext);
 
   return (
     <BrowserRouter>
       <AuthProvider>
         <UIProvider>
-          { isAuthenticated && <Navigation /> }
-          
           <Routes>
             <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />

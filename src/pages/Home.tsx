@@ -1,9 +1,14 @@
+import Navigation from "../components/Navigation";
+
 function Home() {
 
     return(
-        <p>Hello... Home page.</p>
+        <main>
+            <Navigation />
+             <p>Hello... Home page.</p>
+        </main>
+       
     )
-
 }
 
 export default Home;
