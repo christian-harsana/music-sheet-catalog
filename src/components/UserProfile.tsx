@@ -52,9 +52,7 @@ export default function UserProfile() {
 
     // RENDER
     if (isLoading) {
-        return (
-            <Loading />
-       )
+        return (<Loading />)
     }
 
     return (

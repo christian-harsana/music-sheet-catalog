@@ -16,6 +16,7 @@ export default function Navigation() {
           <>
             <Link to="/settings">Settings</Link>
             <Link to="/profile">Profile</Link>
+            <Link to="/genre">Genre</Link>
           </>
         ) :
         (
