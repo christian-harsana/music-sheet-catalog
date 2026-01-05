@@ -14,15 +14,15 @@ export default function Navigation() {
         isAuthenticated ? 
         (
           <>
-            <Link to="/settings">Settings</Link>
-            <Link to="/profile">Profile</Link>
-            <Link to="/genre">Genre</Link>
+            <Link to="/settings" className="ms-3">Settings</Link>
+            <Link to="/profile" className="ms-3">Profile</Link>
+            <Link to="/genre" className="ms-3">Genre</Link>
           </>
         ) :
         (
           <>
-            <Link to="/signup">Sign Up</Link>
-            <Link to="/login">Login</Link>
+            <Link to="/signup" className="ms-3">Sign Up</Link>
+            <Link to="/login" className="ms-3">Login</Link>
           </>
         )
       }

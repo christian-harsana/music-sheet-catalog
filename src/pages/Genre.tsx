@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import Navigation from "../components/Navigation";
 import GenreList from '../components/GenreList';
 import GenreForm from '../components/GenreForm';
 import Modal from '../components/Modal';
+import { UIContext } from '../contexts/UIContext';
 
 
-function Genre() {
+export default function Genre() {
 
-    const [showAddModal, setShowAddModal] = useState<boolean>(false);
+    const {showModal} = useContext(UIContext);
 
     const handleAddGenre = () => {
-        setShowAddModal(true);
-    }
-
-    const handleCloseAddGenreModal = () => {
-        setShowAddModal(false);
+        showModal(
+            <Modal title={'Add Genre'}>
+                <GenreForm />
+            </Modal>
+        )
     }
 
     return(
@@ -33,14 +34,6 @@ function Genre() {
             <div className="mb-4">
                 <GenreList />
             </div>
-
-            { showAddModal && 
-                <Modal title={'Add Genre'} handleCloseModal={handleCloseAddGenreModal}>
-                    <GenreForm />
-                </Modal>
-            }
         </main>
     )
 }
-
-export default Genre;

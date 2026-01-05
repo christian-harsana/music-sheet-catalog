@@ -1,18 +1,20 @@
-import { type ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
+import { UIContext } from '../contexts/UIContext';
 
 type ModalProps = {
-    title: string,
-    handleCloseModal: () => void,
+    title?: string,
     children: ReactNode
 }
 
-export default function Modal({title, handleCloseModal, children}: ModalProps) {
+export default function Modal({title, children}: ModalProps) {
+
+    const {closeModal} = useContext(UIContext);
 
     return (
         <div aria-live="polite">
             <div className="flex">
-                <h3>{title}</h3>
-                <button type="button" onClick={handleCloseModal}>
+                {title && <h3>{title}</h3>}
+                <button type="button" onClick={closeModal}>
                     Close
                 </button>
             </div>

@@ -12,11 +12,15 @@ type Notification = {
 type UIContextType = { 
     addToast: (message: string, type?: NotificationType) => void,
     removeToast: (id: string) => void,
+    showModal: (content: ReactNode) => void,
+    closeModal: () => void
 }
 
 export const UIContext = createContext<UIContextType> ({
     addToast: () => {},
-    removeToast: () => {}
+    removeToast: () => {},
+    showModal: () => {},
+    closeModal: () => {}
 });
 
 type ToastContainerProps = {
@@ -24,7 +28,7 @@ type ToastContainerProps = {
     handleRemoveToast: (id: string) => void
 }
 
-export function ToastContainer({notificationList, handleRemoveToast} : ToastContainerProps ) {
+function ToastContainer({notificationList, handleRemoveToast} : ToastContainerProps ) {
 
     return(
         <div className="fixed bottom-15 right-15 flex flex-col gap-2" aria-live="polite">
@@ -46,9 +50,20 @@ export function ToastContainer({notificationList, handleRemoveToast} : ToastCont
 };
 
 
+function ModalOverlay({children}: {children: ReactNode}) {
+
+    return (
+        <div className="" aria-live="polite">
+            {children}
+        </div>
+    )
+}
+
+
 export function UIProvider({children} : {children: ReactNode}) {
 
     const [notificationList, setnotificationList] = useState<Notification[]>([]);
+    const [modal, setModal] = useState<ReactNode>(null);
 
     const addToast = (message: string, type: NotificationType = "success") => {
 
@@ -65,9 +80,18 @@ export function UIProvider({children} : {children: ReactNode}) {
         setnotificationList(prev => prev.filter(toast => toast.id !== id));
     };
 
+    const showModal = (content: ReactNode) => {
+        setModal(content);
+    }
+
+    const closeModal = () => {
+        setModal(null);
+    }
+
     return(
-        <UIContext.Provider value={{addToast, removeToast}}>
+        <UIContext.Provider value={{addToast, removeToast, showModal, closeModal}}>
             {children}
+            { modal && <ModalOverlay>{modal}</ModalOverlay>}
             { notificationList && <ToastContainer notificationList={notificationList} handleRemoveToast={removeToast} /> }
         </UIContext.Provider>
     )
