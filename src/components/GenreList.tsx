@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import Loading from "./Loading";
+import Modal from "./Modal";
 
 type Genre = {
     id: string,
@@ -11,7 +12,60 @@ type Genre = {
 const BASEURL = 'http://localhost:3000/';
 const GENREURL = `${BASEURL}api/genre/`;
 
+function DeleteConfirmation({id, name} : {id: string, name: string}) {
+    
+    const {token} = useContext(AuthContext);
+    const {addToast, closeModal} = useContext(UIContext);
+
+    const handleDelete = async (id: string) => {
+
+        const DELETEGENREURL = `${GENREURL}${id}`;
+
+        try {
+            const response = await fetch(`${DELETEGENREURL}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+            const result = await response.json();
+
+            addToast(result.message);
+            closeModal();
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
+
+            addToast(errorMessage, "error");
+        }
+    }
+    
+    return(
+        <>
+            <p>Are you sure want to delete <strong>{name}</strong>?</p>
+
+            <div className="flex flex-nowrap gap-3">
+                <button type="button" onClick={() => handleDelete(id)}>Yes</button>
+                <button type="button" onClick={closeModal}>No</button>
+            </div>
+        </>
+    )
+}
+
+
 function GenreRows({genres} : {genres: Genre[]}) {
+
+    const {showModal} = useContext(UIContext);
+
+    const showDeleteConfirmation = (id: string, name: string) => {
+        showModal(
+            <Modal title={"Confirmation"}>
+                <DeleteConfirmation id={id} name={name} />
+            </Modal>
+        )
+    }
 
     return (
         <>
@@ -22,7 +76,7 @@ function GenreRows({genres} : {genres: Genre[]}) {
                         <td>
                             <div className="flex flex-nowrap gap-3">
                                 <button type="button">Edit</button>
-                                <button type="button">Delete</button>
+                                <button type="button" onClick={() => showDeleteConfirmation(genre.id, genre.name)}>Delete</button>
                             </div>
                         </td>
                     </tr>

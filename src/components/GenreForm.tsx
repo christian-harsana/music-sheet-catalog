@@ -25,7 +25,7 @@ export default function GenreForm() {
     const [genreFormDataError, setGenreFormDataError] = useState<genreFormDataError>({});
     const [genreFormDataTouched, setGenreFormDataTouched] = useState<genreFormDataTouched>({});
     const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
-    const { addToast } = useContext(UIContext);
+    const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
 
 
@@ -124,6 +124,7 @@ export default function GenreForm() {
 
                 if (data.status.toLowerCase() === "success") {
                     addToast(data.message);
+                    closeModal();
                 }
                 else {
                     addToast(data.message, 'error');

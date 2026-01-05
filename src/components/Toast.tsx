@@ -11,7 +11,7 @@ type ToastProps = {
 export default function Toast({id, text, type, removeToast}: ToastProps) {
 
     const toastType = type? type : "success";
-    const toastBaseClasses = "flex flex-nowrap gap-4 rounded-lg p-6";
+    const toastBaseClasses = "flex flex-nowrap gap-3 rounded-lg p-6";
     let toastClasses = "";
     let toastIcon: React.ReactNode = null;
 
