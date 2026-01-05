@@ -25,7 +25,7 @@ function Genre() {
             <div className="mb-4">
                 <button type="button" 
                     onClick={handleAddGenre}
-                    className="px-3 py-2 border border-fuchsia-400 hover:border-fuchsia-500 rounded-md bg-fuchsia-400 hover:bg-fuchsia-500">
+                    className="px-3 py-2 border border-violet-400 hover:border-violet-500 rounded-md bg-violet-400 hover:bg-violet-500">
                     Add Genre
                 </button>
             </div>

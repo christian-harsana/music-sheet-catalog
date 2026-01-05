@@ -167,13 +167,13 @@ export default function GenreForm() {
                     isFormProcessing ? (
                         <button type="submit" 
                             disabled 
-                            className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-fuchsia-400 rounded-md bg-fuchsia-400 font-semibold uppercase cursor-progress opacity-50">
+                            className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-400 rounded-md bg-violet-400 font-semibold uppercase cursor-progress opacity-50">
                             <IconSpinner />
                             Saving...
                         </button>
                     ) : (
                         <button type="submit" 
-                            className="w-full px-3 py-2 border border-fuchsia-500 hover:border-fuchsia-500 rounded-md bg-fuchsia-400 hover:bg-fuchsia-500 font-semibold">
+                            className="w-full px-3 py-2 border border-violet-500 hover:border-violet-500 rounded-md bg-violet-400 hover:bg-violet-500 font-semibold">
                             Save
                         </button>
                     )

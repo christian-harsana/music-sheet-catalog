@@ -232,14 +232,14 @@ function SignUp() {
                         isFormProcessing ? (
                             <button type="submit" 
                                 disabled 
-                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-fuchsia-400 rounded-md bg-fuchsia-400 font-semibold uppercase cursor-progress opacity-50">
+                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-400 rounded-md bg-violet-400 text-gray-50 font-semibold uppercase cursor-progress opacity-50">
                                 <IconSpinner />
                                 Registering...
                             </button>  
                         ) :
                         ( 
                             <button type="submit"
-                                className="w-full px-3 py-2 border border-fuchsia-400 hover:border-fuchsia-500 rounded-md bg-fuchsia-400 hover:bg-fuchsia-500 font-semibold uppercase">
+                                className="w-full px-3 py-2 border border-violet-400 hover:border-violet-500 rounded-md bg-violet-400 hover:bg-violet-500 text-gray-50 font-semibold uppercase">
                                 Register
                             </button> 
                         )
@@ -247,7 +247,7 @@ function SignUp() {
                 </div>
 
                 <p className="mb-4 text-center">
-                    Have an account? <Link to="/login" className="text-sm text-fuchsia-500 font-semibold underline hover:no-underline">Login</Link>
+                    Have an account? <Link to="/login" className="text-sm text-violet-500 font-semibold underline hover:no-underline">Login</Link>
                 </p>
             </form>
         </main>
