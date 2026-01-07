@@ -1,11 +1,13 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import type { AuthUser } from "../types/common.type";
+import { UIContext } from "./UIContext";
 
 type AuthContextType = {
   user: AuthUser | null,
   isAuthenticated: boolean,
+  isLoading: boolean,
   token: string | null,
   login: (user: AuthUser, token: string) => void,
   logout: () => void
@@ -14,17 +16,22 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({
     user: null,
     isAuthenticated: false,
+    isLoading: true,
     token: null,
     login: () => {},
     logout: () => {}
 });
 
+const BASEURL = 'http://localhost:3000/';
+const VERIFYURL = `${BASEURL}api/auth/verify`;
 
 export function AuthProvider({children} : {children: ReactNode}) {
 
     const [user, setUser] = useState<AuthUser | null>(null);
     const [token, setToken] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthtenticated] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const {addToast} = useContext(UIContext);
     let navigate = useNavigate();
 
     const login = (user: AuthUser, token: string) => {
@@ -65,35 +72,53 @@ export function AuthProvider({children} : {children: ReactNode}) {
         localStorage.removeItem(`music_sheet_catalog_token`);
         localStorage.removeItem(`music_sheet_catalog_isAuthenticated`);
 
-        // Redirect to home
-        navigate("/");
+        // Redirect to login
+        navigate("/login");
     }
 
     useEffect(() => {
 
-        // Check local storage
-        const cachedUser = localStorage.getItem(`music_sheet_catalog_user`);
+        // Check local storage for token
         const cachedToken = localStorage.getItem(`music_sheet_catalog_token`);
 
-        // If available setUser and setIsAuthtenticated
-        if (cachedUser) {
-            setUser(JSON.parse(cachedUser));
-            setToken(cachedToken);
-            setIsAuthtenticated(true);
-        }
+        // Verify token
+        try {
+            const verifyToken = async() => {
 
-        // TODO: 
-        // - implement appropriate persistent user mechanism using token - instead of relying on cachedUser (user info may change)
-        // - separate auth token from the user data
-        // - since useEffect is run after render, take care of the isAuthenticated state flicker - use loader
-        // - when refreshing at protected route, the display redirect to login page eventhough token is available
+                const response = await fetch(`${VERIFYURL}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${cachedToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                const user: AuthUser = result.data;
+                
+                localStorage.setItem(`music_sheet_catalog_user`, JSON.stringify(user));
+
+                setUser(user);
+                setToken(cachedToken);
+                setIsAuthtenticated(true);
+                setIsLoading(false);
+            }
+
+            verifyToken();
+        }
+        catch (error: unknown) {
+
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+            addToast(errorMessage, "error");
+            setIsLoading(false);
+        }
     }, []);
 
 
     return(
-        <AuthContext.Provider value={{user, isAuthenticated, token, login, logout}}>
+        <AuthContext.Provider value={{user, isAuthenticated, isLoading, token, login, logout}}>
             {children}
         </AuthContext.Provider>
     )
-
 }

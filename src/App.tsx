@@ -19,9 +19,13 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({children}: ProtectedRouteProps) => {
 
-  const {user} = useContext(AuthContext);
-  
-  if (!user) {
+  const {token, isLoading} = useContext(AuthContext);
+
+  if (isLoading) {
+    return(<div>Loading...</div>); // TODO: Implement full page loading indicator
+  }
+
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 
@@ -34,8 +38,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <UIProvider>
+      <UIProvider>
+        <AuthProvider>
           <Routes>
             <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
@@ -45,8 +49,8 @@ function App() {
             <Route path="signup" element={<SignUp />} />
             <Route path="*" element={<Error />} />
           </Routes>
-        </UIProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </UIProvider>
     </BrowserRouter>
   )
 }
