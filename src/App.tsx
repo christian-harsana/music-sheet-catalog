@@ -38,8 +38,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <UIProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <UIProvider>
           <Routes>
             <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
@@ -49,8 +49,8 @@ function App() {
             <Route path="signup" element={<SignUp />} />
             <Route path="*" element={<Error />} />
           </Routes>
-        </AuthProvider>
-      </UIProvider>
+        </UIProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

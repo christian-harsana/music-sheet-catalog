@@ -1,8 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import type { AuthUser } from "../types/common.type";
-import { UIContext } from "./UIContext";
 
 type AuthContextType = {
   user: AuthUser | null,
@@ -31,7 +30,6 @@ export function AuthProvider({children} : {children: ReactNode}) {
     const [token, setToken] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthtenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {addToast} = useContext(UIContext);
     let navigate = useNavigate();
 
     const login = (user: AuthUser, token: string) => {
@@ -109,8 +107,7 @@ export function AuthProvider({children} : {children: ReactNode}) {
         catch (error: unknown) {
 
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-
-            addToast(errorMessage, "error");
+            throw new Error(errorMessage); // TODO: any better error handling?
             setIsLoading(false);
         }
     }, []);

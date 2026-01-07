@@ -1,33 +1,48 @@
 import { useState, useContext } from 'react';
 import { UIContext } from '../contexts/UIContext';
-import IconSpinner from './IconSpinner';
 import { AuthContext } from '../contexts/AuthContext';
+import IconSpinner from './IconSpinner';
+import type { Genre } from '../types/genre.type';
 
-type genreFormData = {
+type GenreFormData = {
     name: string
 }
 
-type genreFormDataError = {
-    [K in keyof genreFormData]?: string
+type GenreFormDataError = {
+    [K in keyof GenreFormData]?: string
 }
 
-type genreFormDataTouched = {
-    [K in keyof genreFormData]?: boolean
+type GenreFormDataTouched = {
+    [K in keyof GenreFormData]?: boolean
+}
+
+type GenreFormProp = {
+    genre?: Genre
 }
 
 const BASEURL = 'http://localhost:3000/';
-const ADDGENREURL = `${BASEURL}api/genre/`;
+const GENREURL = `${BASEURL}api/genre/`;
 
 
-export default function GenreForm() {
+export default function GenreForm({genre} : GenreFormProp) {
 
-    const [genreFormData, setGenreFormData] = useState<genreFormData>({name: ""});
-    const [genreFormDataError, setGenreFormDataError] = useState<genreFormDataError>({});
-    const [genreFormDataTouched, setGenreFormDataTouched] = useState<genreFormDataTouched>({});
+    const mode = genre ? "edit" : "add";
+    const genreId = genre?.id ?? null;
+    const {id, ...formDefaultData} = genre ?? {name: ""};
+
+    const [GenreFormData, setGenreFormData] = useState<GenreFormData>(formDefaultData);
+    const [GenreFormDataError, setGenreFormDataError] = useState<GenreFormDataError>({});
+    const [GenreFormDataTouched, setGenreFormDataTouched] = useState<GenreFormDataTouched>({});
     const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
 
+    console.log('Genre Form');
+    console.log(token);
+    const authContextValue = useContext(AuthContext);
+    console.log('Full AuthContext value:', authContextValue);
+    console.log('Token specifically:', token);
+    console.log('Token type:', typeof token);
 
     function validateField(field: string, value: string): string {
 
@@ -41,15 +56,15 @@ export default function GenreForm() {
     }
 
 
-    function validateForm(genreFormData: genreFormData): genreFormDataError {
+    function validateForm(GenreFormData: GenreFormData): GenreFormDataError {
 
-        const formSubmissionError: genreFormDataError = {};
+        const formSubmissionError: GenreFormDataError = {};
 
         // Loop through the field and validate
-        Object.keys(genreFormData).forEach((name) => {
+        Object.keys(GenreFormData).forEach((name) => {
 
-            const fieldName = name as keyof genreFormData;
-            let error = validateField(fieldName, genreFormData[fieldName]);
+            const fieldName = name as keyof GenreFormData;
+            let error = validateField(fieldName, GenreFormData[fieldName]);
 
             formSubmissionError[fieldName] = error;
         });
@@ -61,13 +76,13 @@ export default function GenreForm() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         const value = e.target.value;
-        const name = e.target.name as keyof genreFormData;
+        const name = e.target.name as keyof GenreFormData;
 
         // Set Form Data
         setGenreFormData(prev => ({...prev, [name]: value}));
 
         // Set Validation
-        if (genreFormDataTouched[name]) {
+        if (GenreFormDataTouched[name]) {
             setGenreFormDataError(prev => ({...prev, [name]: validateField(name, value)}));
         }
     }
@@ -75,7 +90,7 @@ export default function GenreForm() {
 
     const handleNameBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
 
-        const name = e.target.name as keyof genreFormData;
+        const name = e.target.name as keyof GenreFormData;
         const value = e.target.value;
 
         setGenreFormDataTouched(prev => ({...prev, [name]: true}));
@@ -83,20 +98,20 @@ export default function GenreForm() {
     }
 
 
-    const handleGenreFormSubmit = async (e: React.FormEvent, genreFormData: genreFormData) => {
+    const handleGenreFormSubmit = async (e: React.FormEvent, GenreFormData: GenreFormData, genreId: string | null) => {
 
         e.preventDefault()
 
         setIsFormProcessing(true);
 
         // Validate the form
-        const formSubmissionError: genreFormDataError = validateForm(genreFormData);
+        const formSubmissionError: GenreFormDataError = validateForm(GenreFormData);
     
         // Check if error exist
         let isErrorExist = false;
 
         Object.keys(formSubmissionError).forEach(name => {
-            isErrorExist = formSubmissionError[name as keyof genreFormData]?.length ? true : false;
+            isErrorExist = formSubmissionError[name as keyof GenreFormData]?.length ? true : false;
         });
 
         if (isErrorExist) {
@@ -111,13 +126,16 @@ export default function GenreForm() {
 
             try {
 
-                const response = await fetch(ADDGENREURL, {
-                    method: 'POST',
+                const method = mode === 'edit' ? 'PUT' : 'POST';
+                const actionURL = mode === 'edit' ? `${GENREURL}${genreId}` : GENREURL;
+
+                const response = await fetch(actionURL, {
+                    method: method,
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type' : 'application/json'
                     },
-                    body: JSON.stringify(genreFormData)
+                    body: JSON.stringify(GenreFormData)
                 });
 
                 const data = await response.json();
@@ -143,24 +161,24 @@ export default function GenreForm() {
     }
 
     return (
-        <form onSubmit={(e) => handleGenreFormSubmit(e, genreFormData)}>
+        <form onSubmit={(e) => handleGenreFormSubmit(e, GenreFormData, genreId)}>
             <div className="mb-4">
                 <label htmlFor="genreName"
-                    className={`block mb-1 ${genreFormDataError.name ? 'text-red-600' : ''}`}>
+                    className={`block mb-1 ${GenreFormDataError.name ? 'text-red-600' : ''}`}>
                     Name <span className="text-red-600" aria-hidden="true">*</span>
                 </label>
 
                 <input type="text" 
                     id="genreName" 
                     name="name"
-                    value={genreFormData.name} 
+                    value={GenreFormData.name} 
                     onChange={handleInputChange} 
                     onBlur={handleNameBlur}
                     required={true}
-                    className={`w-full border rounded-md px-3 py-2 ${genreFormDataError.name ? 'border-red-600' : 'border-gray-400'}`} 
-                    { ...(genreFormDataError.name && { "aria-invalid" : "true", "aria-describedby" : "genreNameError" }) }
+                    className={`w-full border rounded-md px-3 py-2 ${GenreFormDataError.name ? 'border-red-600' : 'border-gray-400'}`} 
+                    { ...(GenreFormDataError.name && { "aria-invalid" : "true", "aria-describedby" : "genreNameError" }) }
                     />
-                { genreFormDataError.name && <div id="genreNameError" className="text-red-600">{genreFormDataError.name}</div>}
+                { GenreFormDataError.name && <div id="genreNameError" className="text-red-600">{GenreFormDataError.name}</div>}
             </div>
 
             <div className="mb-4">

@@ -1,13 +1,12 @@
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router";
 import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import Loading from "./Loading";
 import Modal from "./Modal";
+import GenreForm from "./GenreForm";
+import { type Genre } from "../types/genre.type";
 
-type Genre = {
-    id: string,
-    name: string
-}
 
 const BASEURL = 'http://localhost:3000/';
 const GENREURL = `${BASEURL}api/genre/`;
@@ -59,6 +58,14 @@ function GenreRows({genres} : {genres: Genre[]}) {
 
     const {showModal} = useContext(UIContext);
 
+    const showEditForm = (genre: Genre) => {
+        showModal(
+            <Modal title={"Edit Genre"}>
+                <GenreForm genre={genre} />
+            </Modal>
+        )
+    }
+
     const showDeleteConfirmation = (id: string, name: string) => {
         showModal(
             <Modal title={"Confirmation"}>
@@ -75,7 +82,7 @@ function GenreRows({genres} : {genres: Genre[]}) {
                         <td>{genre.name}</td>
                         <td>
                             <div className="flex flex-nowrap gap-3">
-                                <button type="button">Edit</button>
+                                <button type="button" onClick={() => showEditForm(genre)}>Edit</button>
                                 <button type="button" onClick={() => showDeleteConfirmation(genre.id, genre.name)}>Delete</button>
                             </div>
                         </td>
@@ -90,6 +97,7 @@ function GenreRows({genres} : {genres: Genre[]}) {
 export default function GenreList() {
     const {token} = useContext(AuthContext);
     const {addToast} = useContext(UIContext);
+    const navigate = useNavigate();
     const [genres, setGenres] = useState<Genre[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -107,8 +115,21 @@ export default function GenreList() {
                         'Content-Type': 'application/json'
                     }
                 });
-                
                 const result = await response.json();
+
+                if (!response.ok) {
+
+                    if (response.status === 401) {
+                        addToast(result.error, "error");
+                        localStorage.removeItem('music_sheet_catalog_token');
+                        navigate('/login');
+                        return;
+                    }
+
+                    addToast(result.error, "error");
+                    return;
+                }
+
                 const resultData: Genre[] = result.data;
 
                 setGenres(resultData);
@@ -124,7 +145,8 @@ export default function GenreList() {
         };
 
         fetchGenres();
-    }, [token, addToast]);
+    }, [token]);
+
 
     // RENDER
     if (isLoading) {
