@@ -17,6 +17,7 @@ export default function Navigation() {
             <Link to="/settings" className="block">Settings</Link>
             <Link to="/profile" className="block">Profile</Link>
             <Link to="/genre" className="block">Genre</Link>
+            <Link to="/level" className="block">Level</Link>
           </>
         ) :
         (
