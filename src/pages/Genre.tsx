@@ -19,21 +19,28 @@ export default function Genre() {
     }
 
     return(
-        <main>
-            <Navigation />
-            <h1 className="mb-4 font-semibold text-2xl">Genre</h1>
-
-            <div className="mb-4">
-                <button type="button" 
-                    onClick={handleAddGenre}
-                    className="px-3 py-2 border border-violet-400 hover:border-violet-500 rounded-md bg-violet-400 hover:bg-violet-500">
-                    Add Genre
-                </button>
+        <div className="flex flex-nowrap">
+            <div className="h-screen basis-3xs">
+                <Navigation />
             </div>
 
-            <div className="mb-4">
-                <GenreList />
-            </div>
-        </main>
+            <main className="h-screen basis-full bg-gray-50 text-gray-900">
+                <div className="p-6">
+                    <div className="flex justify-between gap-4 mb-4">
+                        <h1 className="font-semibold text-2xl">Genre</h1>
+
+                        <button type="button" 
+                            onClick={handleAddGenre}
+                            className="px-4 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50">
+                            Add Genre
+                        </button>                        
+                    </div>
+
+                    <div className="mb-4">
+                        <GenreList />
+                    </div>
+                </div>
+            </main>
+        </div>
     )
 }

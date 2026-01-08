@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { DataRefreshContext } from '../contexts/DataRefreshContext';
@@ -38,6 +38,7 @@ export default function GenreForm({genre} : GenreFormProp) {
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
     const { triggerRefresh } = useContext(DataRefreshContext);
+    const nameInputRef = useRef<HTMLInputElement>(null);
 
     function validateField(field: string, value: string): string {
 
@@ -156,6 +157,15 @@ export default function GenreForm({genre} : GenreFormProp) {
         }
     }
 
+
+    useEffect(() => {
+        // Set focus to name input
+        if (nameInputRef.current) {
+            nameInputRef.current.focus();
+        }
+    }, []);
+
+
     return (
         <form onSubmit={(e) => handleGenreFormSubmit(e, GenreFormData, genreId)}>
             <div className="mb-4">
@@ -171,24 +181,25 @@ export default function GenreForm({genre} : GenreFormProp) {
                     onChange={handleInputChange} 
                     onBlur={handleNameBlur}
                     required={true}
-                    className={`w-full border rounded-md px-3 py-2 ${GenreFormDataError.name ? 'border-red-600' : 'border-gray-400'}`} 
+                    ref={nameInputRef}
+                    className={`w-full border rounded-md px-3 py-2 ${GenreFormDataError.name ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
                     { ...(GenreFormDataError.name && { "aria-invalid" : "true", "aria-describedby" : "genreNameError" }) }
                     />
                 { GenreFormDataError.name && <div id="genreNameError" className="text-red-600">{GenreFormDataError.name}</div>}
             </div>
 
-            <div className="mb-4">
+            <div className="mt-4">
                 {
                     isFormProcessing ? (
                         <button type="submit" 
                             disabled 
-                            className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-400 rounded-md bg-violet-400 font-semibold uppercase cursor-progress opacity-50">
+                            className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50">
                             <IconSpinner />
                             Saving...
                         </button>
                     ) : (
                         <button type="submit" 
-                            className="w-full px-3 py-2 border border-violet-500 hover:border-violet-500 rounded-md bg-violet-400 hover:bg-violet-500 font-semibold">
+                            className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold">
                             Save
                         </button>
                     )

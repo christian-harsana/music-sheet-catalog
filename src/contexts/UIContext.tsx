@@ -53,7 +53,7 @@ function ToastContainer({notificationList, handleRemoveToast} : ToastContainerPr
 function ModalOverlay({children}: {children: ReactNode}) {
 
     return (
-        <div className="" aria-live="polite">
+        <div className="fixed top-0 left-0 z-10 flex justify-center items-center w-screen h-screen bg-black/75" aria-live="polite">
             {children}
         </div>
     )

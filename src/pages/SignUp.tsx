@@ -232,14 +232,14 @@ function SignUp() {
                         isFormProcessing ? (
                             <button type="submit" 
                                 disabled 
-                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-400 rounded-md bg-violet-400 text-gray-50 font-semibold uppercase cursor-progress opacity-50">
+                                className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold uppercase cursor-progress opacity-50">
                                 <IconSpinner />
                                 Registering...
                             </button>  
                         ) :
                         ( 
                             <button type="submit"
-                                className="w-full px-3 py-2 border border-violet-400 hover:border-violet-500 rounded-md bg-violet-400 hover:bg-violet-500 text-gray-50 font-semibold uppercase">
+                                className="w-full px-3 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold uppercase">
                                 Register
                             </button> 
                         )
