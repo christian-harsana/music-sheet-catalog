@@ -171,7 +171,7 @@ export default function GenreList() {
                 {
                     genres.length < 1 ? (
                         <tr className="bg-gray-50">
-                            <td colSpan={2} className="px-3 py-2">There is currently no Genre data yet.</td>
+                            <td colSpan={2} className="px-3 py-2">There is currently no data yet.</td>
                         </tr>
                     ) : (
                         genres.map(genre => 

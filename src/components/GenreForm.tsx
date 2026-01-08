@@ -84,7 +84,7 @@ export default function GenreForm({genre} : GenreFormProp) {
     }
 
 
-    const handleNameBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
+    const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
 
         const name = e.target.name as keyof GenreFormData;
         const value = e.target.value;
@@ -179,7 +179,7 @@ export default function GenreForm({genre} : GenreFormProp) {
                     name="name"
                     value={GenreFormData.name} 
                     onChange={handleInputChange} 
-                    onBlur={handleNameBlur}
+                    onBlur={handleInputBlur}
                     required={true}
                     ref={nameInputRef}
                     className={`w-full border rounded-md px-3 py-2 ${GenreFormDataError.name ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 

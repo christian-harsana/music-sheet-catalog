@@ -28,7 +28,7 @@ const LEVELURL = `${BASEURL}api/level/`;
 export default function LevelForm({level} : LevelFormProp) {
 
     const mode = level ? "edit" : "add";
-    const LevelId = level?.id ?? null;
+    const levelId = level?.id ?? null;
     const {id, ...formDefaultData} = level ?? {name: ""};
 
     const [levelFormData, setLevelFormData] = useState<LevelFormData>(formDefaultData);
@@ -84,7 +84,7 @@ export default function LevelForm({level} : LevelFormProp) {
     }
 
 
-    const handleNameBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
+    const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
 
         const name = e.target.name as keyof LevelFormData;
         const value = e.target.value;
@@ -167,25 +167,25 @@ export default function LevelForm({level} : LevelFormProp) {
 
 
     return (
-        <form onSubmit={(e) => handleLevelFormSubmit(e, levelFormData, LevelId)}>
+        <form onSubmit={(e) => handleLevelFormSubmit(e, levelFormData, levelId)}>
             <div className="mb-4">
-                <label htmlFor="LevelName"
+                <label htmlFor="levelName"
                     className={`block mb-1 ${levelFormDataError.name ? 'text-red-600' : ''}`}>
                     Name <span className="text-red-600" aria-hidden="true">*</span>
                 </label>
 
                 <input type="text" 
-                    id="LevelName" 
+                    id="levelName" 
                     name="name"
                     value={levelFormData.name} 
                     onChange={handleInputChange} 
-                    onBlur={handleNameBlur}
+                    onBlur={handleInputBlur}
                     required={true}
                     ref={nameInputRef}
                     className={`w-full border rounded-md px-3 py-2 ${levelFormDataError.name ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
-                    { ...(levelFormDataError.name && { "aria-invalid" : "true", "aria-describedby" : "LevelNameError" }) }
+                    { ...(levelFormDataError.name && { "aria-invalid" : "true", "aria-describedby" : "levelNameError" }) }
                     />
-                { levelFormDataError.name && <div id="LevelNameError" className="text-red-600">{levelFormDataError.name}</div>}
+                { levelFormDataError.name && <div id="levelNameError" className="text-red-600">{levelFormDataError.name}</div>}
             </div>
 
             <div className="mt-4">

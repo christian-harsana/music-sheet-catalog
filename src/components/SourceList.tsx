@@ -3,14 +3,14 @@ import { useNavigate } from "react-router";
 import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { DataRefreshContext } from "../contexts/DataRefreshContext";
-import { type Level } from "../types/level.type";
+import { type Source } from "../types/source.type";
 import Loading from "./Loading";
 import Modal from "./Modal";
-import LevelForm from "./LevelForm";
+import SourceForm from "./SourceForm";
 import IconSpinner from "./IconSpinner";
 
 const BASEURL = 'http://localhost:3000/';
-const LEVELURL = `${BASEURL}api/level/`;
+const SOURCEURL = `${BASEURL}api/source/`;
 
 function DeleteConfirmation({id, name} : {id: string, name: string}) {
     
@@ -23,10 +23,10 @@ function DeleteConfirmation({id, name} : {id: string, name: string}) {
 
         setIsFormProcessing(true);
 
-        const DELETELEVELURL = `${LEVELURL}${id}`;
+        const DELETESOURCEURL = `${SOURCEURL}${id}`;
 
         try {
-            const response = await fetch(`${DELETELEVELURL}`, {
+            const response = await fetch(`${DELETESOURCEURL}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -84,18 +84,18 @@ function DeleteConfirmation({id, name} : {id: string, name: string}) {
 }
 
 
-export default function LevelList() {
+export default function SourceList() {
     const {token} = useContext(AuthContext);
     const {refreshTrigger} = useContext(DataRefreshContext);
     const {addToast, showModal} = useContext(UIContext);
     const navigate = useNavigate();
-    const [levels, setLevels] = useState<Level[]>([]);
+    const [sources, setSources] = useState<Source[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     
-    const showEditForm = (level: Level) => {
+    const showEditForm = (source: Source) => {
         showModal(
-            <Modal title={"Edit Level"}>
-                <LevelForm level={level} />
+            <Modal title={"Edit Source"}>
+                <SourceForm source={source} />
             </Modal>
         )
     }
@@ -112,9 +112,9 @@ export default function LevelList() {
 
         if (!token) return;
 
-        const fetchLevels = async () => {
+        const fetchSources = async () => {
             try {
-                const response = await fetch(`${LEVELURL}`, {
+                const response = await fetch(`${SOURCEURL}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -136,9 +136,9 @@ export default function LevelList() {
                     return;
                 }
 
-                const resultData: Level[] = result.data;
+                const resultData: Source[] = result.data;
 
-                setLevels(resultData);
+                setSources(resultData);
             }
             catch(error: unknown) {
 
@@ -150,7 +150,7 @@ export default function LevelList() {
             }
         };
 
-        fetchLevels();
+        fetchSources();
     }, [token, refreshTrigger]);
 
 
@@ -163,24 +163,28 @@ export default function LevelList() {
         <table className="w-full border rounded-md border-gray-300">
             <thead>
                 <tr className="bg-gray-200">
-                    <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Name</th>
+                    <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Title</th>
+                    <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Author</th>
+                    <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Format</th>
                     <th scope="col" className="px-3 py-2 border-b border-gray-300 text-left"></th>
                 </tr>
             </thead>
             <tbody>
                 {
-                    levels.length < 1 ? (
+                    sources.length < 1 ? (
                         <tr className="bg-gray-50">
-                            <td colSpan={2} className="px-3 py-2">There is currently no data yet.</td>
+                            <td colSpan={4} className="px-3 py-2">There is currently no data yet.</td>
                         </tr>
                     ) : (
-                        levels.map(level => 
-                            <tr key={level.id} className="odd:bg-gray-50 even:bg-gray-100">
-                                <td className="px-3 py-2">{level.name}</td>
+                        sources.map(source => 
+                            <tr key={source.id} className="odd:bg-gray-50 even:bg-gray-100">
+                                <td className="px-3 py-2">{source.title}</td>
+                                <td className="px-3 py-2">{source.author}</td>
+                                <td className="px-3 py-2">{source.format}</td>
                                 <td className="px-3 py-2">
                                     <div className="flex flex-nowrap gap-3">
-                                        <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(level)}>Edit</button>
-                                        <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(level.id, level.name)}>Delete</button>
+                                        <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(source)}>Edit</button>
+                                        <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(source.id, source.title)}>Delete</button>
                                     </div>
                                 </td>
                             </tr>
