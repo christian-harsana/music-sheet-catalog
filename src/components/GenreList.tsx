@@ -2,11 +2,11 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
+import { DataRefreshContext } from "../contexts/DataRefreshContext";
+import { type Genre } from "../types/genre.type";
 import Loading from "./Loading";
 import Modal from "./Modal";
 import GenreForm from "./GenreForm";
-import { type Genre } from "../types/genre.type";
-
 
 const BASEURL = 'http://localhost:3000/';
 const GENREURL = `${BASEURL}api/genre/`;
@@ -15,6 +15,7 @@ function DeleteConfirmation({id, name} : {id: string, name: string}) {
     
     const {token} = useContext(AuthContext);
     const {addToast, closeModal} = useContext(UIContext);
+    const {triggerRefresh} = useContext(DataRefreshContext);
 
     const handleDelete = async (id: string) => {
 
@@ -32,6 +33,7 @@ function DeleteConfirmation({id, name} : {id: string, name: string}) {
             const result = await response.json();
 
             addToast(result.message);
+            triggerRefresh();
             closeModal();
         }
         catch (error) {
@@ -54,10 +56,14 @@ function DeleteConfirmation({id, name} : {id: string, name: string}) {
 }
 
 
-function GenreRows({genres} : {genres: Genre[]}) {
-
-    const {showModal} = useContext(UIContext);
-
+export default function GenreList() {
+    const {token} = useContext(AuthContext);
+    const {refreshTrigger} = useContext(DataRefreshContext);
+    const {addToast, showModal} = useContext(UIContext);
+    const navigate = useNavigate();
+    const [genres, setGenres] = useState<Genre[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    
     const showEditForm = (genre: Genre) => {
         showModal(
             <Modal title={"Edit Genre"}>
@@ -74,40 +80,12 @@ function GenreRows({genres} : {genres: Genre[]}) {
         )
     }
 
-    return (
-        <>
-            {
-                genres.map(genre => 
-                    <tr key={genre.id}>
-                        <td>{genre.name}</td>
-                        <td>
-                            <div className="flex flex-nowrap gap-3">
-                                <button type="button" onClick={() => showEditForm(genre)}>Edit</button>
-                                <button type="button" onClick={() => showDeleteConfirmation(genre.id, genre.name)}>Delete</button>
-                            </div>
-                        </td>
-                    </tr>
-                )
-            }
-        </>
-    );
-}
-
-
-export default function GenreList() {
-    const {token} = useContext(AuthContext);
-    const {addToast} = useContext(UIContext);
-    const navigate = useNavigate();
-    const [genres, setGenres] = useState<Genre[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
     useEffect(() => {
 
         if (!token) return;
 
         const fetchGenres = async () => {
             try {
-
                 const response = await fetch(`${GENREURL}`, {
                     method: 'GET',
                     headers: {
@@ -145,7 +123,7 @@ export default function GenreList() {
         };
 
         fetchGenres();
-    }, [token]);
+    }, [token, refreshTrigger]);
 
 
     // RENDER
@@ -168,7 +146,17 @@ export default function GenreList() {
                             <td colSpan={2}>There is currently no Genre data yet.</td>
                         </tr>
                     ) : (
-                        <GenreRows genres={genres} />
+                        genres.map(genre => 
+                            <tr key={genre.id}>
+                                <td>{genre.name}</td>
+                                <td>
+                                    <div className="flex flex-nowrap gap-3">
+                                        <button type="button" onClick={() => showEditForm(genre)}>Edit</button>
+                                        <button type="button" onClick={() => showDeleteConfirmation(genre.id, genre.name)}>Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        )
                     )
                 }
             </tbody>

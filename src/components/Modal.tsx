@@ -12,7 +12,7 @@ export default function Modal({title, children}: ModalProps) {
 
     return (
         <div aria-live="polite">
-            <div className="flex">
+            <div className="flex flex-nowrap">
                 {title && <h3>{title}</h3>}
                 <button type="button" onClick={closeModal}>
                     Close

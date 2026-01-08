@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
+import { DataRefreshContext } from '../contexts/DataRefreshContext';
 import IconSpinner from './IconSpinner';
 import type { Genre } from '../types/genre.type';
 
@@ -36,13 +37,7 @@ export default function GenreForm({genre} : GenreFormProp) {
     const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
-
-    console.log('Genre Form');
-    console.log(token);
-    const authContextValue = useContext(AuthContext);
-    console.log('Full AuthContext value:', authContextValue);
-    console.log('Token specifically:', token);
-    console.log('Token type:', typeof token);
+    const { triggerRefresh } = useContext(DataRefreshContext);
 
     function validateField(field: string, value: string): string {
 
@@ -142,6 +137,7 @@ export default function GenreForm({genre} : GenreFormProp) {
 
                 if (data.status.toLowerCase() === "success") {
                     addToast(data.message);
+                    triggerRefresh();
                     closeModal();
                 }
                 else {
