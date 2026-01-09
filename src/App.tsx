@@ -9,6 +9,7 @@ import Profile from './pages/Profile.tsx'
 import Genre from './pages/Genre.tsx'
 import Level from './pages/Level.tsx'
 import Source from './pages/Source.tsx'
+import Sheet from './pages/Sheet.tsx'
 import Login from './pages/Login.tsx'
 import SignUp from './pages/SignUp.tsx'
 import Error from './pages/Error.tsx'
@@ -51,6 +52,7 @@ function App() {
               <Route path="genre" element={<ProtectedRoute><Genre /></ProtectedRoute>} />
               <Route path="level" element={<ProtectedRoute><Level /></ProtectedRoute>} />
               <Route path="source" element={<ProtectedRoute><Source /></ProtectedRoute>} />
+              <Route path="sheet" element={<ProtectedRoute><Sheet /></ProtectedRoute>} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="*" element={<Error />} />

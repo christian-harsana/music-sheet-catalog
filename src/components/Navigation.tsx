@@ -19,6 +19,7 @@ export default function Navigation() {
             <Link to="/genre" className="block">Genre</Link>
             <Link to="/level" className="block">Level</Link>
             <Link to="/source" className="block">Source</Link>
+            <Link to="/sheet" className="block">Sheet</Link>
           </>
         ) :
         (
