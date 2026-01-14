@@ -1,13 +1,9 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
-import { DataRefreshContext } from '../contexts/DataRefreshContext';
+import { useCreateGenre, useUpdateGenre } from '../hooks/genreHooks';
 import IconSpinner from './IconSpinner';
-import type { Genre } from '../types/genre.type';
-
-type GenreFormData = {
-    name: string
-}
+import type { Genre, GenreFormData } from '../types/genre.type';
 
 type GenreFormDataError = {
     [K in keyof GenreFormData]?: string
@@ -18,27 +14,25 @@ type GenreFormDataTouched = {
 }
 
 type GenreFormProp = {
-    genre?: Genre
+    genre?: Genre,
+    refreshGenres: () => void
 }
 
-const BASEURL = 'http://localhost:3000/';
-const GENREURL = `${BASEURL}api/genre/`;
 
+export default function GenreForm({genre, refreshGenres} : GenreFormProp) {
 
-export default function GenreForm({genre} : GenreFormProp) {
-
-    const mode = genre ? "edit" : "add";
     const genreId = genre?.id ?? null;
     const {id, ...formDefaultData} = genre ?? {name: ""};
 
     const [GenreFormData, setGenreFormData] = useState<GenreFormData>(formDefaultData);
     const [GenreFormDataError, setGenreFormDataError] = useState<GenreFormDataError>({});
     const [GenreFormDataTouched, setGenreFormDataTouched] = useState<GenreFormDataTouched>({});
-    const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
-    const { triggerRefresh } = useContext(DataRefreshContext);
     const nameInputRef = useRef<HTMLInputElement>(null);
+    const { createGenre, isLoading: isCreatingGenre } = useCreateGenre();
+    const { updateGenre, isLoading: isUpdatingGenre } = useUpdateGenre();
+    const isLoading = isCreatingGenre || isUpdatingGenre;
 
     function validateField(field: string, value: string): string {
 
@@ -98,8 +92,6 @@ export default function GenreForm({genre} : GenreFormProp) {
 
         e.preventDefault()
 
-        setIsFormProcessing(true);
-
         // Validate the form
         const formSubmissionError: GenreFormDataError = validateForm(GenreFormData);
     
@@ -120,43 +112,20 @@ export default function GenreForm({genre} : GenreFormProp) {
             setGenreFormDataError({});
             setGenreFormDataTouched({});
 
-            try {
+            if (!token) return;
 
-                const method = mode === 'edit' ? 'PUT' : 'POST';
-                const actionURL = mode === 'edit' ? `${GENREURL}${genreId}` : GENREURL;
+            const result = !genreId ? await createGenre(GenreFormData, token) : await updateGenre(genreId, GenreFormData, token);
 
-                const response = await fetch(actionURL, {
-                    method: method,
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type' : 'application/json'
-                    },
-                    body: JSON.stringify(GenreFormData)
-                });
-
-                const data = await response.json();
-
-                if (data.status.toLowerCase() === "success") {
-                    addToast(data.message);
-                    triggerRefresh();
-                    closeModal();
-                }
-                else {
-                    addToast(data.message, 'error');
-                }
-
-                setIsFormProcessing(false);
+            if (result.status.toLowerCase() === "success") {
+                addToast(result.message);
+                refreshGenres();
+                closeModal();
             }
-            catch (error: unknown) {
-
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                addToast(errorMessage, "error");
-                setIsFormProcessing(false);
-
+            else {
+                addToast(result.message, 'error');
             }
         }
     }
-
 
     useEffect(() => {
         // Set focus to name input
@@ -190,7 +159,7 @@ export default function GenreForm({genre} : GenreFormProp) {
 
             <div className="mt-4">
                 {
-                    isFormProcessing ? (
+                    isLoading ? (
                         <button type="submit" 
                             disabled 
                             className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50">

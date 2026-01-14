@@ -25,10 +25,6 @@ const ProtectedRoute = ({children}: ProtectedRouteProps) => {
 
   const {token, isLoading} = useContext(AuthContext);
 
-  console.log("protected route");
-  console.log(token);
-  console.log(isLoading);
-
   if (isLoading) {
     return(<div className='text-white'>Loading...</div>); // TODO: Implement full page loading indicator
   }

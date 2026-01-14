@@ -75,7 +75,6 @@ export function AuthProvider({children} : {children: ReactNode}) {
             }
 
             try {
-
                 const response = await fetch(`${VERIFYURL}`, {
                     method: 'POST',
                     headers: {
@@ -87,7 +86,6 @@ export function AuthProvider({children} : {children: ReactNode}) {
                 if (!response.ok) {
                     if (response.status === 401) {
                         localStorage.removeItem(`music_sheet_catalog_token`);
-                        navigate("/login");
                     }
 
                     throw new Error(`HTTP error! status ${response.status}`);
