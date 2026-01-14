@@ -1,6 +1,16 @@
 const API_BASE_URL = 'http://localhost:3000/api';
 
-const api = {
+const handleResponse = async (response: Response) => {
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(`${response.status} - ${error.message || 'HTTP Error'}`);
+    }
+
+    return response;
+}
+
+export const api = {
     get: async(endpoint: string, token?: string) => {
             const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
                 method: 'GET',
@@ -10,11 +20,7 @@ const api = {
                 }
             });
 
-            if (!response.ok) {
-                throw new Error(`${response.status} - HTTP Error`);
-            }
-
-            return response;
+            return handleResponse(response);
         },
 
     post: async (endpoint: string, body: object, token?: string) => {
@@ -24,56 +30,37 @@ const api = {
                     'Content-Type': 'application/json',
                     ...(token && { 'Authorization': `Bearer ${token}` })
                 },
-                ...(body && { body : JSON.stringify(body) })
+                body : JSON.stringify(body)
             });
 
-            if (!response.ok) {
-                throw new Error(`${response.status} - HTTP Error`);
-            }
-
-            return response;
+            return handleResponse(response);
         },
 
-    put: (endpoint: string, body: object, token?: string) =>
-        fetch(`${API_BASE_URL}/${endpoint}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token && { 'Authorization': `Bearer ${token}` })
-            },
-            ...(body && { body : JSON.stringify(body) })
-        }),
+    put: async (endpoint: string, body: object, token?: string) => {
 
-    delete: (endpoint: string, token?: string) =>
-        fetch(`${API_BASE_URL}/${endpoint}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token && { Authorization: `Bearer ${token}` })
-            }
-        }),
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                },
+                body : JSON.stringify(body)
+            });
+
+            return handleResponse(response);
+        },
+        
+
+    delete: async (endpoint: string, token?: string) => {
+            
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Bearer ${token}` })
+                }
+            });
+
+            return handleResponse(response);
+        }
 }
-
-export { api };
-
-// export default async function apiRequest(endPoint: string, options:{} = {}) {
-
-//     const url = `${API_BASE_URL}${endPoint}`;
-
-//     const config = {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             ...options.headers,
-//         },
-//         ...options
-//     }
-
-//     const response = await fetch(url, config);
-
-//     if (!response.ok) {
-
-//     }
-
-//     return response.json();
-
-// }
