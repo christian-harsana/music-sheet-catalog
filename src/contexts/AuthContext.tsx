@@ -39,18 +39,6 @@ export function AuthProvider({children} : {children: ReactNode}) {
         localStorage.setItem(`music_sheet_catalog_token`, token);
         localStorage.setItem(`music_sheet_catalog_isAuthenticated`, "true");
 
-        // TEMP: checking token
-        // const decoded = jwtDecode(token);
-        // const issuedAt = new Date(decoded.iat * 1000);
-        // const expiresAt = new Date(decoded.exp * 1000);
-        // const duration = (decoded.exp - decoded.iat) * 1000; // in milliseconds
-
-        // console.log('Token issued at:', issuedAt);
-        // console.log('Token expires at:', expiresAt);
-        // console.log('Duration:', duration, 'ms');
-        // console.log('Duration in hours:', duration / 1000 / 60 / 60, 'hours');
-
-
         // Update State
         setUser(user);
         setToken(token);
@@ -76,12 +64,17 @@ export function AuthProvider({children} : {children: ReactNode}) {
 
     useEffect(() => {
 
-        // Check local storage for token
-        const cachedToken = localStorage.getItem(`music_sheet_catalog_token`);
+        const verifyToken = async() => {
 
-        // Verify token
-        try {
-            const verifyToken = async() => {
+            // Check local storage for token
+            const cachedToken = localStorage.getItem(`music_sheet_catalog_token`);
+
+            if (!cachedToken) {
+                setIsLoading(false);
+                return;
+            }
+
+            try {
 
                 const response = await fetch(`${VERIFYURL}`, {
                     method: 'POST',
@@ -90,6 +83,15 @@ export function AuthProvider({children} : {children: ReactNode}) {
                         'Content-Type': 'application/json'
                     }
                 });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem(`music_sheet_catalog_token`);
+                        navigate("/login");
+                    }
+
+                    throw new Error(`HTTP error! status ${response.status}`);
+                }
 
                 const result = await response.json();
                 const user: AuthUser = result.data;
@@ -99,17 +101,18 @@ export function AuthProvider({children} : {children: ReactNode}) {
                 setUser(user);
                 setToken(cachedToken);
                 setIsAuthtenticated(true);
+            }
+            catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                console.error(errorMessage);
+            }
+            finally {
                 setIsLoading(false);
             }
-
-            verifyToken();
         }
-        catch (error: unknown) {
 
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            throw new Error(errorMessage); // TODO: any better error handling?
-            setIsLoading(false);
-        }
+        verifyToken();
+
     }, []);
 
 
