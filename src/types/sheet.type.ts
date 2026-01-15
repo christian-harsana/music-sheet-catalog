@@ -8,3 +8,10 @@ export type Sheet = {
     genreId: string,
     genreName: string
 }
+
+export type SheetFormData = {
+    title: string,
+    sourceId: string,
+    levelId: string,
+    genreId: string
+}

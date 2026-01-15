@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router'
 import { AuthContext, AuthProvider } from './contexts/AuthContext.tsx'
 import { UIProvider } from './contexts/UIContext.tsx'
-import { DataRefreshProvider } from './contexts/DataRefreshContext.tsx'
 import Home from './pages/Home.tsx'
 import Settings from './pages/Settings.tsx'
 import Profile from './pages/Profile.tsx'
@@ -43,22 +42,20 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <DataRefreshProvider>
-          <UIProvider>
-            <Routes>
-              <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="genre" element={<ProtectedRoute><Genre /></ProtectedRoute>} />
-              <Route path="level" element={<ProtectedRoute><Level /></ProtectedRoute>} />
-              <Route path="source" element={<ProtectedRoute><Source /></ProtectedRoute>} />
-              <Route path="sheet" element={<ProtectedRoute><Sheet /></ProtectedRoute>} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<SignUp />} />
-              <Route path="*" element={<Error />} />
-            </Routes>
-          </UIProvider>
-        </DataRefreshProvider>
+        <UIProvider>
+          <Routes>
+            <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="genre" element={<ProtectedRoute><Genre /></ProtectedRoute>} />
+            <Route path="level" element={<ProtectedRoute><Level /></ProtectedRoute>} />
+            <Route path="source" element={<ProtectedRoute><Source /></ProtectedRoute>} />
+            <Route path="sheet" element={<ProtectedRoute><Sheet /></ProtectedRoute>} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+        </UIProvider>
       </AuthProvider>
     </BrowserRouter>
   )

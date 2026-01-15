@@ -1,20 +1,16 @@
 import { useState, useContext, useRef, useEffect } from 'react';
-import { useNavigate } from "react-router";
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
-import { DataRefreshContext } from '../contexts/DataRefreshContext';
 import IconSpinner from './IconSpinner';
-import type { Sheet } from '../types/sheet.type';
+import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { Genre } from '../types/genre.type';
 import type { Level } from '../types/level.type';
 import type { Source } from '../types/source.type';
+import { useGetGenres } from '../hooks/genreHooks';
+import { useGetLevels } from '../hooks/levelHooks';
+import { useGetSources } from '../hooks/sourceHooks';
+import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
 
-type SheetFormData = {
-    title: string,
-    sourceId: string,
-    levelId: string,
-    genreId: string
-}
 
 type SheetFormDataError = {
     [K in keyof SheetFormData]?: string
@@ -25,32 +21,28 @@ type SheetFormDataTouched = {
 }
 
 type SheetFormProp = {
-    sheet?: Sheet
+    sheet?: Sheet,
+    refreshData: () => void
 }
 
-const BASEURL = 'http://localhost:3000/';
-const SHEETURL = `${BASEURL}api/sheet/`;
-const GENREURL = `${BASEURL}api/genre/`;
-const LEVELURL = `${BASEURL}api/level/`;
-const SOURCEURL = `${BASEURL}api/source/`;
 
-export default function SheetForm({sheet} : SheetFormProp) {
+export default function SheetForm({sheet, refreshData} : SheetFormProp) {
 
-    const mode = sheet ? "edit" : "add";
     const sheetId = sheet?.id ?? null;
     const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", sourceId: "", levelId: "", genreId: ""};
     const [SheetFormData, setSheetFormData] = useState<SheetFormData>(formDefaultData);
     const [SheetFormDataError, setSheetFormDataError] = useState<SheetFormDataError>({});
     const [SheetFormDataTouched, setSheetFormDataTouched] = useState<SheetFormDataTouched>({});
-    const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
-    const [genreList, setGenreList] = useState<Genre[]>([]);
-    const [sourceList, setSourceList] = useState<Source[]>([]);
-    const [levelList, setLevelList] = useState<Level[]>([]);
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
-    const { triggerRefresh } = useContext(DataRefreshContext);
     const titleInputRef = useRef<HTMLInputElement>(null);
-    const navigate = useNavigate();
+    const {genres, isLoading: isLoadingGenre } = useGetGenres();
+    const {levels, isLoading: isLoadingLevel } = useGetLevels();
+    const {sources, isLoading: isLoadingSource } = useGetSources(); 
+    const {createSheet, isLoading: isCreatingSheet} = useCreateSheet();
+    const {updateSheet, isLoading: isUpdatingSheet} = useUpdateSheet();
+    const isLoading = isCreatingSheet || isUpdatingSheet;
+
 
     function validateField(field: string, value: string): string {
 
@@ -110,8 +102,6 @@ export default function SheetForm({sheet} : SheetFormProp) {
 
         e.preventDefault()
 
-        setIsFormProcessing(true);
-
         // Validate the form
         const formSubmissionError: SheetFormDataError = validateForm(SheetFormData);
     
@@ -137,39 +127,20 @@ export default function SheetForm({sheet} : SheetFormProp) {
             setSheetFormDataError({});
             setSheetFormDataTouched({});
 
-            try {
-
-                const method = mode === 'edit' ? 'PUT' : 'POST';
-                const actionURL = mode === 'edit' ? `${SHEETURL}${sheetId}` : SHEETURL;
-
-                const response = await fetch(actionURL, {
-                    method: method,
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type' : 'application/json'
-                    },
-                    body: JSON.stringify(sheetFormData)
-                });
-
-                const data = await response.json();
-
-                if (data.status.toLowerCase() === "success") {
-                    addToast(data.message);
-                    triggerRefresh();
-                    closeModal();
-                }
-                else {
-                    addToast(data.message, 'error');
-                }
-
-                setIsFormProcessing(false);
+            if (!token) {
+                addToast('Invalid token', 'error');
+                return;
             }
-            catch (error: unknown) {
 
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                addToast(errorMessage, "error");
-                setIsFormProcessing(false);
+            const result = !sheetId ? await createSheet(sheetFormData, token) : await updateSheet(sheetId, sheetFormData, token);
 
+            if (result.status.toLowerCase() === "success") {
+                addToast(result.message);
+                refreshData();
+                closeModal();
+            }
+            else {
+                addToast(result.message, 'error');
             }
         }
     }
@@ -177,128 +148,11 @@ export default function SheetForm({sheet} : SheetFormProp) {
 
     useEffect(() => {
 
-        if (!token) return;
-
-        // Fetch Genre
-        const fetchGenres = async() => {
-
-            try {
-                const response = await fetch(`${GENREURL}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        addToast(result.error, "error");
-                        localStorage.removeItem('music_sheet_catalog_token');
-                        closeModal();
-                        navigate('/login');
-                        return;
-                    }
-
-                    addToast(result.error, "error");
-                    return;
-                }
-
-                const resultData: Genre[] = result.data;
-
-                setGenreList(resultData);
-            }
-            catch (error) {
-                const errorMessage = error instanceof Error ? error.message : "Unknown Error";
-                addToast(errorMessage, "error");
-            }
-        }
-
-        // Fetch Levels
-        const fetchLevels = async() => {
-
-            try {
-                const response = await fetch(`${LEVELURL}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        addToast(result.error, "error");
-                        localStorage.removeItem('music_sheet_catalog_token');
-                        closeModal();
-                        navigate('/login');
-                        return;
-                    }
-
-                    addToast(result.error, "error");
-                    return;
-                }
-
-                const resultData: Level[] = result.data;
-
-                setLevelList(resultData);
-            }
-            catch (error) {
-                const errorMessage = error instanceof Error ? error.message : "Unknown Error";
-                addToast(errorMessage, "error");
-            }
-        }
-
-        // Fetch Sources
-        const fetchSources = async() => {
-
-            try {
-                const response = await fetch(`${SOURCEURL}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        addToast(result.error, "error");
-                        localStorage.removeItem('music_sheet_catalog_token');
-                        closeModal();
-                        navigate('/login');
-                        return;
-                    }
-
-                    addToast(result.error, "error");
-                    return;
-                }
-
-                const resultData: Source[] = result.data;
-
-                setSourceList(resultData);
-            }
-            catch (error) {
-                const errorMessage = error instanceof Error ? error.message : "Unknown Error";
-                addToast(errorMessage, "error");
-            }
-        }
-
-        fetchGenres();
-        fetchLevels();
-        fetchSources();
-
-        // Set focus to name input
+        // Set focus to title input
         if (titleInputRef.current) {
             titleInputRef.current.focus();
         }
-    }, [token]);
+    }, []);
 
 
     return (
@@ -333,21 +187,28 @@ export default function SheetForm({sheet} : SheetFormProp) {
                         name="sourceId"
                         onChange={handleInputChange}
                         value={SheetFormData.sourceId}
-                        className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50">
+                        className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
+                        disabled={isLoadingSource} >
                         <option value="">Please Select</option>
                         {
-                            sourceList.map(source => 
+                            sources.map((source: Source) => 
                                 ( <option key={`source-${source.id}`} value={source.id}>{source.title}</option> )
                             )
                         }
                     </select>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
-                        aria-hidden="true" 
-                        width="10"
-                        className="absolute top-3.5 right-3">
-                        {/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
-                        <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
-                    </svg>
+                    { isLoadingSource? (
+                        <span className="absolute top-3 right-3">
+                            <IconSpinner color={"dark"} />
+                        </span>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
+                            aria-hidden="true" 
+                            width="10"
+                            className="absolute top-3.5 right-3">
+                            {/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
+                            <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+                        </svg>
+                    )}
                 </div>
             </div>
 
@@ -361,21 +222,28 @@ export default function SheetForm({sheet} : SheetFormProp) {
                         name="levelId"
                         onChange={handleInputChange}
                         value={SheetFormData.levelId}
-                        className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50">
+                        className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
+                        disabled={isLoadingLevel} >
                         <option value="">Please Select</option>
                         {
-                            levelList.map(level => 
+                            levels.map((level: Level) => 
                                 ( <option key={`level-${level.id}`} value={level.id}>{level.name}</option> )
                             )
                         }
                     </select>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
-                        aria-hidden="true" 
-                        width="10"
-                        className="absolute top-3.5 right-3">
-                        {/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
-                        <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
-                    </svg>
+                    { isLoadingLevel? (
+                        <span className="absolute top-3 right-3">
+                            <IconSpinner color={"dark"} />
+                        </span>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
+                            aria-hidden="true" 
+                            width="10"
+                            className="absolute top-3.5 right-3">
+                            {/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
+                            <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+                        </svg>
+                    )}
                 </div>
             </div>
 
@@ -389,27 +257,35 @@ export default function SheetForm({sheet} : SheetFormProp) {
                         name="genreId"
                         onChange={handleInputChange}
                         value={SheetFormData.genreId}
-                        className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50">
+                        className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
+                        disabled={isLoadingGenre} >
                         <option value="">Please Select</option>
                         {
-                            genreList.map(genre => 
+                            genres.map((genre: Genre) => 
                                 ( <option key={`genre-${genre.id}`} value={genre.id}>{genre.name}</option> )
                             )
                         }
                     </select>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
-                        aria-hidden="true" 
-                        width="10"
-                        className="absolute top-3.5 right-3">
-                        {/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
-                        <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
-                    </svg>
+
+                    { isLoadingGenre? (
+                        <span className="absolute top-3 right-3">
+                            <IconSpinner color={"dark"} />
+                        </span>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
+                            aria-hidden="true" 
+                            width="10"
+                            className="absolute top-3.5 right-3">
+                            {/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
+                            <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+                        </svg>
+                    )}
                 </div>
             </div>
 
             <div className="mt-4">
                 {
-                    isFormProcessing ? (
+                    isLoading ? (
                         <button type="submit" 
                             disabled 
                             className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50">
