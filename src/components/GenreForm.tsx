@@ -15,15 +15,14 @@ type GenreFormDataTouched = {
 
 type GenreFormProp = {
     genre?: Genre,
-    refreshGenres: () => void
+    refreshData: () => void
 }
 
 
-export default function GenreForm({genre, refreshGenres} : GenreFormProp) {
+export default function GenreForm({genre, refreshData} : GenreFormProp) {
 
     const genreId = genre?.id ?? null;
     const {id, ...formDefaultData} = genre ?? {name: ""};
-
     const [GenreFormData, setGenreFormData] = useState<GenreFormData>(formDefaultData);
     const [GenreFormDataError, setGenreFormDataError] = useState<GenreFormDataError>({});
     const [GenreFormDataTouched, setGenreFormDataTouched] = useState<GenreFormDataTouched>({});
@@ -33,6 +32,7 @@ export default function GenreForm({genre, refreshGenres} : GenreFormProp) {
     const { createGenre, isLoading: isCreatingGenre } = useCreateGenre();
     const { updateGenre, isLoading: isUpdatingGenre } = useUpdateGenre();
     const isLoading = isCreatingGenre || isUpdatingGenre;
+
 
     function validateField(field: string, value: string): string {
 
@@ -112,13 +112,16 @@ export default function GenreForm({genre, refreshGenres} : GenreFormProp) {
             setGenreFormDataError({});
             setGenreFormDataTouched({});
 
-            if (!token) return;
+            if (!token) {
+                addToast('Invalid token', 'error');
+                return;
+            }
 
             const result = !genreId ? await createGenre(GenreFormData, token) : await updateGenre(genreId, GenreFormData, token);
 
             if (result.status.toLowerCase() === "success") {
                 addToast(result.message);
-                refreshGenres();
+                refreshData();
                 closeModal();
             }
             else {

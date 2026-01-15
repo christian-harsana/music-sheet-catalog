@@ -8,7 +8,7 @@ import Modal from "./Modal";
 import GenreForm from "./GenreForm";
 import IconSpinner from "./IconSpinner";
 
-function DeleteConfirmation({id, name, refreshGenres} : {id: string, name: string, refreshGenres: () => void }) {
+function DeleteConfirmation({id, name, refreshData} : {id: string, name: string, refreshData: () => void }) {
     
     const {token} = useContext(AuthContext);
     const {addToast, closeModal} = useContext(UIContext);
@@ -17,13 +17,14 @@ function DeleteConfirmation({id, name, refreshGenres} : {id: string, name: strin
     const handleDelete = async (id: string) => {
 
         if (!token) {
+            addToast('Failed to delete - Invalid token', 'error');
             return;
         }
 
         const result = await deleteGenre(id, token); 
     
         if (result.status === 'success') {
-            refreshGenres();
+            refreshData();
             closeModal();
             addToast(result.message);
         }
@@ -73,7 +74,7 @@ export default function GenreList() {
     const handleAddGenre = () => {
         showModal(
             <Modal title={'Add Genre'}>
-                <GenreForm refreshGenres={refreshGenres} />
+                <GenreForm refreshData={refreshGenres} />
             </Modal>
         )
     }
@@ -82,7 +83,7 @@ export default function GenreList() {
         showModal(
             <Modal title={"Edit Genre"}>
                 <GenreForm genre={genre}
-                    refreshGenres={refreshGenres} />
+                    refreshData={refreshGenres} />
             </Modal>
         )
     }
@@ -92,7 +93,7 @@ export default function GenreList() {
             <Modal title={"Confirmation"}>
                 <DeleteConfirmation id={id} 
                     name={name} 
-                    refreshGenres={refreshGenres} />
+                    refreshData={refreshGenres} />
             </Modal>
         )
     }

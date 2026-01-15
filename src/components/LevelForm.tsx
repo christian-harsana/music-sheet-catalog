@@ -1,13 +1,9 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
-import { DataRefreshContext } from '../contexts/DataRefreshContext';
 import IconSpinner from './IconSpinner';
-import type { Level } from '../types/level.type';
-
-type LevelFormData = {
-    name: string
-}
+import type { Level, LevelFormData } from '../types/level.type';
+import { useCreateLevel, useUpdateLevel } from '../hooks/levelHooks';
 
 type LevelFormDataError = {
     [K in keyof LevelFormData]?: string
@@ -18,27 +14,24 @@ type LevelFormDataTouched = {
 }
 
 type LevelFormProp = {
-    level?: Level
+    level?: Level,
+    refreshData: () => void
 }
 
-const BASEURL = 'http://localhost:3000/';
-const LEVELURL = `${BASEURL}api/level/`;
+export default function LevelForm({level, refreshData} : LevelFormProp) {
 
-
-export default function LevelForm({level} : LevelFormProp) {
-
-    const mode = level ? "edit" : "add";
     const levelId = level?.id ?? null;
     const {id, ...formDefaultData} = level ?? {name: ""};
-
     const [levelFormData, setLevelFormData] = useState<LevelFormData>(formDefaultData);
     const [levelFormDataError, setLevelFormDataError] = useState<LevelFormDataError>({});
     const [levelFormDataTouched, setLevelFormDataTouched] = useState<LevelFormDataTouched>({});
-    const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
-    const { triggerRefresh } = useContext(DataRefreshContext);
     const nameInputRef = useRef<HTMLInputElement>(null);
+    const { createLevel, isLoading: isCreatingLevel } = useCreateLevel();
+    const { updateLevel, isLoading: isUpdatingLevel } = useUpdateLevel();
+    const isLoading = isCreatingLevel || isUpdatingLevel;
+
 
     function validateField(field: string, value: string): string {
 
@@ -98,8 +91,6 @@ export default function LevelForm({level} : LevelFormProp) {
 
         e.preventDefault()
 
-        setIsFormProcessing(true);
-
         // Validate the form
         const formSubmissionError: LevelFormDataError = validateForm(levelFormData);
     
@@ -120,39 +111,20 @@ export default function LevelForm({level} : LevelFormProp) {
             setLevelFormDataError({});
             setLevelFormDataTouched({});
 
-            try {
-
-                const method = mode === 'edit' ? 'PUT' : 'POST';
-                const actionURL = mode === 'edit' ? `${LEVELURL}${levelId}` : LEVELURL;
-
-                const response = await fetch(actionURL, {
-                    method: method,
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type' : 'application/json'
-                    },
-                    body: JSON.stringify(levelFormData)
-                });
-
-                const data = await response.json();
-
-                if (data.status.toLowerCase() === "success") {
-                    addToast(data.message);
-                    triggerRefresh();
-                    closeModal();
-                }
-                else {
-                    addToast(data.message, 'error');
-                }
-
-                setIsFormProcessing(false);
+            if (!token) {
+                addToast('Invalid token', 'error');
+                return;
             }
-            catch (error: unknown) {
 
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                addToast(errorMessage, "error");
-                setIsFormProcessing(false);
+            const result = !levelId ? await createLevel(levelFormData, token) : await updateLevel(levelId, levelFormData, token) 
 
+            if (result.status.toLowerCase() === "success") {
+                addToast(result.message);
+                refreshData();
+                closeModal();
+            }
+            else {
+                addToast(result.message, 'error');
             }
         }
     }
@@ -190,7 +162,7 @@ export default function LevelForm({level} : LevelFormProp) {
 
             <div className="mt-4">
                 {
-                    isFormProcessing ? (
+                    isLoading ? (
                         <button type="submit" 
                             disabled 
                             className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50">
