@@ -5,6 +5,7 @@ import { useCreateGenre, useUpdateGenre } from '../hooks/genreHooks';
 import IconSpinner from './IconSpinner';
 import type { Genre, GenreFormData } from '../types/genre.type';
 
+
 type GenreFormDataError = {
     [K in keyof GenreFormData]?: string
 }
@@ -23,14 +24,14 @@ export default function GenreForm({genre, refreshData} : GenreFormProp) {
 
     const genreId = genre?.id ?? null;
     const {id, ...formDefaultData} = genre ?? {name: ""};
-    const [GenreFormData, setGenreFormData] = useState<GenreFormData>(formDefaultData);
-    const [GenreFormDataError, setGenreFormDataError] = useState<GenreFormDataError>({});
-    const [GenreFormDataTouched, setGenreFormDataTouched] = useState<GenreFormDataTouched>({});
-    const { addToast, closeModal } = useContext(UIContext);
-    const { token } = useContext(AuthContext);
+    const [genreFormData, setGenreFormData] = useState<GenreFormData>(formDefaultData);
+    const [genreFormDataError, setGenreFormDataError] = useState<GenreFormDataError>({});
+    const [genreFormDataTouched, setGenreFormDataTouched] = useState<GenreFormDataTouched>({});
+    const {addToast, closeModal} = useContext(UIContext);
+    const {token } = useContext(AuthContext);
     const nameInputRef = useRef<HTMLInputElement>(null);
-    const { createGenre, isLoading: isCreatingGenre } = useCreateGenre();
-    const { updateGenre, isLoading: isUpdatingGenre } = useUpdateGenre();
+    const {createGenre, isLoading: isCreatingGenre} = useCreateGenre();
+    const {updateGenre, isLoading: isUpdatingGenre} = useUpdateGenre();
     const isLoading = isCreatingGenre || isUpdatingGenre;
 
 
@@ -72,7 +73,7 @@ export default function GenreForm({genre, refreshData} : GenreFormProp) {
         setGenreFormData(prev => ({...prev, [name]: value}));
 
         // Set Validation
-        if (GenreFormDataTouched[name]) {
+        if (genreFormDataTouched[name]) {
             setGenreFormDataError(prev => ({...prev, [name]: validateField(name, value)}));
         }
     }
@@ -88,12 +89,12 @@ export default function GenreForm({genre, refreshData} : GenreFormProp) {
     }
 
 
-    const handleGenreFormSubmit = async (e: React.FormEvent, GenreFormData: GenreFormData, genreId: string | null) => {
+    const handleGenreFormSubmit = async (e: React.FormEvent, genreFormData: GenreFormData, genreId: string | null) => {
 
         e.preventDefault()
 
         // Validate the form
-        const formSubmissionError: GenreFormDataError = validateForm(GenreFormData);
+        const formSubmissionError: GenreFormDataError = validateForm(genreFormData);
     
         // Check if error exist
         let isErrorExist = false;
@@ -117,7 +118,7 @@ export default function GenreForm({genre, refreshData} : GenreFormProp) {
                 return;
             }
 
-            const result = !genreId ? await createGenre(GenreFormData, token) : await updateGenre(genreId, GenreFormData, token);
+            const result = !genreId ? await createGenre(genreFormData, token) : await updateGenre(genreId, genreFormData, token);
 
             if (result.status.toLowerCase() === "success") {
                 addToast(result.message);
@@ -139,25 +140,25 @@ export default function GenreForm({genre, refreshData} : GenreFormProp) {
 
 
     return (
-        <form onSubmit={(e) => handleGenreFormSubmit(e, GenreFormData, genreId)}>
+        <form onSubmit={(e) => handleGenreFormSubmit(e, genreFormData, genreId)}>
             <div className="mb-4">
                 <label htmlFor="genreName"
-                    className={`block mb-1 ${GenreFormDataError.name ? 'text-red-600' : ''}`}>
+                    className={`block mb-1 ${genreFormDataError.name ? 'text-red-600' : ''}`}>
                     Name <span className="text-red-600" aria-hidden="true">*</span>
                 </label>
 
                 <input type="text" 
                     id="genreName" 
                     name="name"
-                    value={GenreFormData.name} 
+                    value={genreFormData.name} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}
                     required={true}
                     ref={nameInputRef}
-                    className={`w-full border rounded-md px-3 py-2 ${GenreFormDataError.name ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
-                    { ...(GenreFormDataError.name && { "aria-invalid" : "true", "aria-describedby" : "genreNameError" }) }
+                    className={`w-full border rounded-md px-3 py-2 ${genreFormDataError.name ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
+                    { ...(genreFormDataError.name && { "aria-invalid" : "true", "aria-describedby" : "genreNameError" }) }
                     />
-                { GenreFormDataError.name && <div id="genreNameError" className="text-red-600">{GenreFormDataError.name}</div>}
+                { genreFormDataError.name && <div id="genreNameError" className="text-red-600">{genreFormDataError.name}</div>}
             </div>
 
             <div className="mt-4">

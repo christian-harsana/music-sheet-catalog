@@ -4,3 +4,9 @@ export type Source = {
     author: string,
     format: string
 }
+
+export type SourceFormData = {
+    title: string,
+    author: string,
+    format: string
+}

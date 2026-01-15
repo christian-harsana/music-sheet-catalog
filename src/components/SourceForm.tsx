@@ -1,15 +1,10 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
-import { DataRefreshContext } from '../contexts/DataRefreshContext';
+import { useCreateSource, useUpdateSource } from '../hooks/sourceHooks';
 import IconSpinner from './IconSpinner';
-import type { Source } from '../types/source.type';
+import type { Source, SourceFormData } from '../types/source.type';
 
-type SourceFormData = {
-    title: string,
-    author: string,
-    format: string
-}
 
 type SourceFormDataError = {
     [K in keyof SourceFormData]?: string
@@ -20,27 +15,25 @@ type SourceFormDataTouched = {
 }
 
 type SourceFormProp = {
-    source?: Source
+    source?: Source,
+    refreshData: () => void
 }
 
-const BASEURL = 'http://localhost:3000/';
-const SOURCEURL = `${BASEURL}api/source/`;
 
+export default function SourceForm({source, refreshData} : SourceFormProp) {
 
-export default function SourceForm({source} : SourceFormProp) {
-
-    const mode = source ? "edit" : "add";
     const sourceId = source?.id ?? null;
     const {id, ...formDefaultData} = source ?? {title: "", author: "", format: ""};
-
-    const [SourceFormData, setSourceFormData] = useState<SourceFormData>(formDefaultData);
-    const [SourceFormDataError, setSourceFormDataError] = useState<SourceFormDataError>({});
-    const [SourceFormDataTouched, setSourceFormDataTouched] = useState<SourceFormDataTouched>({});
-    const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
+    const [sourceFormData, setSourceFormData] = useState<SourceFormData>(formDefaultData);
+    const [sourceFormDataError, setSourceFormDataError] = useState<SourceFormDataError>({});
+    const [sourceFormDataTouched, setSourceFormDataTouched] = useState<SourceFormDataTouched>({});
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
-    const { triggerRefresh } = useContext(DataRefreshContext);
     const titleInputRef = useRef<HTMLInputElement>(null);
+    const {createSource, isLoading: isCreatingSource} = useCreateSource();
+    const {updateSource, isLoading: isUpdatingSource} = useUpdateSource();
+    const isLoading = isCreatingSource || isUpdatingSource;
+
 
     function validateField(field: string, value: string): string {
 
@@ -80,7 +73,7 @@ export default function SourceForm({source} : SourceFormProp) {
         setSourceFormData(prev => ({...prev, [name]: value}));
 
         // Set Validation
-        if (SourceFormDataTouched[name]) {
+        if (sourceFormDataTouched[name]) {
             setSourceFormDataError(prev => ({...prev, [name]: validateField(name, value)}));
         }
     }
@@ -99,8 +92,6 @@ export default function SourceForm({source} : SourceFormProp) {
     const handleSourceFormSubmit = async (e: React.FormEvent, SourceFormData: SourceFormData, sourceId: string | null) => {
 
         e.preventDefault()
-
-        setIsFormProcessing(true);
 
         // Validate the form
         const formSubmissionError: SourceFormDataError = validateForm(SourceFormData);
@@ -126,39 +117,20 @@ export default function SourceForm({source} : SourceFormProp) {
             setSourceFormDataError({});
             setSourceFormDataTouched({});
 
-            try {
-
-                const method = mode === 'edit' ? 'PUT' : 'POST';
-                const actionURL = mode === 'edit' ? `${SOURCEURL}${sourceId}` : SOURCEURL;
-
-                const response = await fetch(actionURL, {
-                    method: method,
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type' : 'application/json'
-                    },
-                    body: JSON.stringify(SourceFormData)
-                });
-
-                const data = await response.json();
-
-                if (data.status.toLowerCase() === "success") {
-                    addToast(data.message);
-                    triggerRefresh();
-                    closeModal();
-                }
-                else {
-                    addToast(data.message, 'error');
-                }
-
-                setIsFormProcessing(false);
+            if (!token) {
+                addToast('Invalid token', 'error');
+                return;
             }
-            catch (error: unknown) {
 
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                addToast(errorMessage, "error");
-                setIsFormProcessing(false);
+            const result = !sourceId ? await createSource(sourceFormData, token) : await updateSource(sourceId, sourceFormData, token);
 
+            if (result.status.toLowerCase() === "success") {
+                addToast(result.message);
+                refreshData();
+                closeModal();
+            }
+            else {
+                addToast(result.message, 'error');
             }
         }
     }
@@ -173,66 +145,66 @@ export default function SourceForm({source} : SourceFormProp) {
 
 
     return (
-        <form onSubmit={(e) => handleSourceFormSubmit(e, SourceFormData, sourceId)}>
+        <form onSubmit={(e) => handleSourceFormSubmit(e, sourceFormData, sourceId)}>
             <div className="mb-4">
                 <label htmlFor="sourceTitle"
-                    className={`block mb-1 ${SourceFormDataError.title ? 'text-red-600' : ''}`}>
+                    className={`block mb-1 ${sourceFormDataError.title ? 'text-red-600' : ''}`}>
                     Title <span className="text-red-600" aria-hidden="true">*</span>
                 </label>
 
                 <input type="text" 
                     id="sourceTitle" 
                     name="title"
-                    value={SourceFormData.title} 
+                    value={sourceFormData.title} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}
                     required={true}
                     ref={titleInputRef}
-                    className={`w-full border rounded-md px-3 py-2 ${SourceFormDataError.title ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
-                    { ...(SourceFormDataError.title && { "aria-invalid" : "true", "aria-describedby" : "sourceTitleError" }) }
+                    className={`w-full border rounded-md px-3 py-2 ${sourceFormDataError.title ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
+                    { ...(sourceFormDataError.title && { "aria-invalid" : "true", "aria-describedby" : "sourceTitleError" }) }
                     />
-                { SourceFormDataError.title && <div id="sourceTitleError" className="text-red-600">{SourceFormDataError.title}</div>}
+                { sourceFormDataError.title && <div id="sourceTitleError" className="text-red-600">{sourceFormDataError.title}</div>}
             </div>
 
             <div className="mb-4">
                 <label htmlFor="sourceAuthor"
-                    className={`block mb-1 ${SourceFormDataError.author ? 'text-red-600' : ''}`}>
+                    className={`block mb-1 ${sourceFormDataError.author ? 'text-red-600' : ''}`}>
                     Author
                 </label>
 
                 <input type="text" 
                     id="sourceAuthor" 
                     name="author"
-                    value={SourceFormData.author} 
+                    value={sourceFormData.author} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}
-                    className={`w-full border rounded-md px-3 py-2 ${SourceFormDataError.author ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
-                    { ...(SourceFormDataError.author && { "aria-invalid" : "true", "aria-describedby" : "sourceTitleError" }) }
+                    className={`w-full border rounded-md px-3 py-2 ${sourceFormDataError.author ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
+                    { ...(sourceFormDataError.author && { "aria-invalid" : "true", "aria-describedby" : "sourceTitleError" }) }
                     />
-                { SourceFormDataError.author && <div id="sourceTitleError" className="text-red-600">{SourceFormDataError.author}</div>}
+                { sourceFormDataError.author && <div id="sourceTitleError" className="text-red-600">{sourceFormDataError.author}</div>}
             </div>
 
             <div className="mb-4">
                 <label htmlFor="sourceFormat"
-                    className={`block mb-1 ${SourceFormDataError.format ? 'text-red-600' : ''}`}>
+                    className={`block mb-1 ${sourceFormDataError.format ? 'text-red-600' : ''}`}>
                     Format
                 </label>
 
                 <input type="text" 
                     id="sourceFormat" 
                     name="format"
-                    value={SourceFormData.format} 
+                    value={sourceFormData.format} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}
-                    className={`w-full border rounded-md px-3 py-2 ${SourceFormDataError.format ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
-                    { ...(SourceFormDataError.format && { "aria-invalid" : "true", "aria-describedby" : "sourceTitleError" }) }
+                    className={`w-full border rounded-md px-3 py-2 ${sourceFormDataError.format ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
+                    { ...(sourceFormDataError.format && { "aria-invalid" : "true", "aria-describedby" : "sourceTitleError" }) }
                     />
-                { SourceFormDataError.format && <div id="sourceTitleError" className="text-red-600">{SourceFormDataError.format}</div>}
+                { sourceFormDataError.format && <div id="sourceTitleError" className="text-red-600">{sourceFormDataError.format}</div>}
             </div>
 
             <div className="mt-4">
                 {
-                    isFormProcessing ? (
+                    isLoading ? (
                         <button type="submit" 
                             disabled 
                             className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50">
