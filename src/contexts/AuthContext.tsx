@@ -75,10 +75,10 @@ export function AuthProvider({children} : {children: ReactNode}) {
             }
 
             try {
-                const response = await api.get(`auth/verify`, cachedToken);
+                const response = await api.post(`auth/verify`, {token: cachedToken});
                 const result = await response.json();
                 const user: AuthUser = result.data;
-                
+
                 localStorage.setItem(`music_sheet_catalog_user`, JSON.stringify(user));
 
                 setUser(user);
@@ -101,7 +101,6 @@ export function AuthProvider({children} : {children: ReactNode}) {
         }
 
         verifyToken();
-
     }, []);
 
 
