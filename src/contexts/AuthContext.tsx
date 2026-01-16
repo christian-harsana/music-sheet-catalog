@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import type { AuthUser } from "../types/common.type";
+import { api } from "../utils/api";
+
 
 type AuthContextType = {
   user: AuthUser | null,
@@ -21,8 +23,6 @@ export const AuthContext = createContext<AuthContextType>({
     logout: () => {}
 });
 
-const BASEURL = 'http://localhost:3000/';
-const VERIFYURL = `${BASEURL}api/auth/verify`;
 
 export function AuthProvider({children} : {children: ReactNode}) {
 
@@ -75,22 +75,7 @@ export function AuthProvider({children} : {children: ReactNode}) {
             }
 
             try {
-                const response = await fetch(`${VERIFYURL}`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${cachedToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        localStorage.removeItem(`music_sheet_catalog_token`);
-                    }
-
-                    throw new Error(`HTTP error! status ${response.status}`);
-                }
-
+                const response = await api.get(`auth/verify`, cachedToken);
                 const result = await response.json();
                 const user: AuthUser = result.data;
                 
@@ -103,6 +88,12 @@ export function AuthProvider({children} : {children: ReactNode}) {
             catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : 'Unknown error';
                 console.error(errorMessage);
+
+                let statusCode = parseInt(errorMessage.split("-")[0].trim());
+
+                if (statusCode === 401) {
+                    localStorage.removeItem(`music_sheet_catalog_token`);
+                }
             }
             finally {
                 setIsLoading(false);

@@ -2,6 +2,7 @@ import { useContext, useState, type ChangeEvent, type FocusEvent } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 import { UIContext } from "../contexts/UIContext";
+import { api } from "../utils/api";
 import type { AuthUser } from "../types/common.type";
 import IconSpinner from "../components/IconSpinner";
 
@@ -19,9 +20,6 @@ type loginFieldTouchedType = {
     [K in keyof loginFormDataType]?: boolean;
 }
 
-
-const BASEURL = 'http://localhost:3000/';
-const LOGINURL = `${BASEURL}api/auth/login`;
 
 function Login() {
 
@@ -121,39 +119,24 @@ function Login() {
             setLoginFieldTouched({});
 
             try {
-                // Connect to login end point
-                const response = await fetch(LOGINURL, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(loginFormData)
-                });
-
-                const responseData = await response.json();
-
-                // Check if the response is successful or not
-                if (!response.ok) {
-                    setIsFormProcessing(false);
-
-                    // Handle API error responses (401, 400, 500, etc.)
-                    throw new Error(responseData.message);
-                }
+                const response = await api.post(`auth/login`, loginFormData);
+                const result = await response.json();
 
                 // On Success, store token to Context and Local Storage
                 const user: AuthUser = {
-                    id: responseData.data.userId,
-                    email: responseData.data.email,
-                    name: responseData.data.name
+                    id: result.data.userId,
+                    email: result.data.email,
+                    name: result.data.name
                 }
 
                 // Store user to Context and local Storage
-                login(user, responseData.data.token);
-
-                setIsFormProcessing(false);
+                login(user, result.data.token);
             }
             catch (error: unknown) {
-
                 const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                addToast(errorMessage, "error");
+                addToast(errorMessage, "error");          
+            }
+            finally {
                 setIsFormProcessing(false);
             }
         }

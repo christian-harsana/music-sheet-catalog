@@ -3,9 +3,8 @@ import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import type { AuthUser } from "../types/common.type";
 import Loading from "./Loading";
+import { api } from "../utils/api";
 
-const BASEURL = 'http://localhost:3000/';
-const PROFILEURL = `${BASEURL}api/profile/`;
 
 export default function UserProfile() {
     const {token} = useContext(AuthContext);
@@ -20,14 +19,7 @@ export default function UserProfile() {
         const fetchUser = async () => {
             try {
 
-                const response = await fetch(`${PROFILEURL}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
+                const response = await api.get(`profile`, token);
                 const result = await response.json();
                 const resultData: AuthUser = {
                     id: result.data.id,
@@ -50,6 +42,7 @@ export default function UserProfile() {
         fetchUser();
     }, [token]);
 
+    
     // RENDER
     if (isLoading) {
         return (<Loading />)

@@ -1,6 +1,7 @@
 import { useContext, useState, type FocusEvent } from "react";
 import { useNavigate, Link } from "react-router";
 import { UIContext } from "../contexts/UIContext";
+import { api } from "../utils/api";
 import IconSpinner from "../components/IconSpinner";
 
 type signUpFormDataType = {
@@ -16,10 +17,6 @@ type signUpFormErrorType = {
 type signUpFormTouched = {
     [K in keyof signUpFormDataType]?: boolean;
 }
-
-
-const BASEURL = 'http://localhost:3000/';
-const SIGNUPURL = `${BASEURL}api/auth/signup`;
 
 
 function SignUp() {
@@ -129,31 +126,23 @@ function SignUp() {
             setSignUpFormTouched({});
 
             try {
-                // Call the signup endpoint
-                const response = await fetch(SIGNUPURL, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(signUpFormData)
-                });
+                const response = await api.post(`auth/signup`, signUpFormData)
+                const result = await response.json();
 
-                const data = await response.json();
-
-                if (data.status.toLowerCase() === "success") {
-
-                    addToast(data.message);
-
-                    // Redirect to login
+                if (result.status.toLowerCase() === "success") {
+                    addToast(result.message);
                     navigate("/login");
                 }
                 else {
-                    addToast(data.message, "error");
-                    setIsFormProcessing(false);
+                    throw new Error(`${response.status} - ${result.message}`);
                 }
             }
             catch (error: unknown) {
 
                 const errorMessage = error instanceof Error ? error.message : 'Unknown error';
                 addToast(errorMessage, "error");
+            }
+            finally {
                 setIsFormProcessing(false);
             }
         }
