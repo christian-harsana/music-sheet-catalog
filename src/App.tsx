@@ -11,7 +11,7 @@ import Sheet from './pages/Sheet.tsx'
 import Login from './pages/Login.tsx'
 import SignUp from './pages/SignUp.tsx'
 import Error from './pages/Error.tsx'
-import './App.css'
+import Skeleton from './pages/Skeleton.tsx'
 
 
 // Protected Route
@@ -24,7 +24,7 @@ const ProtectedRoute = ({children}: ProtectedRouteProps) => {
   const {token, isLoading} = useContext(AuthContext);
 
   if (isLoading) {
-    return(<div className='text-white'>Loading...</div>); // TODO: Implement full page loading indicator
+    return(<Skeleton />);
   }
 
   if (!token) {
