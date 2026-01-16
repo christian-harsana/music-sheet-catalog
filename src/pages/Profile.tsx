@@ -1,28 +1,25 @@
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
 import Navigation from "../components/Navigation";
 import UserProfile from "../components/UserProfile";
 
 function Profile() {
 
-    const {logout} = useContext(AuthContext);
-
     return (
-        <main>
-            <Navigation />
-            
-            <h1>Profile</h1>
-
-            <div className="mb-6">
-                <UserProfile />
+        <div className="flex flex-nowrap">
+            <div className="h-screen basis-3xs">
+                <Navigation />
             </div>
 
-            <div className="mb-6">
-                <button type="button" onClick={logout}>Logout</button>
-            </div>
-        </main>
+            <main className="h-screen basis-full bg-gray-50 text-gray-900">
+                <div className="p-6">
+                    <h1 className="font-semibold text-2xl mb-4">Profile</h1>
+
+                    <div className="mb-4">
+                        <UserProfile />
+                    </div>
+                </div>
+            </main>
+        </div>
     )
-
 }
 
 export default Profile;
