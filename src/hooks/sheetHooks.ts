@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import * as sheetService from "../services/sheetService";
 import type { Sheet, SheetFormData } from "../types/sheet.type";
 import { AuthContext } from "../contexts/AuthContext";
@@ -35,9 +35,9 @@ export const useGetSheets = () => {
         
     }, [token, refresh]);
 
-    const refreshSheets = () => {
+    const refreshSheets = useCallback(() => {
         setRefresh(prev => prev + 1);
-    };
+    }, []);
 
     return { sheets, refreshSheets, isLoading };
 }

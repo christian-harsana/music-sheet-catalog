@@ -3,12 +3,9 @@ import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
 import IconSpinner from './IconSpinner';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
-import type { Genre } from '../types/genre.type';
-import type { Level } from '../types/level.type';
 import type { Source } from '../types/source.type';
-import { useGetGenres } from '../hooks/genreHooks';
-import { useGetLevels } from '../hooks/levelHooks';
-import { useGetSources } from '../hooks/sourceHooks';
+import type { Level } from '../types/level.type';
+import type { Genre } from '../types/genre.type';
 import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
 
 
@@ -22,11 +19,17 @@ type SheetFormDataTouched = {
 
 type SheetFormProp = {
     sheet?: Sheet,
+    sources: Source[],
+    isLoadingSource: boolean,
+    levels: Level[],
+    isLoadingLevel: boolean,
+    genres: Genre[],
+    isLoadingGenre: boolean,
     refreshData: () => void
 }
 
 
-export default function SheetForm({sheet, refreshData} : SheetFormProp) {
+export default function SheetForm({sheet, refreshData, sources, isLoadingSource, levels, isLoadingLevel, genres, isLoadingGenre } : SheetFormProp) {
 
     const sheetId = sheet?.id ?? null;
     const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", sourceId: "", levelId: "", genreId: ""};
@@ -36,9 +39,7 @@ export default function SheetForm({sheet, refreshData} : SheetFormProp) {
     const { addToast, closeModal } = useContext(UIContext);
     const { token } = useContext(AuthContext);
     const titleInputRef = useRef<HTMLInputElement>(null);
-    const {genres, isLoading: isLoadingGenre } = useGetGenres();
-    const {levels, isLoading: isLoadingLevel } = useGetLevels();
-    const {sources, isLoading: isLoadingSource } = useGetSources(); 
+    
     const {createSheet, isLoading: isCreatingSheet} = useCreateSheet();
     const {updateSheet, isLoading: isUpdatingSheet} = useUpdateSheet();
     const isLoading = isCreatingSheet || isUpdatingSheet;
