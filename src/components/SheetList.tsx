@@ -9,7 +9,7 @@ import { useDebounce } from "../hooks/utilHooks";
 import type { Source } from '../types/source.type';
 import type { Genre } from '../types/genre.type';
 import type { Level } from '../types/level.type';
-import { type Sheet } from "../types/sheet.type";
+import type { Sheet } from "../types/sheet.type";
 import Loading from "./Loading";
 import Modal from "./Modal";
 import SheetForm from "./SheetForm";
@@ -172,8 +172,8 @@ export default function SheetList() {
 
         if (!sheet) return false;
 
-        const matchesTitle = sheet.title.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
-        const matchesSourceTitle = sheet.sourceTitle.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
+        const matchesTitle = (sheet.title ?? "").toLowerCase().includes(debouncedSearchQuery.toLowerCase());
+        const matchesSourceTitle = (sheet.sourceTitle ?? "").toLowerCase().includes(debouncedSearchQuery.toLowerCase());
         const matchesLevel = levelFilter === "all" || String(sheet.levelId) === levelFilter;
         const matchesGenre = genreFilter === "all" || String(sheet.genreId) === genreFilter;
 
