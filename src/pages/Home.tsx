@@ -1,4 +1,5 @@
 import Navigation from "../components/Navigation";
+import Dashboard from "../components/Dashboard";
 
 function Home() {
 
@@ -10,10 +11,10 @@ function Home() {
 
             <main className="h-screen basis-full bg-gray-50 text-gray-900">
                 <div className="p-6">
-                    <h1 className="font-semibold text-2xl mb-4">Home</h1>
+                    <h1 className="font-semibold text-2xl mb-4">Dashboard</h1>
 
                     <div className="mb-4">
-                        <p>Hello from the home page...</p>
+                        <Dashboard />
                     </div>
                 </div>
             </main>
