@@ -32,7 +32,7 @@ type SheetFormProp = {
 export default function SheetForm({sheet, refreshData, sources, isLoadingSource, levels, isLoadingLevel, genres, isLoadingGenre } : SheetFormProp) {
 
     const sheetId = sheet?.id ?? null;
-    const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", sourceId: "", levelId: "", genreId: ""};
+    const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", sourceId: null, levelId: null, genreId: null};
     const [SheetFormData, setSheetFormData] = useState<SheetFormData>(formDefaultData);
     const [SheetFormDataError, setSheetFormDataError] = useState<SheetFormDataError>({});
     const [SheetFormDataTouched, setSheetFormDataTouched] = useState<SheetFormDataTouched>({});
@@ -45,11 +45,11 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
     const isLoading = isCreatingSheet || isUpdatingSheet;
 
 
-    function validateField(field: string, value: string): string {
+    function validateField(field: string, value: string | null): string {
 
         switch(field) {
             case "title":
-                if (value.trim().length < 1) return "Name is required";
+                if (!value || value.trim().length < 1) return "Name is required";
                 break;
         }
 
@@ -187,7 +187,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                     <select id="sheetSource"
                         name="sourceId"
                         onChange={handleInputChange}
-                        value={SheetFormData.sourceId}
+                        value={SheetFormData.sourceId ?? ""}
                         className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
                         disabled={isLoadingSource} >
                         <option value="">Please Select</option>
@@ -222,7 +222,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                     <select id="sheetLevel"
                         name="levelId"
                         onChange={handleInputChange}
-                        value={SheetFormData.levelId}
+                        value={SheetFormData.levelId ?? ""}
                         className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
                         disabled={isLoadingLevel} >
                         <option value="">Please Select</option>
@@ -257,7 +257,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                     <select id="sheetGenre"
                         name="genreId"
                         onChange={handleInputChange}
-                        value={SheetFormData.genreId}
+                        value={SheetFormData.genreId ?? ""}
                         className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
                         disabled={isLoadingGenre} >
                         <option value="">Please Select</option>
