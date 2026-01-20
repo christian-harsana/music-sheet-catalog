@@ -7,6 +7,7 @@ import type { Source } from '../types/source.type';
 import type { Level } from '../types/level.type';
 import type { Genre } from '../types/genre.type';
 import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
+import { KEYS } from '../shared/constants';
 
 
 type SheetFormDataError = {
@@ -32,7 +33,7 @@ type SheetFormProp = {
 export default function SheetForm({sheet, refreshData, sources, isLoadingSource, levels, isLoadingLevel, genres, isLoadingGenre } : SheetFormProp) {
 
     const sheetId = sheet?.id ?? null;
-    const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", sourceId: null, levelId: null, genreId: null};
+    const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", key: "", sourceId: null, levelId: null, genreId: null};
     const [SheetFormData, setSheetFormData] = useState<SheetFormData>(formDefaultData);
     const [SheetFormDataError, setSheetFormDataError] = useState<SheetFormDataError>({});
     const [SheetFormDataTouched, setSheetFormDataTouched] = useState<SheetFormDataTouched>({});
@@ -117,6 +118,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
             setSheetFormDataError(formSubmissionError);
             setSheetFormDataTouched({
                 title: true,
+                key: true, 
                 sourceId: true,
                 levelId: true,
                 genreId: true
@@ -176,6 +178,32 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                     { ...(SheetFormDataError.title && { "aria-invalid" : "true", "aria-describedby" : "genreNameError" }) }
                     />
                 { SheetFormDataError.title && <div id="genreNameError" className="text-red-600">{SheetFormDataError.title}</div>}
+            </div>
+
+            <div className="mb-4">
+                <label htmlFor="sheetKey" className="block mb-1">Key</label>
+
+                <div className="relative">
+                    <select id="sheetKey"
+                        name="key"
+                        onChange={handleInputChange}
+                        value={SheetFormData.key ?? ""}
+                        className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50">
+                        <option value="">Please Select</option>
+                        {
+                            KEYS.map((key, index) => 
+                                ( <option key={`key-${index}`} value={key}>{key}</option> )
+                            )
+                        }
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
+                        aria-hidden="true" 
+                        width="10"
+                        className="absolute top-3.5 right-3">
+                        {/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
+                        <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+                    </svg>
+                </div>
             </div>
 
             <div className="mb-4">
