@@ -1,4 +1,4 @@
-import { api } from "../utils/api";
+import { api } from "../shared/utils/api";
 import type { SourceFormData } from "../types/source.type";
 
 export const createSource = async (sourceData: SourceFormData, token: string) => {

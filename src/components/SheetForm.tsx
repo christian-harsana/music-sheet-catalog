@@ -1,13 +1,13 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
-import IconSpinner from './IconSpinner';
+import IconSpinner from '../shared/components/IconSpinner';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { Source } from '../types/source.type';
 import type { Level } from '../types/level.type';
 import type { Genre } from '../types/genre.type';
 import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
-import { KEYS } from '../shared/constants';
+import { KEYS } from '../shared/utils/constants';
 
 
 type SheetFormDataError = {

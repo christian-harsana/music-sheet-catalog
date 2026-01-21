@@ -3,10 +3,10 @@ import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { useGetLevels, useDeleteLevel } from "../hooks/levelHooks";
 import { type Level } from "../types/level.type";
-import Loading from "./Loading";
-import Modal from "./Modal";
+import Loading from "../shared/components/Loading";
+import Modal from "../shared/components/Modal";
 import LevelForm from "./LevelForm";
-import IconSpinner from "./IconSpinner";
+import IconSpinner from "../shared/components/IconSpinner";
 
 function DeleteConfirmation({id, name, refreshData} : {id: string, name: string, refreshData: () => void}) {
     

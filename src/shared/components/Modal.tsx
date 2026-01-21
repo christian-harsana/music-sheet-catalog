@@ -1,5 +1,5 @@
 import { useContext, type ReactNode } from 'react';
-import { UIContext } from '../contexts/UIContext';
+import { UIContext } from '../../contexts/UIContext';
 
 type ModalProps = {
     title?: string,

@@ -2,8 +2,8 @@ import { useState, useContext, useEffect } from "react";
 import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import type { AuthUser } from "../types/common.type";
-import Loading from "./Loading";
-import { api } from "../utils/api";
+import Loading from "../shared/components/Loading";
+import { api } from "../shared/utils/api";
 
 
 export default function UserProfile() {

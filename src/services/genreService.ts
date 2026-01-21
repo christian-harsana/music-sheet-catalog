@@ -1,4 +1,4 @@
-import { api } from "../utils/api";
+import { api } from "../shared/utils/api";
 import type { GenreFormData } from "../types/genre.type";
 
 export const createGenre = async (genreData: GenreFormData, token: string) => {

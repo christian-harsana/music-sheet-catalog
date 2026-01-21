@@ -1,4 +1,4 @@
-import { api } from "../utils/api";
+import { api } from "../shared/utils/api";
 import type { SheetFormData } from "../types/sheet.type";
 
 export const createSheet = async (sheetData: SheetFormData, token: string) => {

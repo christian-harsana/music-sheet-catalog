@@ -2,10 +2,10 @@ import { useContext } from "react";
 import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { type Source } from "../types/source.type";
-import Loading from "./Loading";
-import Modal from "./Modal";
+import Loading from "../shared/components/Loading";
+import Modal from "../shared/components/Modal";
 import SourceForm from "./SourceForm";
-import IconSpinner from "./IconSpinner";
+import IconSpinner from "../shared/components/IconSpinner";
 import { useGetSources, useDeleteSource } from "../hooks/sourceHooks";
 
 

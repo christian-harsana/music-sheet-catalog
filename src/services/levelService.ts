@@ -1,4 +1,4 @@
-import { api } from "../utils/api";
+import { api } from "../shared/utils/api";
 import type { LevelFormData } from "../types/level.type";
 
 export const createLevel = async (levelData: LevelFormData, token: string) => {

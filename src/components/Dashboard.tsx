@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { api } from "../utils/api";
-import IconSpinner from "./IconSpinner";
+import { api } from "../shared/utils/api";
+import IconSpinner from "../shared/components/IconSpinner";
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
-import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from "../shared/constants";
+import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from "../shared/utils/constants";
 
 type SheetByLevel = {
     levelId: string | null;

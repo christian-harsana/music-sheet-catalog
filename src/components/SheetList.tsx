@@ -10,11 +10,11 @@ import type { Source } from '../types/source.type';
 import type { Genre } from '../types/genre.type';
 import type { Level } from '../types/level.type';
 import type { Sheet } from "../types/sheet.type";
-import Loading from "./Loading";
-import Modal from "./Modal";
+import Loading from "../shared/components/Loading";
+import Modal from "../shared/components/Modal";
 import SheetForm from "./SheetForm";
-import IconSpinner from "./IconSpinner";
-import { KEYS } from "../shared/constants";
+import IconSpinner from "../shared/components/IconSpinner";
+import { KEYS } from "../shared/utils/constants";
 
 
 function DeleteConfirmation({id, name, refreshData} : {id: string, name: string, refreshData: () => void}) {
