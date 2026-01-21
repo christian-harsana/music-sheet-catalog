@@ -49,11 +49,16 @@ export default function UserProfile() {
     }
 
     return (
-        <dl>
-            <dt>Name:</dt>
-            <dd>{user?.name}</dd>
-            <dt>Email:</dt>
-            <dd>{user?.email}</dd>
-        </dl>
+        <div className="px-5 py-5 w-full h-auto max-w-xs rounded-md border border-gray-300">
+            <div className="flex justify-center items-center m-auto mb-6 text-center w-25 h-25 rounded-full bg-violet-400 text-gray-50 text-5xl font-semibold uppercase">
+                {user?.name[0]}
+            </div>
+            <dl className="flex flex-wrap gap-3">
+                <dt className="w-[calc(50%-0.5rem)]">Name</dt>
+                <dd className="w-[calc(50%-0.5rem)] text-right font-semibold">{user?.name}</dd>
+                <dt className="w-[calc(50%-0.5rem)]">Email</dt>
+                <dd className="w-[calc(50%-0.5rem)] text-right font-semibold">{user?.email}</dd>
+            </dl>
+        </div>
     )
 }
