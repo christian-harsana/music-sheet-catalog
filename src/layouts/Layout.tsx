@@ -10,14 +10,18 @@ type LayoutProps = {
 export default function Layout({heading, children}: LayoutProps) {
 
     return (
-        <div className="flex flex-nowrap">
-            <div className="h-screen basis-3xs p-5">
-                <Logo />
-                <Navigation />
+        <div className="flex flex-col flex-nowrap h-screen lg:flex-row">
+            <div className="fixed top-0 left-0 z-50 flex flex-row flex-nowrap justify-between items-center w-full h-14 bg-gray-950 lg:relative lg:overflow-y-auto lg:flex-col lg:items-start lg:justify-start lg:shrink-0 lg:w-3xs lg:h-full">
+                <div className="ps-4 lg:px-5 lg:py-5 lg:w-full">
+                    <Logo />
+                </div>
+                <div className="pe-4 lg:pe-0 lg:w-full">
+                    <Navigation />
+                </div>
             </div>
 
-            <main className="h-screen basis-full bg-gray-50 text-gray-900">
-                <div className="p-6">
+            <main className="grow pt-14 bg-gray-50 text-gray-900 lg:pt-0 lg:overflow-y-auto">
+                <div className="px-4 py-6 lg:px-6">
                     <h1 className="font-semibold text-2xl mb-4">{heading}</h1>
 
                     <div className="mb-4">
