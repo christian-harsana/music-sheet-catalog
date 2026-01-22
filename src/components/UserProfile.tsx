@@ -54,9 +54,9 @@ export default function UserProfile() {
                 {user?.name[0]}
             </div>
             <dl className="flex flex-wrap gap-3">
-                <dt className="w-[calc(50%-0.5rem)]">Name</dt>
+                <dt className="w-[calc(50%-0.5rem)]">Name:</dt>
                 <dd className="w-[calc(50%-0.5rem)] text-right font-semibold">{user?.name}</dd>
-                <dt className="w-[calc(50%-0.5rem)]">Email</dt>
+                <dt className="w-[calc(50%-0.5rem)]">Email:</dt>
                 <dd className="w-[calc(50%-0.5rem)] text-right font-semibold">{user?.email}</dd>
             </dl>
         </div>

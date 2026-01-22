@@ -119,28 +119,31 @@ export default function SourceList() {
                 </button>
             </div>
 
-            <table className="w-full border rounded-md border-gray-300">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Title</th>
-                        <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Author</th>
-                        <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Format</th>
-                        <th scope="col" className="px-3 py-2 border-b border-gray-300 text-left"></th>
+            <table role="table" className="block w-full overflow-hidden border rounded-md border-gray-300 md:table md:overflow-visible">
+                <caption className="sr-only">
+                    <h2>Source list</h2>
+                </caption>
+                <thead role="rowgroup" className="hidden invisible md:table-header-group md:visible">
+                    <tr role="row" className="bg-gray-200">
+                        <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Title</th>
+                        <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Author</th>
+                        <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Format</th>
+                        <th role="columnheader" scope="col" className="px-3 py-2 border-b border-gray-300 text-left"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody role="rowgroup" className="block md:table-row-group"> 
                     {
                         sources.length < 1 ? (
-                            <tr className="bg-gray-50">
-                                <td colSpan={4} className="px-3 py-2">There is currently no data yet.</td>
+                            <tr role="row" className="block bg-gray-50 md:table-row">
+                                <td role="cell" colSpan={4} className="block px-3 py-2 md:table-row">There is currently no data yet.</td>
                             </tr>
                         ) : (
                             sources.map(source => 
-                                <tr key={source.id} className="odd:bg-gray-50 even:bg-gray-100">
-                                    <td className="px-3 py-2">{source.title}</td>
-                                    <td className="px-3 py-2">{source.author}</td>
-                                    <td className="px-3 py-2">{source.format}</td>
-                                    <td className="px-3 py-2">
+                                <tr key={source.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
+                                    <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{source.title}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Author">{source.author}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Format">{source.format}</td>
+                                    <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
                                         <div className="flex flex-nowrap gap-3">
                                             <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(source)}>Edit</button>
                                             <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(source.id, source.title)}>Delete</button>

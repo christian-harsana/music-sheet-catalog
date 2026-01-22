@@ -13,15 +13,15 @@ export default function LayoutSkeleton() {
                     </div>
 
                     <div className="mb-4 px-4 lg:px-5">
-                        <div className="mb-2 h-6 w-2/3 rounded bg-gray-200 animate-pulse"></div>
-                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse"></div>
-                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse"></div>
+                        <div className="mb-2 h-6 w-2/3 rounded bg-gray-200 animate-pulse opacity-75"></div>
+                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse opacity-75"></div>
+                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse opacity-50"></div>
                     </div>
 
                     <div className="mb-4 px-4 lg:px-5">
-                        <div className="mb-2 h-6 w-2/3 rounded bg-gray-200 animate-pulse"></div>
-                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse"></div>
-                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse"></div>
+                        <div className="mb-2 h-6 w-2/3 rounded bg-gray-200 animate-pulse opacity-50"></div>
+                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse opacity-25"></div>
+                        <div className="my-2 h-6 w-full rounded bg-gray-200 animate-pulse opacity-25"></div>
                     </div>
                 </div>
             </div>
@@ -34,11 +34,11 @@ export default function LayoutSkeleton() {
                         <div className="mb-4 h-6 w-2/3 rounded bg-gray-200 animate-pulse"></div>
                         
                         <div className="mb-2 h-6 w-full rounded bg-gray-200 animate-pulse"></div>
-                        <div className="mb-2 h-6 w-3/4 rounded bg-gray-200 animate-pulse"></div>
-                        <div className="mb-2 h-6 w-1/4 rounded bg-gray-200 animate-pulse"></div>
-                        <div className="mb-2 h-6 w-2/4 rounded bg-gray-200 animate-pulse"></div>
-                        <div className="mb-2 h-6 w-3/4 rounded bg-gray-200 animate-pulse"></div>
-                        <div className="mb-2 h-6 w-full rounded bg-gray-200 animate-pulse"></div>
+                        <div className="mb-2 h-6 w-3/4 rounded bg-gray-200 animate-pulse opacity-75"></div>
+                        <div className="mb-2 h-6 w-1/4 rounded bg-gray-200 animate-pulse opacity-50"></div>
+                        <div className="mb-2 h-6 w-2/4 rounded bg-gray-200 animate-pulse opacity-50"></div>
+                        <div className="mb-2 h-6 w-3/4 rounded bg-gray-200 animate-pulse opacity-25"></div>
+                        <div className="mb-2 h-6 w-full rounded bg-gray-200 animate-pulse opacity-25"></div>
                     </div>
                 </div>
             </main>
