@@ -73,7 +73,7 @@ function Dashboard() {
                 
             </div>
 
-            <div className="px-5 py-4 w-[calc(50%-0.5rem)] h-auto rounded-md border border-gray-300">
+            <div className="px-5 py-4 w-full h-auto rounded-md border border-gray-300 sm:w-[calc(50%-0.5rem)]">
                 <h2 className="mb-3 font-bold text-gray-900">Sheets by Genre</h2>
                 
                 {
@@ -140,7 +140,7 @@ function Dashboard() {
                 }     
             </div>
             
-            <div className="px-5 py-4 w-[calc(50%-0.5rem)] h-auto rounded-md border border-gray-300">
+            <div className="px-5 py-4 w-full h-auto rounded-md border border-gray-300 sm:w-[calc(50%-0.5rem)]">
                 <h2 className="mb-3 font-bold text-gray-900">Sheets by Level</h2>
 
                 {
