@@ -2,15 +2,15 @@ import { useContext } from 'react'
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router'
 import { AuthContext, AuthProvider } from './contexts/AuthContext.tsx'
 import { UIProvider } from './contexts/UIContext.tsx'
-import Home from './pages/Home.tsx'
-import Profile from './pages/Profile.tsx'
-import Genre from './pages/Genre.tsx'
-import Level from './pages/Level.tsx'
-import Source from './pages/Source.tsx'
-import Sheet from './pages/Sheet.tsx'
-import Login from './pages/Login.tsx'
-import SignUp from './pages/SignUp.tsx'
-import Error from './pages/Error.tsx'
+import DashboardPage from './features/dashboard/pages/DashboardPage.tsx'
+import ProfilePage from './features/profile/pages/ProfilePage.tsx'
+import GenresPage from './features/genres/pages/GenresPage.tsx'
+import LevelsPage from './features/levels/pages/LevelsPage.tsx'
+import SourcesPage from './features/sources/pages/SourcesPage.tsx'
+import SheetsPage from './features/sheets/pages/Sheet.tsx'
+import Login from './features/auth/pages/LoginPage.tsx'
+import SignUp from './features/auth/pages/SignUpPage.tsx'
+import ErrorPage from './shared/pages/ErrorPage.tsx'
 import LayoutSkeleton from './shared/components/Skeleton/LayoutSkeleton.tsx'
 
 
@@ -43,15 +43,15 @@ function App() {
       <AuthProvider>
         <UIProvider>
           <Routes>
-            <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="genre" element={<ProtectedRoute><Genre /></ProtectedRoute>} />
-            <Route path="level" element={<ProtectedRoute><Level /></ProtectedRoute>} />
-            <Route path="source" element={<ProtectedRoute><Source /></ProtectedRoute>} />
-            <Route path="sheet" element={<ProtectedRoute><Sheet /></ProtectedRoute>} />
+            <Route index element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+            <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+            <Route path="genres" element={<ProtectedRoute><GenresPage /></ProtectedRoute>} />
+            <Route path="levels" element={<ProtectedRoute><LevelsPage /></ProtectedRoute>} />
+            <Route path="sources" element={<ProtectedRoute><SourcesPage /></ProtectedRoute>} />
+            <Route path="sheets" element={<ProtectedRoute><SheetsPage /></ProtectedRoute>} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
-            <Route path="*" element={<Error />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </UIProvider>
       </AuthProvider>
