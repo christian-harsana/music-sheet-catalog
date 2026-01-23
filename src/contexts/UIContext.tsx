@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 import type { NotificationType } from "../types/common.type";
-import Toast from "../components/Toast";
+import Toast from "../shared/components/Toast";
 
 type Notification = {
     id: string,

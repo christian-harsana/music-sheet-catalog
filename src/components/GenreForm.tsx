@@ -2,7 +2,7 @@ import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { useCreateGenre, useUpdateGenre } from '../hooks/genreHooks';
-import IconSpinner from './IconSpinner';
+import IconSpinner from '../shared/components/IconSpinner';
 import type { Genre, GenreFormData } from '../types/genre.type';
 
 

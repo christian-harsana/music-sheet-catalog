@@ -1,8 +1,8 @@
 import { useContext, useState, type FocusEvent } from "react";
 import { useNavigate, Link } from "react-router";
 import { UIContext } from "../contexts/UIContext";
-import { api } from "../utils/api";
-import IconSpinner from "../components/IconSpinner";
+import { api } from "../shared/utils/api";
+import IconSpinner from "../shared/components/IconSpinner";
 
 type signUpFormDataType = {
     email: string;

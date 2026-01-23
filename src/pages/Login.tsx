@@ -2,9 +2,9 @@ import { useContext, useState, type ChangeEvent, type FocusEvent } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 import { UIContext } from "../contexts/UIContext";
-import { api } from "../utils/api";
+import { api } from "../shared/utils/api";
 import type { AuthUser } from "../types/common.type";
-import IconSpinner from "../components/IconSpinner";
+import IconSpinner from "../shared/components/IconSpinner";
 
 
 type loginFormDataType = {

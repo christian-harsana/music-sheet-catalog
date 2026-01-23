@@ -3,10 +3,10 @@ import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { useGetLevels, useDeleteLevel } from "../hooks/levelHooks";
 import { type Level } from "../types/level.type";
-import Loading from "./Loading";
-import Modal from "./Modal";
+import Loading from "../shared/components/Loading";
+import Modal from "../shared/components/Modal";
 import LevelForm from "./LevelForm";
-import IconSpinner from "./IconSpinner";
+import IconSpinner from "../shared/components/IconSpinner";
 
 function DeleteConfirmation({id, name, refreshData} : {id: string, name: string, refreshData: () => void}) {
     
@@ -113,24 +113,27 @@ export default function LevelList() {
                 </button>
             </div>
 
-            <table className="w-full border rounded-md border-gray-300">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Name</th>
-                        <th scope="col" className="px-3 py-2 border-b border-gray-300 text-left"></th>
+            <table role="table" className="block w-full overflow-hidden border rounded-md border-gray-300 md:table md:overflow-visible">
+                <caption className="sr-only">
+                    <h2>Level List</h2>
+                </caption>
+                <thead role="rowgroup" className="hidden invisible md:table-header-group md:visible">
+                    <tr role="row" className="bg-gray-200">
+                        <th scope="col" role="columnheader" className="px-3 py-2 border-r border-b border-gray-300 text-left">Name</th>
+                        <th scope="col" role="columnheader" className="px-3 py-2 border-b border-gray-300 text-left"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody role="rowgroup" className="block md:table-row-group">
                     {
                         levels.length < 1 ? (
-                            <tr className="bg-gray-50">
-                                <td colSpan={2} className="px-3 py-2">There is currently no data yet.</td>
+                            <tr role="row" className="block bg-gray-50 md:table-row">
+                                <td role="cell" colSpan={2} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data yet.</td>
                             </tr>
                         ) : (
                             levels.map(level => 
-                                <tr key={level.id} className="odd:bg-gray-50 even:bg-gray-100">
-                                    <td className="px-3 py-2">{level.name}</td>
-                                    <td className="px-3 py-2">
+                                <tr key={level.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
+                                    <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{level.name}</td>
+                                    <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
                                         <div className="flex flex-nowrap gap-3">
                                             <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(level)}>Edit</button>
                                             <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(level.id, level.name)}>Delete</button>

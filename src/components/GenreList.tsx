@@ -3,10 +3,10 @@ import { UIContext } from "../contexts/UIContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { useGetGenres, useDeleteGenre } from "../hooks/genreHooks";
 import { type Genre } from "../types/genre.type";
-import Loading from "./Loading";
-import Modal from "./Modal";
+import Loading from "../shared/components/Loading";
+import Modal from "../shared/components/Modal";
 import GenreForm from "./GenreForm";
-import IconSpinner from "./IconSpinner";
+import IconSpinner from "../shared/components/IconSpinner";
 
 function DeleteConfirmation({id, name, refreshData} : {id: string, name: string, refreshData: () => void }) {
     
@@ -113,24 +113,27 @@ export default function GenreList() {
                 </button>
             </div>
 
-            <table className="w-full border rounded-md border-gray-300">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Name</th>
-                        <th scope="col" className="px-3 py-2 border-b border-gray-300 text-left"></th>
+            <table role="table" className="block w-full overflow-hidden border rounded-md border-gray-300 md:table md:overflow-visible">
+                <caption className="sr-only">
+                    <h2>Genre List</h2>
+                </caption>
+                <thead role="rowgroup" className="hidden invisible md:table-header-group md:visible">
+                    <tr role="row" className="bg-gray-200">
+                        <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Name</th>
+                        <th role="columnheader" scope="col" className="px-3 py-2 border-b border-gray-300 text-left"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody role="rowgroup" className="block md:table-row-group">
                     {
                         genres.length < 1 ? (
-                            <tr className="bg-gray-50">
-                                <td colSpan={2} className="px-3 py-2">There is currently no data yet.</td>
+                            <tr role="row" className="block bg-gray-50 md:table-row">
+                                <td role="cell" colSpan={2} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data yet.</td>
                             </tr>
                         ) : (
-                            genres.map(genre => 
-                                <tr key={genre.id} className="odd:bg-gray-50 even:bg-gray-100">
-                                    <td className="px-3 py-2">{genre.name}</td>
-                                    <td className="px-3 py-2">
+                            genres.map(genre =>
+                                <tr key={genre.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
+                                    <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{genre.name}</td>
+                                    <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
                                         <div className="flex flex-nowrap gap-3">
                                             <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(genre)}>Edit</button>
                                             <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(genre.id, genre.name)}>Delete</button>

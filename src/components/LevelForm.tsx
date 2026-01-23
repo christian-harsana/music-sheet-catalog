@@ -1,7 +1,7 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../contexts/UIContext';
 import { AuthContext } from '../contexts/AuthContext';
-import IconSpinner from './IconSpinner';
+import IconSpinner from '../shared/components/IconSpinner';
 import type { Level, LevelFormData } from '../types/level.type';
 import { useCreateLevel, useUpdateLevel } from '../hooks/levelHooks';
 

@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { api } from "../utils/api";
-import IconSpinner from "./IconSpinner";
+import { api } from "../shared/utils/api";
+import IconSpinner from "../shared/components/IconSpinner";
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
-import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from "../shared/constants";
+import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from "../shared/utils/constants";
 
 type SheetByLevel = {
     levelId: string | null;
@@ -73,7 +73,7 @@ function Dashboard() {
                 
             </div>
 
-            <div className="px-5 py-4 w-[calc(50%-0.5rem)] h-auto rounded-md border border-gray-300">
+            <div className="px-5 py-4 w-full h-auto rounded-md border border-gray-300 sm:w-[calc(50%-0.5rem)]">
                 <h2 className="mb-3 font-bold text-gray-900">Sheets by Genre</h2>
                 
                 {
@@ -140,7 +140,7 @@ function Dashboard() {
                 }     
             </div>
             
-            <div className="px-5 py-4 w-[calc(50%-0.5rem)] h-auto rounded-md border border-gray-300">
+            <div className="px-5 py-4 w-full h-auto rounded-md border border-gray-300 sm:w-[calc(50%-0.5rem)]">
                 <h2 className="mb-3 font-bold text-gray-900">Sheets by Level</h2>
 
                 {
