@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
-import type { AuthUser } from "../types/common.type";
+import type { AuthUser } from "../shared/types/common.type";
 import { api } from "../shared/utils/api";
 
 

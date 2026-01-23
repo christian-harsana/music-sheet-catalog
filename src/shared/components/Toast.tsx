@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { NotificationType } from "../../types/common.type";
+import type { NotificationType } from "../types/common.type";
 
 type ToastProps = {
     id: string,
