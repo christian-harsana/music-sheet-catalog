@@ -32,7 +32,7 @@ function DeleteConfirmation({id, name, refreshData} : {id: string, name: string,
 
         const result = await deleteSheet(id, token);
 
-        if (result.status === 'success') {
+        if (result.success) {
             refreshData();
             closeModal();
             addToast(result.message);

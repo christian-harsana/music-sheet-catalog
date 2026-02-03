@@ -24,7 +24,7 @@ function DeleteConfirmation({id, name, refreshData} : {id: string, name: string,
 
         const result = await deleteLevel(id, token);
 
-        if (result.status === 'success') {
+        if (result.success) {
             refreshData();
             closeModal();
             addToast(result.message);
