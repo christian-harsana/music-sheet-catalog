@@ -8,6 +8,7 @@ import Modal from "../../../shared/components/Modal";
 import GenreForm from "./GenreForm";
 import IconSpinner from "../../../shared/components/IconSpinner";
 
+// TODO: Turn delete confirmation into reusable component
 function DeleteConfirmation({id, name, refreshData} : {id: string, name: string, refreshData: () => void }) {
     
     const {token} = useContext(AuthContext);

@@ -16,7 +16,7 @@ import SheetForm from './SheetForm';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import { KEYS } from '../../../shared/utils/constants';
 
-
+// TODO: Turn delete confirmation into reusable component
 function DeleteConfirmation({id, name, refreshData} : {id: string, name: string, refreshData: () => void}) {
     
     const {token} = useContext(AuthContext);

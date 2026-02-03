@@ -142,6 +142,10 @@ export default function LoginPage() {
         }
     }
 
+    // TODO:
+    // - Separate the page layout and form component
+    
+
     return(
         <main className="flex justify-center items-center min-h-screen">
             <form onSubmit={(e) => handleLoginFormSubmit(e, loginFormData)} 

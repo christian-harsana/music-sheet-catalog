@@ -12,6 +12,7 @@ export default function UserProfile() {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    // TODO: create custom hook for data fetching
     useEffect(() => {
 
         if (!token) return;

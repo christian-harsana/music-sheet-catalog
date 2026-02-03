@@ -27,6 +27,7 @@ function Dashboard() {
     const [incompleteSheetCount, setIncompleteSheetCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
+    // TODO: extract data fetching to custom hook
     useEffect(() => {
 
         const fetchSummary = async() => {
@@ -55,6 +56,7 @@ function Dashboard() {
 
     const incompleteSheetCountClass = incompleteSheetCount > 0 ? 'text-red-600' : 'text-green-500';
 
+    // TODO: transform the dashboard widgets into components
     return (
         <div className="flex flex-wrap gap-4">
             <div className="px-5 py-4 w-full h-auto rounded-md border border-gray-300 text-center">
