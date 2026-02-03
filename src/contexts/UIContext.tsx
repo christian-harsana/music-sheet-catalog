@@ -31,7 +31,7 @@ type ToastContainerProps = {
 function ToastContainer({notificationList, handleRemoveToast} : ToastContainerProps ) {
 
     return(
-        <div className="fixed bottom-15 right-15 flex flex-col gap-2" aria-live="polite">
+        <div className="fixed bottom-6 right-6 z-20 flex flex-col gap-2" aria-live="polite">
             {
                 notificationList.map(notification => {
                     
