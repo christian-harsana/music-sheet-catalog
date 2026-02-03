@@ -129,7 +129,7 @@ export default function SignUpPage() {
                 const response = await api.post(`auth/signup`, signUpFormData)
                 const result = await response.json();
 
-                if (result.status.toLowerCase() === "success") {
+                if (result.success) {
                     addToast(result.message);
                     navigate("/login");
                 }
@@ -147,6 +147,10 @@ export default function SignUpPage() {
             }
         }
     }
+
+    // TODO:
+    // - Separate the page layout and form component
+    
 
     return (
         <main className="flex justify-center items-center min-h-screen">

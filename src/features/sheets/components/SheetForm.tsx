@@ -137,7 +137,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
 
             const result = !sheetId ? await createSheet(sheetFormData, token) : await updateSheet(sheetId, sheetFormData, token);
 
-            if (result.status.toLowerCase() === "success") {
+            if (result.success) {
                 addToast(result.message);
                 refreshData();
                 closeModal();

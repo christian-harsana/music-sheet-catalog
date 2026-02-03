@@ -118,7 +118,7 @@ export default function LevelForm({level, refreshData} : LevelFormProps) {
 
             const result = !levelId ? await createLevel(levelFormData, token) : await updateLevel(levelId, levelFormData, token) 
 
-            if (result.status.toLowerCase() === "success") {
+            if (result.success) {
                 addToast(result.message);
                 refreshData();
                 closeModal();

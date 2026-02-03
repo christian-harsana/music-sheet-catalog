@@ -120,7 +120,7 @@ export default function GenreForm({genre, refreshData} : GenreFormProps) {
 
             const result = !genreId ? await createGenre(genreFormData, token) : await updateGenre(genreId, genreFormData, token);
 
-            if (result.status.toLowerCase() === "success") {
+            if (result.success) {
                 addToast(result.message);
                 refreshData();
                 closeModal();

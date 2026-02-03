@@ -124,7 +124,7 @@ export default function SourceForm({source, refreshData} : SourceFormProps) {
 
             const result = !sourceId ? await createSource(sourceFormData, token) : await updateSource(sourceId, sourceFormData, token);
 
-            if (result.status.toLowerCase() === "success") {
+            if (result.success) {
                 addToast(result.message);
                 refreshData();
                 closeModal();
