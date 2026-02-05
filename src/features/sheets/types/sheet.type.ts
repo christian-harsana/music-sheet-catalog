@@ -2,18 +2,18 @@ export type Sheet = {
     id: string,
     title: string,
     key: string | null,
-    sourceId: string | null,
+    sourceId: number | null,
     sourceTitle: string | null,
-    levelId: string | null,
+    levelId: number | null,
     levelName: string | null,
-    genreId: string | null,
+    genreId: number | null,
     genreName: string | null
 }
 
 export type SheetFormData = {
     title: string,
     key: string | null,
-    sourceId: string | null,
-    levelId: string | null,
-    genreId: string | null
+    sourceId: number | null,
+    levelId: number | null,
+    genreId: number | null
 }

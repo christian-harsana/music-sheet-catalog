@@ -46,11 +46,13 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
     const isLoading = isCreatingSheet || isUpdatingSheet;
 
 
-    function validateField(field: string, value: string | null): string {
+    function validateField(field: string, value: string | number | null): string {
 
         switch(field) {
             case "title":
-                if (!value || value.trim().length < 1) return "Name is required";
+                const title: string = value as string;
+
+                if (!title || title.trim().length < 1) return "Name is required";
                 break;
         }
 
@@ -77,8 +79,15 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
-        const value = e.target.value;
+        let value: string | number;
         const name = e.target.name as keyof SheetFormData;
+
+        if (name === 'sourceId' || name === 'levelId' || name === 'genreId') {
+            value = parseInt(e.target.value);
+        }
+        else {
+            value = e.target.value;
+        }
 
         // Set Form Data
         setSheetFormData(prev => ({...prev, [name]: value}));
