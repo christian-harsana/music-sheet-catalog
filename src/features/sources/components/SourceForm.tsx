@@ -155,6 +155,7 @@ export default function SourceForm({source, refreshData} : SourceFormProps) {
                 <input type="text" 
                     id="sourceTitle" 
                     name="title"
+                    placeholder="i.e. book title, collection title, etc."
                     value={sourceFormData.title} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}
@@ -175,6 +176,7 @@ export default function SourceForm({source, refreshData} : SourceFormProps) {
                 <input type="text" 
                     id="sourceAuthor" 
                     name="author"
+                    placeholder="i.e. author name, composer name, etc."
                     value={sourceFormData.author} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}
@@ -193,6 +195,7 @@ export default function SourceForm({source, refreshData} : SourceFormProps) {
                 <input type="text" 
                     id="sourceFormat" 
                     name="format"
+                    placeholder="i.e. print, digital, etc."
                     value={sourceFormData.format} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}
