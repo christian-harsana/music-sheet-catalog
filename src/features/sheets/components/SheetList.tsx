@@ -14,6 +14,7 @@ import Loading from '../../../shared/components/Loading';
 import Modal from '../../../shared/components/Modal';
 import SheetForm from './SheetForm';
 import IconSpinner from '../../../shared/components/IconSpinner';
+import Pagination from '../../../shared/components/Pagination';
 import { KEYS } from '../../../shared/utils/constants';
 
 // TODO: Turn delete confirmation into reusable component
@@ -87,7 +88,14 @@ type SheetTableProps = {
 }
 
 
-function SheetTable({sheets, refreshSheets, sources, isLoadingSource, levels, isLoadingLevel, genres, isLoadingGenre} : SheetTableProps) {
+function SheetTable({sheets, 
+    refreshSheets, 
+    sources, 
+    isLoadingSource, 
+    levels, 
+    isLoadingLevel, 
+    genres, 
+    isLoadingGenre} : SheetTableProps) {
 
     const {showModal} = useContext(UIContext);
 
@@ -173,7 +181,7 @@ export default function SheetList() {
     const {genres, isLoading: isLoadingGenre } = useGetGenres();
     const {levels, isLoading: isLoadingLevel } = useGetLevels();
     const {sources, isLoading: isLoadingSource } = useGetSources();
-    const {sheets, refreshSheets, isLoading: isLoadingSheet} = useGetSheets();
+    const {sheets, refreshSheets, isLoading: isLoadingSheet, currentPage, paginate, totalPages} = useGetSheets();
 
     const filteredSheets = useMemo(() => {return sheets.filter(sheet => {
 
@@ -318,14 +326,22 @@ export default function SheetList() {
                 </button>
             </div>
 
-            <SheetTableMemo sheets={filteredSheets} 
-                refreshSheets={refreshSheets}
-                sources={sources} 
-                isLoadingSource={isLoadingSource}
-                levels={levels}
-                isLoadingLevel={isLoadingLevel}
-                genres={genres}
-                isLoadingGenre={isLoadingGenre} />
+            <div className="mb-3">
+                <SheetTableMemo sheets={filteredSheets} 
+                    refreshSheets={refreshSheets}
+                    sources={sources} 
+                    isLoadingSource={isLoadingSource}
+                    levels={levels}
+                    isLoadingLevel={isLoadingLevel}
+                    genres={genres}
+                    isLoadingGenre={isLoadingGenre} 
+                />
+            </div>
+
+            <Pagination currentPage={currentPage}
+                totalPages={totalPages}
+                paginate={paginate} 
+            />
         </>
     )
 }

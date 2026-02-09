@@ -1,7 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import * as sheetService from '../services/sheetService'
-import type { Sheet, SheetFormData } from '../types/sheet.type';
 import { AuthContext } from '../../../contexts/AuthContext';
+import type { Sheet, SheetFormData } from '../types/sheet.type';
+import type { PaginationData } from '../../../shared/types/common.type';
 
 
 export const useGetSheets = () => {
@@ -10,6 +11,14 @@ export const useGetSheets = () => {
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const {token} = useContext(AuthContext);
+    const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const limit = 5;
+    const totalPages = paginationData?.totalPages;
+
+    const paginate = (pageNumber: number): void => {
+        setCurrentPage(pageNumber);
+    }
 
     useEffect(() => {
 
@@ -17,9 +26,10 @@ export const useGetSheets = () => {
             if (!token) return;
 
             try {
-                const result = await sheetService.getSheets(token);
+                const result = await sheetService.getSheets(token, currentPage, limit);
             
                 setSheets(result.data);
+                setPaginationData(result.pagination);
             }
             catch (error: unknown) {
 
@@ -33,13 +43,20 @@ export const useGetSheets = () => {
 
         fetchSheets();
         
-    }, [token, refresh]);
+    }, [token, refresh, currentPage]);
 
     const refreshSheets = useCallback(() => {
         setRefresh(prev => prev + 1);
     }, []);
 
-    return { sheets, refreshSheets, isLoading };
+    return { 
+        sheets, 
+        refreshSheets, 
+        isLoading, 
+        currentPage, 
+        paginate, 
+        totalPages 
+    };
 }
 
 

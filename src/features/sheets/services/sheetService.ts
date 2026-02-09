@@ -7,8 +7,8 @@ export const createSheet = async (sheetData: SheetFormData, token: string) => {
     return result;
 };
     
-export const getSheets = async (token: string) => {
-    const response = await api.get(`sheet`, token);  
+export const getSheets = async (token: string, page?: number, limit?: number) => {
+    const response = await api.get(`sheet?page=${page}&limit=${limit}`, token);  
     const result = await response.json(); 
     return result;
 };
