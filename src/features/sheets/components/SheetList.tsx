@@ -79,6 +79,7 @@ function DeleteConfirmation({id, name, refreshData} : {id: string, name: string,
 type SheetTableProps = {
     sheets: Sheet[],
     refreshSheets: () => void,
+    isLoadingSheet: boolean,
     sources: Source[],
     isLoadingSource: boolean,
     levels: Level[],
@@ -90,6 +91,7 @@ type SheetTableProps = {
 
 function SheetTable({sheets, 
     refreshSheets, 
+    isLoadingSheet,
     sources, 
     isLoadingSource, 
     levels, 
@@ -141,25 +143,35 @@ function SheetTable({sheets,
             </thead>
             <tbody role="rowgroup" className="block md:table-row-group">
                 {
-                    sheets.length < 1 ? (
+                    isLoadingSheet ? (
                         <tr role="row" className="block bg-gray-50 md:table-row">
-                            <td role="cell" colSpan={6} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data to display.</td>
+                            <td role="cell" colSpan={6} className="block px-3 py-4 md:table-cell md:py-2">
+                                <div className='flex justify-center'>
+                                    <Loading />
+                                </div>
+                            </td>
                         </tr>
                     ) : (
-                        sheets.map(sheet => 
-                            <tr key={sheet.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
-                                <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{sheet.title}</td>
-                                <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Key">{sheet.key}</td>
-                                <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Source">{sheet.sourceTitle}</td>
-                                <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Level">{sheet.levelName}</td>
-                                <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Genre">{sheet.genreName}</td>
-                                <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
-                                    <div className="flex flex-nowrap gap-3">
-                                        <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(sheet)}>Edit</button>
-                                        <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(sheet.id, sheet.title)}>Delete</button>
-                                    </div>
-                                </td>
+                        sheets.length < 1 ? (
+                            <tr role="row" className="block bg-gray-50 md:table-row">
+                                <td role="cell" colSpan={6} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data to display.</td>
                             </tr>
+                        ) : (
+                            sheets.map(sheet => 
+                                <tr key={sheet.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
+                                    <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{sheet.title}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Key">{sheet.key}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Source">{sheet.sourceTitle}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Level">{sheet.levelName}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Genre">{sheet.genreName}</td>
+                                    <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
+                                        <div className="flex flex-nowrap gap-3">
+                                            <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(sheet)}>Edit</button>
+                                            <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(sheet.id, sheet.title)}>Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
                         )
                     )
                 }
@@ -219,10 +231,6 @@ export default function SheetList() {
     }
 
     // RENDER
-    if (isLoadingSheet) {
-        return (<Loading />)
-    }
-
     return (
         <>
             <div className="mb-4 flex flex-wrap gap-3 justify-between">
@@ -329,7 +337,8 @@ export default function SheetList() {
             <div className="mb-3">
                 <SheetTableMemo sheets={filteredSheets} 
                     refreshSheets={refreshSheets}
-                    sources={sources} 
+                    isLoadingSheet= {isLoadingSheet}
+                    sources={sources}
                     isLoadingSource={isLoadingSource}
                     levels={levels}
                     isLoadingLevel={isLoadingLevel}

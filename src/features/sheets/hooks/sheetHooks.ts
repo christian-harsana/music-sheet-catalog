@@ -18,6 +18,7 @@ export const useGetSheets = () => {
 
     const paginate = (pageNumber: number): void => {
         setCurrentPage(pageNumber);
+        setIsLoading(true);
     }
 
     useEffect(() => {
@@ -43,7 +44,7 @@ export const useGetSheets = () => {
 
         fetchSheets();
         
-    }, [token, refresh, currentPage]);
+    }, [token, refresh, currentPage, isLoading]);
 
     const refreshSheets = useCallback(() => {
         setRefresh(prev => prev + 1);
