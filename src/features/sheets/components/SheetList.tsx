@@ -1,11 +1,10 @@
-import React, { useState, useContext, useMemo, type ChangeEvent } from 'react';
+import React, { useContext, type ChangeEvent } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { useGetGenres } from '../../genres/hooks/genreHooks';
 import { useGetLevels } from '../../levels/hooks/levelHooks';
 import { useGetSources } from '../../sources/hooks/sourceHooks';
 import { useGetSheets, useDeleteSheet } from '../hooks/sheetHooks';
-import { useDebounce } from '../../../shared/hooks/utilHooks';
 import type { Source } from '../../sources/types/source.type';
 import type { Genre } from '../../genres/types/genre.type';
 import type { Level } from '../../levels/types/level.type';
@@ -184,31 +183,11 @@ const SheetTableMemo = React.memo(SheetTable);
 
 export default function SheetList() {
 
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [keyFilter, setKeyFilter] = useState<string>('all');
-    const [levelFilter, setLevelFilter] = useState<string>('all');
-    const [genreFilter, setGenreFilter] = useState<string>('all');
-    const debouncedSearchQuery = useDebounce(searchQuery, 300);
     const {showModal} = useContext(UIContext);
     const {genres, isLoading: isLoadingGenre } = useGetGenres();
     const {levels, isLoading: isLoadingLevel } = useGetLevels();
     const {sources, isLoading: isLoadingSource } = useGetSources();
-    const {sheets, refreshSheets, isLoading: isLoadingSheet, currentPage, paginate, totalPages} = useGetSheets();
-
-    const filteredSheets = useMemo(() => {return sheets.filter(sheet => {
-
-        if (!sheet) return false;
-
-        const matchesTitle = (sheet.title ?? "").toLowerCase().includes(debouncedSearchQuery.toLowerCase());
-        const matchesSourceTitle = (sheet.sourceTitle ?? "").toLowerCase().includes(debouncedSearchQuery.toLowerCase());
-        const matchesKey = keyFilter === "all" || String(sheet.key) === keyFilter;
-        const matchesLevel = levelFilter === "all" || String(sheet.levelId) === levelFilter;
-        const matchesGenre = genreFilter === "all" || String(sheet.genreId) === genreFilter;
-
-        return (matchesTitle || matchesSourceTitle) && matchesKey && matchesLevel && matchesGenre;
-    })
-    }, [sheets, debouncedSearchQuery, keyFilter, levelFilter, genreFilter]);
-
+    const {sheets, refreshSheets, isLoading: isLoadingSheet, currentPage, paginate, totalPages, filters, filterSheets} = useGetSheets();
 
     const handleAddSheet = () => {
         showModal(
@@ -225,9 +204,12 @@ export default function SheetList() {
         )
     };
 
-    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFilterChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+
+        const name = e.target.name;
         const value = e.target.value;
-        setSearchQuery(value);
+
+        filterSheets({...filters, [name]: value });
     }
 
     // RENDER
@@ -238,9 +220,10 @@ export default function SheetList() {
                     <div className="relative w-3xs">
                         <input type="text" 
                             id="sheetSearch"
-                            value={searchQuery} 
+                            name="search"
+                            value={filters.search} 
                             placeholder="Search title or source"
-                            onChange={handleSearchChange}
+                            onChange={handleFilterChange}
                             className={`w-full border rounded-md ps-3 pe-10 py-2 border-gray-400 bg-gray-50`} 
                             />
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" className="absolute top-2.5 right-3 fill-gray-400" aria-hidden={true}>
@@ -251,8 +234,9 @@ export default function SheetList() {
 
                     <div className="relative w-3xs">
                         <select id="keyFilter"
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setKeyFilter(e.target.value)}
-                            value={keyFilter}
+                            name="key"
+                            onChange={handleFilterChange}
+                            value={filters.key}
                             className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50">
                             <option value="all">All keys</option>
                             {
@@ -272,8 +256,9 @@ export default function SheetList() {
 
                     <div className="relative w-3xs">
                         <select id="levelFilter"
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setLevelFilter(e.target.value)}
-                            value={levelFilter}
+                            name="level"
+                            onChange={handleFilterChange}
+                            value={filters.level}
                             className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
                             disabled={isLoadingLevel} >
                             <option value="all">All levels</option>
@@ -300,8 +285,9 @@ export default function SheetList() {
 
                     <div className="relative w-3xs">
                         <select id="genreFilter"
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setGenreFilter(e.target.value)}
-                            value={genreFilter}
+                            name="genre"
+                            onChange={handleFilterChange}
+                            value={filters.genre}
                             className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
                             disabled={isLoadingGenre} >
                             <option value="all">All genres</option>
@@ -335,7 +321,7 @@ export default function SheetList() {
             </div>
 
             <div className="mb-3">
-                <SheetTableMemo sheets={filteredSheets} 
+                <SheetTableMemo sheets={sheets} 
                     refreshSheets={refreshSheets}
                     isLoadingSheet= {isLoadingSheet}
                     sources={sources}

@@ -1,9 +1,16 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { useDebounce } from '../../../shared/hooks/utilHooks';
 import * as sheetService from '../services/sheetService'
 import { AuthContext } from '../../../contexts/AuthContext';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { PaginationData } from '../../../shared/types/common.type';
 
+type SheetFilter = {
+    key: string,
+    level: string,
+    genre: string,
+    search: string
+}
 
 export const useGetSheets = () => {
 
@@ -13,12 +20,18 @@ export const useGetSheets = () => {
     const {token} = useContext(AuthContext);
     const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const limit = 5;
+    const [filters, setFilters] = useState<SheetFilter>({key: 'all', level: 'all', genre: 'all', search: ''});
+    const limit = 10;
     const totalPages = paginationData?.totalPages;
+    const debouncedFiltersSearch = useDebounce(filters.search, 300);
 
     const paginate = (pageNumber: number): void => {
         setCurrentPage(pageNumber);
-        setIsLoading(true);
+    }
+
+    const filterSheets = (filterQuery: SheetFilter): void => {
+        setFilters(filterQuery);
+        setCurrentPage(1);
     }
 
     useEffect(() => {
@@ -26,8 +39,18 @@ export const useGetSheets = () => {
         const fetchSheets = async () => {
             if (!token) return;
 
+            setIsLoading(true);
+
             try {
-                const result = await sheetService.getSheets(token, currentPage, limit);
+
+                const filterParams = new URLSearchParams;
+
+                if (filters.key && filters.key.trim() !== 'all') filterParams.append('keyQuery', filters.key);
+                if (filters.level && filters.level.trim() !== 'all') filterParams.append('levelQuery', filters.level);
+                if (filters.genre && filters.genre.trim() !== 'all') filterParams.append('genreQuery', filters.genre);
+                if (debouncedFiltersSearch) filterParams.append('searchQuery', debouncedFiltersSearch);
+
+                const result = await sheetService.getSheets(token, currentPage, limit, filterParams);
             
                 setSheets(result.data);
                 setPaginationData(result.pagination);
@@ -38,13 +61,13 @@ export const useGetSheets = () => {
                 console.error(errorMessage); // TODO: Create error handlers
             }
             finally {
-                setIsLoading(false)
+                setIsLoading(false);
             };
         }
 
         fetchSheets();
         
-    }, [token, refresh, currentPage, isLoading]);
+    }, [token, refresh, currentPage, filters.key, filters.level, filters.genre, debouncedFiltersSearch ]);
 
     const refreshSheets = useCallback(() => {
         setRefresh(prev => prev + 1);
@@ -54,9 +77,11 @@ export const useGetSheets = () => {
         sheets, 
         refreshSheets, 
         isLoading, 
-        currentPage, 
+        currentPage,
         paginate, 
-        totalPages 
+        totalPages,
+        filters,
+        filterSheets
     };
 }
 
