@@ -99,11 +99,6 @@ export default function LevelList() {
         )
     }
 
-    // RENDER
-    if (isLoading) {
-        return (<Loading />)
-    }
-
     return (
         <>
             <div className="mb-4">
@@ -126,21 +121,31 @@ export default function LevelList() {
                 </thead>
                 <tbody role="rowgroup" className="block md:table-row-group">
                     {
-                        levels.length < 1 ? (
+                        isLoading ? (
                             <tr role="row" className="block bg-gray-50 md:table-row">
-                                <td role="cell" colSpan={2} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data yet.</td>
+                                <td role="cell" colSpan={2} className="block px-3 py-4 md:table-cell md:py-2">
+                                    <div className='flex justify-center'>
+                                        <Loading />
+                                    </div>
+                                </td>
                             </tr>
                         ) : (
-                            levels.map(level => 
-                                <tr key={level.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
-                                    <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{level.name}</td>
-                                    <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
-                                        <div className="flex flex-nowrap gap-3">
-                                            <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(level)}>Edit</button>
-                                            <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(level.id, level.name)}>Delete</button>
-                                        </div>
-                                    </td>
+                            levels.length < 1 ? (
+                                <tr role="row" className="block bg-gray-50 md:table-row">
+                                    <td role="cell" colSpan={2} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data yet.</td>
                                 </tr>
+                            ) : (
+                                levels.map(level => 
+                                    <tr key={level.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
+                                        <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{level.name}</td>
+                                        <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
+                                            <div className="flex flex-nowrap gap-3">
+                                                <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(level)}>Edit</button>
+                                                <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showDeleteConfirmation(level.id, level.name)}>Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
                             )
                         )
                     }
