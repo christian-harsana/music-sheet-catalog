@@ -195,7 +195,7 @@ export default function SourceForm({source, refreshData} : SourceFormProps) {
                 <input type="text" 
                     id="sourceFormat" 
                     name="format"
-                    placeholder="i.e. print, digital, etc."
+                    placeholder="i.e. Print, Digital, etc."
                     value={sourceFormData.format} 
                     onChange={handleInputChange} 
                     onBlur={handleInputBlur}

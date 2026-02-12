@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import * as sourceService from "../services/sourceService";
 import type { Source, SourceFormData } from "../types/source.type";
 import { AuthContext } from "../../../contexts/AuthContext";
+import type { PaginationData } from "../../../shared/types/common.type";
 
 
 export const useGetSources = () => {
@@ -10,16 +11,27 @@ export const useGetSources = () => {
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const {token} = useContext(AuthContext);
+    const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const limit = 10;
+    const totalPages = paginationData?.totalPages; 
+
+    const paginate = (pageNumber: number): void => {
+        setCurrentPage(pageNumber);
+    }
 
     useEffect(() => {
 
         const fetchSources = async () => {
             if (!token) return;
 
+            setIsLoading(true);
+
             try {
-                const result = await sourceService.getSources(token);
+                const result = await sourceService.getSources(token, currentPage, limit);
              
                 setSources(result.data);
+                setPaginationData(result.pagination);
             }
             catch (error: unknown) {
 
@@ -27,19 +39,26 @@ export const useGetSources = () => {
                 console.error(errorMessage); // TODO: Create error handlers
             }
             finally {
-                setIsLoading(false)
+                setIsLoading(false);
             };
         }
 
         fetchSources();
         
-    }, [token, refresh]);
+    }, [token, refresh, currentPage]);
 
-    const refreshSources = () => {
+    const refreshSources = useCallback(() => {
         setRefresh(prev => prev + 1);
-    };
+    }, []);
 
-    return { sources, refreshSources, isLoading };
+    return { 
+        sources, 
+        refreshSources, 
+        isLoading,
+        currentPage,
+        paginate,
+        totalPages
+    };
 }
 
 

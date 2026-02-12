@@ -7,8 +7,8 @@ export const createSource = async (sourceData: SourceFormData, token: string) =>
     return result;
 };
     
-export const getSources = async (token: string) => {
-    const response = await api.get(`source`, token);  
+export const getSources = async (token: string, page?: number, limit?: number) => {
+    const response = await api.get(`source?page=${page}&limit=${limit}`, token);  
     const result = await response.json(); 
     return result;
 };
