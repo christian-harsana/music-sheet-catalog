@@ -112,11 +112,11 @@ function Dashboard() {
                                                 }
                                             </Pie>
                                             <Tooltip 
-                                                formatter={(value: any, name: any, props: any) => {
+                                                formatter={(value: any, _name: any, props: any) => {
                                                     const genreName = props.payload.genreName ?? "No Genre";
                                                     return [value, genreName];
                                                 }}
-                                                />
+                                            />
                                             <RechartsDevtools />
                                         </PieChart>
                                     </div>
@@ -178,7 +178,7 @@ function Dashboard() {
                                                 }
                                             </Pie>
                                             <Tooltip 
-                                                formatter={(value: any, name: any, props: any) => {
+                                                formatter={(value: any, _name: any, props: any) => {
                                                     const levelName = props.payload.levelName ?? "No Level";
                                                     return [value, levelName];
                                                 }}

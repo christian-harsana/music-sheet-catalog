@@ -30,11 +30,11 @@ export default function Pagination({currentPage, totalPages, paginate} : Paginat
                     <li key={`page-${pageNumber}`}>
                         {
                             (pageNumber === currentPage) ?
-                                <div className="flex items-center justify-center box-border size-[30px] rounded-full bg-violet-600 text-sm text-gray-50" role="status" aria-current="page">{pageNumber}</div>
+                                <div className="flex items-center justify-center box-border size-7.5 rounded-full bg-violet-600 text-sm text-gray-50" role="status" aria-current="page">{pageNumber}</div>
                                 :
                                 <button type="button" 
                                     onClick={(e) => handlePageNumberClick(e, pageNumber)} 
-                                    className="flex items-center justify-center box-border size-[30px] rounded-full text-sm text-gray-900 hover:bg-gray-300">
+                                    className="flex items-center justify-center box-border size-7.5 rounded-full text-sm text-gray-900 hover:bg-gray-300">
                                     {pageNumber}
                                 </button>
                         }
