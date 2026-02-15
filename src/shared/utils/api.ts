@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000/api';
+const apiBaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const handleResponse = async (response: Response) => {
 
@@ -12,7 +12,7 @@ const handleResponse = async (response: Response) => {
 
 export const api = {
     get: async(endpoint: string, token?: string) => {
-            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+            const response = await fetch(`${apiBaseURL}/${endpoint}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export const api = {
         },
 
     post: async (endpoint: string, body: object, token?: string) => {
-            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+            const response = await fetch(`${apiBaseURL}/${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export const api = {
 
     put: async (endpoint: string, body: object, token?: string) => {
 
-            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+            const response = await fetch(`${apiBaseURL}/${endpoint}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export const api = {
 
     delete: async (endpoint: string, token?: string) => {
             
-            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+            const response = await fetch(`${apiBaseURL}/${endpoint}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
