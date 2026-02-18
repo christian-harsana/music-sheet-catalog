@@ -31,7 +31,7 @@ type ToastContainerProps = {
 function ToastContainer({notificationList, handleRemoveToast} : ToastContainerProps ) {
 
     return(
-        <div className="fixed bottom-6 right-6 z-20 flex flex-col gap-2" aria-live="polite">
+        <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2" aria-live="polite">
             {
                 notificationList.map(notification => {
                     
@@ -53,7 +53,7 @@ function ToastContainer({notificationList, handleRemoveToast} : ToastContainerPr
 function ModalOverlay({children}: {children: ReactNode}) {
 
     return (
-        <div className="fixed top-0 left-0 z-10 flex justify-center items-center w-screen h-screen bg-black/75" aria-live="polite">
+        <div className="fixed top-0 left-0 z-30 flex justify-center items-center w-screen h-screen bg-black/75" aria-live="polite">
             {children}
         </div>
     )
