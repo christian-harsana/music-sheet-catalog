@@ -141,7 +141,7 @@ export default function SourceList() {
                             ) : (    
                                 sources.length < 1 ? (
                                     <tr role="row" className="block bg-gray-50 md:table-row">
-                                        <td role="cell" colSpan={4} className="block px-3 py-2 md:table-row">There is currently no data yet.</td>
+                                        <td role="cell" colSpan={4} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data yet.</td>
                                     </tr>
                                 ) : (
                                     sources.map(source => 
