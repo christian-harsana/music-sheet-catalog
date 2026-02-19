@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router";
 import { UIContext } from "../../../contexts/UIContext";
 import { api } from "../../../shared/utils/api";
 import IconSpinner from "../../../shared/components/IconSpinner";
+import { HttpError } from "../../../errors";
 
 type signUpFormDataType = {
     email: string;
@@ -132,9 +133,6 @@ export default function SignUpPage() {
                 if (result.success) {
                     addToast(result.message);
                     navigate("/login");
-                }
-                else {
-                    throw new Error(`${response.status} - ${result.message}`);
                 }
             }
             catch (error: unknown) {

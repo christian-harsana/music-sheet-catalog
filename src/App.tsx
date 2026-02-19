@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router'
-import { AuthContext, AuthProvider } from './contexts/AuthContext.tsx'
-import { UIProvider } from './contexts/UIContext.tsx'
+import { AuthContext, AuthProvider } from './contexts/AuthContext'
+import { UIProvider } from './contexts/UIContext'
 import DashboardPage from './features/dashboard/pages/DashboardPage.tsx'
 import ProfilePage from './features/profile/pages/ProfilePage.tsx'
 import GenresPage from './features/genres/pages/GenresPage.tsx'
@@ -28,6 +28,8 @@ const ProtectedRoute = ({children}: ProtectedRouteProps) => {
   }
 
   if (!token) {
+    console.log('redirect from protected route');
+    console.log(token);
     return <Navigate to="/login" replace />;
   }
 
@@ -38,10 +40,12 @@ const ProtectedRoute = ({children}: ProtectedRouteProps) => {
 // COMPONENT
 function App() {
 
+  console.log('App');
+
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <UIProvider>
+      <UIProvider>
+        <AuthProvider>
           <Routes>
             <Route index element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
@@ -53,8 +57,8 @@ function App() {
             <Route path="signup" element={<SignUp />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
-        </UIProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </UIProvider>
     </BrowserRouter>
   )
 }

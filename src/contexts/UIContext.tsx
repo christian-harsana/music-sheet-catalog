@@ -67,6 +67,8 @@ export function UIProvider({children} : {children: ReactNode}) {
 
     const addToast = (message: string, type: NotificationType = "success") => {
 
+        console.log('inside add toast');
+
         const newToast: Notification = {
             id: self.crypto.randomUUID(),
             message: message,
