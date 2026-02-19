@@ -2,35 +2,35 @@ import { describe, test } from "@jest/globals";
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router';
-import LoginPage from "./LoginPage";
+import SignUpForm from "./SignUpForm";
 
-describe('Login Component', () => {
+describe('SignUp Form Component', () => {
 
-    test('login page should render and has correct heading', () => {
+    test('signup form should render and has correct heading', () => {
         render(
             <BrowserRouter>
-                <LoginPage/>
+                <SignUpForm/>
             </BrowserRouter>
         );
     
-        const heading = screen.getByRole('heading', { name: /login/i });
+        const heading = screen.getByRole('heading', { name: /sign up/i });
         expect(heading).toBeInTheDocument();
     });
 
 
-    test('login form should not be valid when required fields are not filled', () => {
+    test('signup form should not be valid when required fields are not filled', () => {
         
         render(
             <BrowserRouter>
-                <LoginPage/>
+                <SignUpForm/>
             </BrowserRouter>
         );
     
         const emailInput = screen.getByRole('textbox', { name: /email/i }) as HTMLInputElement;
         const passwordInput = screen.getByLabelText(/password/i) as HTMLInputElement;
-        const loginButton = screen.getByRole('button', { name: /login/i});
+        const submitButton = screen.getByRole('button', { name: /register/i});
 
-        fireEvent.click(loginButton);
+        fireEvent.click(submitButton);
 
         expect(emailInput.validity.valid).toBe(false);
         expect(emailInput.validity.valueMissing).toBe(true);
