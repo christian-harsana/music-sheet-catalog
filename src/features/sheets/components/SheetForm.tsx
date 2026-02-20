@@ -33,7 +33,7 @@ type SheetFormProp = {
 export default function SheetForm({sheet, refreshData, sources, isLoadingSource, levels, isLoadingLevel, genres, isLoadingGenre } : SheetFormProp) {
 
     const sheetId = sheet?.id ?? null;
-    const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", key: "", sourceId: null, levelId: null, genreId: null};
+    const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", key: "", composer: "", sourceId: null, levelId: null, genreId: null, examPiece: false};
     const [SheetFormData, setSheetFormData] = useState<SheetFormData>(formDefaultData);
     const [SheetFormDataError, setSheetFormDataError] = useState<SheetFormDataError>({});
     const [SheetFormDataTouched, setSheetFormDataTouched] = useState<SheetFormDataTouched>({});
@@ -46,7 +46,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
     const isLoading = isCreatingSheet || isUpdatingSheet;
 
 
-    function validateField(field: string, value: string | number | null): string {
+    function validateField(field: string, value: string | number | boolean | null): string {
 
         switch(field) {
             case "title":
@@ -79,14 +79,22 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
-        let value: string | number;
+        let value: string | number | boolean;
         const name = e.target.name as keyof SheetFormData;
 
-        if (name === 'sourceId' || name === 'levelId' || name === 'genreId') {
-            value = parseInt(e.target.value);
+        if (e.target instanceof HTMLSelectElement) {
+
+            if (name === 'sourceId' || name === 'levelId' || name === 'genreId') {
+                value = parseInt(e.target.value);
+            }
         }
         else {
-            value = e.target.value;
+            if (name === 'examPiece') {
+                value = e.target.checked;
+            }
+            else {
+                value = e.target.value;
+            }
         }
 
         // Set Form Data
@@ -127,10 +135,12 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
             setSheetFormDataError(formSubmissionError);
             setSheetFormDataTouched({
                 title: true,
-                key: true, 
+                key: true,
+                composer: true, 
                 sourceId: true,
                 levelId: true,
-                genreId: true
+                genreId: true,
+                examPiece: true
             });
         }
         else {
@@ -184,9 +194,9 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                     required={true}
                     ref={titleInputRef}
                     className={`w-full border rounded-md px-3 py-2 ${SheetFormDataError.title ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
-                    { ...(SheetFormDataError.title && { "aria-invalid" : "true", "aria-describedby" : "genreNameError" }) }
+                    { ...(SheetFormDataError.title && { "aria-invalid" : "true", "aria-describedby" : "sheetTitleError" }) }
                     />
-                { SheetFormDataError.title && <div id="genreNameError" className="text-red-600">{SheetFormDataError.title}</div>}
+                { SheetFormDataError.title && <div id="sheetTitleError" className="text-red-600">{SheetFormDataError.title}</div>}
             </div>
 
             <div className="mb-4">
@@ -213,6 +223,24 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                         <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
                     </svg>
                 </div>
+            </div>
+
+            <div className="mb-4">
+                <label htmlFor="composer"
+                    className={`block mb-1 ${SheetFormDataError.composer ? 'text-red-600' : ''}`}>
+                    Composer
+                </label>
+
+                <input type="text" 
+                    id="sheetComposer" 
+                    name="composer"
+                    value={SheetFormData.composer} 
+                    onChange={handleInputChange} 
+                    onBlur={handleInputBlur}
+                    className={`w-full border rounded-md px-3 py-2 ${SheetFormDataError.composer ? 'border-red-600' : 'border-gray-400'} bg-gray-50`} 
+                    { ...(SheetFormDataError.composer && { "aria-invalid" : "true", "aria-describedby" : "sheetComposerError" }) }
+                    />
+                { SheetFormDataError.title && <div id="sheetComposerError" className="text-red-600">{SheetFormDataError.composer}</div>}
             </div>
 
             <div className="mb-4">
@@ -319,6 +347,20 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                         </svg>
                     )}
                 </div>
+            </div>
+
+            <div className="mb-4">
+                <label htmlFor="sheetExamPiece" className='flex flex-nowrap items-start'>
+                    <span className='mt-0.5 mr-2'>
+                        <input type="checkbox"
+                            id="sheetExamPiece"
+                            name="examPiece"
+                            onChange={handleInputChange}
+                            checked={SheetFormData.examPiece ?? false}
+                            className="block size-5 border rounded-md border-gray-400 bg-gray-50"/>
+                    </span>
+                    Exam piece
+                </label>
             </div>
 
             <div className="mt-4">

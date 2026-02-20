@@ -9,7 +9,8 @@ type SheetFilter = {
     key: string,
     level: string,
     genre: string,
-    search: string
+    search: string,
+    examPiece: boolean
 }
 
 export const useGetSheets = () => {
@@ -20,7 +21,7 @@ export const useGetSheets = () => {
     const {token} = useContext(AuthContext);
     const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [filters, setFilters] = useState<SheetFilter>({key: 'all', level: 'all', genre: 'all', search: ''});
+    const [filters, setFilters] = useState<SheetFilter>({key: 'all', level: 'all', genre: 'all', examPiece: false, search: ''});
     const limit = 10;
     const totalPages = paginationData?.totalPages;
     const debouncedFiltersSearch = useDebounce(filters.search, 300);
@@ -48,6 +49,7 @@ export const useGetSheets = () => {
                 if (filters.key && filters.key.trim() !== 'all') filterParams.append('keyQuery', filters.key);
                 if (filters.level && filters.level.trim() !== 'all') filterParams.append('levelQuery', filters.level);
                 if (filters.genre && filters.genre.trim() !== 'all') filterParams.append('genreQuery', filters.genre);
+                if (filters.examPiece) filterParams.append('examPieceQuery', filters.examPiece.toString());
                 if (debouncedFiltersSearch) filterParams.append('searchQuery', debouncedFiltersSearch);
 
                 const result = await sheetService.getSheets(token, currentPage, limit, filterParams);
@@ -67,7 +69,7 @@ export const useGetSheets = () => {
 
         fetchSheets();
         
-    }, [token, refresh, currentPage, filters.key, filters.level, filters.genre, debouncedFiltersSearch ]);
+    }, [token, refresh, currentPage, filters.key, filters.level, filters.genre, filters.examPiece, debouncedFiltersSearch ]);
 
     const refreshSheets = useCallback(() => {
         setRefresh(prev => prev + 1);

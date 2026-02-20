@@ -134,9 +134,11 @@ function SheetTable({sheets,
                 <tr role="row" className="bg-gray-200">
                     <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Title</th>
                     <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Key</th>
-                    <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Source</th>
                     <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Level</th>
                     <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Genre</th>
+                    <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Exam Piece</th>
+                    <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Composer</th>
+                    <th role="columnheader" scope="col" className="px-3 py-2 border-r border-b border-gray-300 text-left">Source</th>
                     <th role="columnheader" scope="col" className="px-3 py-2 border-b border-gray-300 text-left"></th>
                 </tr>
             </thead>
@@ -144,7 +146,7 @@ function SheetTable({sheets,
                 {
                     isLoadingSheet ? (
                         <tr role="row" className="block bg-gray-50 md:table-row">
-                            <td role="cell" colSpan={6} className="block px-3 py-4 md:table-cell md:py-2">
+                            <td role="cell" colSpan={8} className="block px-3 py-4 md:table-cell md:py-2">
                                 <div className='flex justify-center'>
                                     <Loading />
                                 </div>
@@ -153,16 +155,18 @@ function SheetTable({sheets,
                     ) : (
                         sheets.length < 1 ? (
                             <tr role="row" className="block bg-gray-50 md:table-row">
-                                <td role="cell" colSpan={6} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data to display.</td>
+                                <td role="cell" colSpan={8} className="block px-3 py-4 md:table-cell md:py-2">There is currently no data to display.</td>
                             </tr>
                         ) : (
                             sheets.map(sheet => 
                                 <tr key={sheet.id} role="row" className="block odd:bg-gray-50 even:bg-gray-100 md:table-row">
                                     <td role="cell" className="block px-3 pt-4 pb-1 text-xl font-bold md:table-cell md:pt-2 md:pb-2 md:text-base md:font-normal">{sheet.title}</td>
-                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Key">{sheet.key}</td>
-                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Source">{sheet.sourceTitle}</td>
-                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Level">{sheet.levelName}</td>
-                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-15 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Genre">{sheet.genreName}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-25 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Key">{sheet.key}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-25 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Level">{sheet.levelName}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-25 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Genre">{sheet.genreName}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:w-25 before:inline-block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Exam Piece">{sheet.examPiece ? "True" : "False" }</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Composer">{sheet.composer}</td>
+                                    <td role="cell" className="block px-3 pb-1 font-semibold before:block before:content-[attr(data-title)':'] before:me-1.5 before:font-normal md:table-cell md:pt-2 md:pb-2 md:before:content-none md:font-normal" data-title="Source">{sheet.sourceTitle}</td>
                                     <td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
                                         <div className="flex flex-nowrap gap-3">
                                             <button type="button" className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50" onClick={() => showEditForm(sheet)}>Edit</button>
@@ -207,7 +211,19 @@ export default function SheetList() {
     const handleFilterChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
         const name = e.target.name;
-        const value = e.target.value;
+        let value;
+
+        if (e.target instanceof HTMLSelectElement) {
+            value = e.target.value;
+        }
+        else {
+            if (name === 'examPiece') {
+                value = e.target.checked;
+            }
+            else {
+                value = e.target.value;
+            }
+        }
 
         filterSheets({...filters, [name]: value });
     }
@@ -310,6 +326,20 @@ export default function SheetList() {
                                 <path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
                             </svg>
                         )}
+                    </div>
+
+                    <div className="self-center">
+                        <label htmlFor="examPieceFilter" className='flex flex-nowrap items-start'>
+                            <span className='mt-0.5 mr-2'>
+                                <input type="checkbox"
+                                    id="examPieceFilter"
+                                    name="examPiece"
+                                    onChange={handleFilterChange}
+                                    checked={filters.examPiece}
+                                    className="block size-5 border rounded-md border-gray-400 bg-gray-50"/>
+                            </span>
+                            Exam piece
+                        </label>
                     </div>
                 </div>
 
