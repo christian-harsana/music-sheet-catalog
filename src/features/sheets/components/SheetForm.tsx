@@ -87,6 +87,9 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
             if (name === 'sourceId' || name === 'levelId' || name === 'genreId') {
                 value = parseInt(e.target.value);
             }
+            else {
+                value = e.target.value
+            }
         }
         else {
             if (name === 'examPiece') {

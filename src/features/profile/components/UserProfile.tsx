@@ -44,7 +44,7 @@ export default function UserProfile() {
     }, [token]);
 
     return (
-        <div className="px-5 py-5 w-full h-auto max-w-xs rounded-md border border-gray-300">
+        <div className="px-5 py-5 w-full h-auto max-w-sm rounded-md border border-gray-300">
             {
                 isLoading ? (
                     <div className="flex justify-center items-center">
@@ -59,7 +59,7 @@ export default function UserProfile() {
                             <dt className="w-[calc(50%-0.5rem)]">Name:</dt>
                             <dd className="w-[calc(50%-0.5rem)] text-right font-semibold">{user?.name}</dd>
                             <dt className="w-[calc(50%-0.5rem)]">Email:</dt>
-                            <dd className="w-[calc(50%-0.5rem)] text-right font-semibold">{user?.email}</dd>
+                            <dd className="w-[calc(50%-0.5rem)] text-right font-semibold break-all">{user?.email}</dd>
                         </dl>
                     </>
                 )
