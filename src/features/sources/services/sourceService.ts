@@ -24,3 +24,9 @@ export const deleteSource = async (id: string, token: string) => {
     const result = await response.json(); 
     return result;
 };
+
+export const getSourcesLookup = async (token: string) => {
+    const response = await api.get(`source/lookup`, token);  
+    const result = await response.json(); 
+    return result;
+};

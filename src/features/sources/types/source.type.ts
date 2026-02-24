@@ -5,6 +5,11 @@ export type Source = {
     format: string
 }
 
+export type SourceLookup = {
+    id: string,
+    title: string
+}
+
 export type SourceFormData = {
     title: string,
     author: string,

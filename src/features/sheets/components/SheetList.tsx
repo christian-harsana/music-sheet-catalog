@@ -3,9 +3,9 @@ import { UIContext } from '../../../contexts/UIContext';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { useGetGenres } from '../../genres/hooks/genreHooks';
 import { useGetLevels } from '../../levels/hooks/levelHooks';
-import { useGetSources } from '../../sources/hooks/sourceHooks';
+import { useGetSourcesLookup } from '../../sources/hooks/sourceHooks';
 import { useGetSheets, useDeleteSheet } from '../hooks/sheetHooks';
-import type { Source } from '../../sources/types/source.type';
+import type { SourceLookup } from '../../sources/types/source.type';
 import type { Genre } from '../../genres/types/genre.type';
 import type { Level } from '../../levels/types/level.type';
 import type { Sheet } from '../types/sheet.type';
@@ -79,11 +79,11 @@ type SheetTableProps = {
     sheets: Sheet[],
     refreshSheets: () => void,
     isLoadingSheet: boolean,
-    sources: Source[],
+    sourcesLookup: SourceLookup[],
     isLoadingSource: boolean,
-    levels: Level[],
+    levelsLookup: Level[],
     isLoadingLevel: boolean,
-    genres: Genre[],
+    genresLookup: Genre[],
     isLoadingGenre: boolean
 }
 
@@ -91,11 +91,11 @@ type SheetTableProps = {
 function SheetTable({sheets, 
     refreshSheets, 
     isLoadingSheet,
-    sources, 
+    sourcesLookup, 
     isLoadingSource, 
-    levels, 
+    levelsLookup, 
     isLoadingLevel, 
-    genres, 
+    genresLookup, 
     isLoadingGenre} : SheetTableProps) {
 
     const {showModal} = useContext(UIContext);
@@ -105,11 +105,11 @@ function SheetTable({sheets,
             <Modal title={'Edit Sheet'}>
                 <SheetForm sheet={sheet} 
                     refreshData={refreshSheets}
-                    sources={sources} 
+                    sourcesLookup={sourcesLookup} 
                     isLoadingSource={isLoadingSource}
-                    levels={levels}
+                    levelsLookup={levelsLookup}
                     isLoadingLevel={isLoadingLevel}
-                    genres={genres}
+                    genresLookup={genresLookup}
                     isLoadingGenre={isLoadingGenre} />
             </Modal>
         )
@@ -190,18 +190,18 @@ export default function SheetList() {
     const {showModal} = useContext(UIContext);
     const {genres, isLoading: isLoadingGenre } = useGetGenres();
     const {levels, isLoading: isLoadingLevel } = useGetLevels();
-    const {sources, isLoading: isLoadingSource } = useGetSources();
+    const {sourcesLookup, isLoading: isLoadingSourceLookup } = useGetSourcesLookup();
     const {sheets, refreshSheets, isLoading: isLoadingSheet, currentPage, paginate, totalPages, filters, filterSheets} = useGetSheets();
 
     const handleAddSheet = () => {
         showModal(
             <Modal title={'Add Sheet'}>
                 <SheetForm refreshData={refreshSheets} 
-                    sources={sources} 
-                    isLoadingSource={isLoadingSource}
-                    levels={levels}
+                    sourcesLookup={sourcesLookup} 
+                    isLoadingSource={isLoadingSourceLookup}
+                    levelsLookup={levels}
                     isLoadingLevel={isLoadingLevel}
-                    genres={genres}
+                    genresLookup={genres}
                     isLoadingGenre={isLoadingGenre}
                     />
             </Modal>
@@ -354,11 +354,11 @@ export default function SheetList() {
                 <SheetTableMemo sheets={sheets} 
                     refreshSheets={refreshSheets}
                     isLoadingSheet= {isLoadingSheet}
-                    sources={sources}
-                    isLoadingSource={isLoadingSource}
-                    levels={levels}
+                    sourcesLookup={sourcesLookup}
+                    isLoadingSource={isLoadingSourceLookup}
+                    levelsLookup={levels}
                     isLoadingLevel={isLoadingLevel}
-                    genres={genres}
+                    genresLookup={genres}
                     isLoadingGenre={isLoadingGenre} 
                 />
             </div>
