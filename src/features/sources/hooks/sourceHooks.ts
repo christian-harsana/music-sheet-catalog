@@ -1,8 +1,50 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import * as sourceService from "../services/sourceService";
-import type { Source, SourceFormData } from "../types/source.type";
+import type { Source, SourceLookup, SourceFormData } from "../types/source.type";
 import { AuthContext } from "../../../contexts/AuthContext";
 import type { PaginationData } from "../../../shared/types/common.type";
+
+export const useGetSourcesLookup = () => {
+
+    const [sourcesLookup, setSourcesLookup] = useState<SourceLookup[]>([]);
+    const [refresh, setRefresh] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const {token} = useContext(AuthContext);
+
+    useEffect(() => {
+        const fetchSourcesLookup = async () => {
+            if (!token) return;
+
+            setIsLoading(true);
+
+            try {
+                const result = await sourceService.getSourcesLookup(token);
+             
+                setSourcesLookup(result.data);
+            }
+            catch (error: unknown) {
+
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                console.error(errorMessage); // TODO: Create error handlers
+            }
+            finally {
+                setIsLoading(false);
+            };
+        }
+
+        fetchSourcesLookup();
+    }, [token, refresh]);
+
+    const refreshSourcesLookup = useCallback(() => {
+        setRefresh(prev => prev + 1);
+    }, []);
+
+    return { 
+        sourcesLookup, 
+        refreshSourcesLookup, 
+        isLoading
+    };
+}
 
 
 export const useGetSources = () => {

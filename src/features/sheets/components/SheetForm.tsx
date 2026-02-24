@@ -3,7 +3,7 @@ import { UIContext } from '../../../contexts/UIContext';
 import { AuthContext } from '../../../contexts/AuthContext';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
-import type { Source } from '../../../features/sources/types/source.type';
+import type { SourceLookup } from '../../../features/sources/types/source.type';
 import type { Level } from '../../../features/levels/types/level.type';
 import type { Genre } from '../../../features/genres/types/genre.type';
 import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
@@ -20,17 +20,25 @@ type SheetFormDataTouched = {
 
 type SheetFormProp = {
     sheet?: Sheet,
-    sources: Source[],
+    sourcesLookup: SourceLookup[],
     isLoadingSource: boolean,
-    levels: Level[],
+    levelsLookup: Level[],
     isLoadingLevel: boolean,
-    genres: Genre[],
+    genresLookup: Genre[],
     isLoadingGenre: boolean,
     refreshData: () => void
 }
 
 
-export default function SheetForm({sheet, refreshData, sources, isLoadingSource, levels, isLoadingLevel, genres, isLoadingGenre } : SheetFormProp) {
+export default function SheetForm({
+    sheet, 
+    refreshData, 
+    sourcesLookup, 
+    isLoadingSource, 
+    levelsLookup, 
+    isLoadingLevel, 
+    genresLookup, 
+    isLoadingGenre } : SheetFormProp) {
 
     const sheetId = sheet?.id ?? null;
     const {id, sourceTitle, levelName, genreName, ...formDefaultData} = sheet ?? {title: "", key: "", composer: "", sourceId: null, levelId: null, genreId: null, examPiece: false};
@@ -260,7 +268,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                         disabled={isLoadingSource} >
                         <option value="">Please Select</option>
                         {
-                            sources.map((source: Source) => 
+                            sourcesLookup.map((source: SourceLookup) => 
                                 ( <option key={`source-${source.id}`} value={source.id}>{source.title}</option> )
                             )
                         }
@@ -295,7 +303,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                         disabled={isLoadingLevel} >
                         <option value="">Please Select</option>
                         {
-                            levels.map((level: Level) => 
+                            levelsLookup.map((level: Level) => 
                                 ( <option key={`level-${level.id}`} value={level.id}>{level.name}</option> )
                             )
                         }
@@ -330,7 +338,7 @@ export default function SheetForm({sheet, refreshData, sources, isLoadingSource,
                         disabled={isLoadingGenre} >
                         <option value="">Please Select</option>
                         {
-                            genres.map((genre: Genre) => 
+                            genresLookup.map((genre: Genre) => 
                                 ( <option key={`genre-${genre.id}`} value={genre.id}>{genre.name}</option> )
                             )
                         }
