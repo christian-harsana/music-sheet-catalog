@@ -22,12 +22,12 @@ type SheetByGenre = {
 
 function Dashboard() {
 
-    const {token} = useContext(AuthContext);
+    const {token, logout} = useContext(AuthContext);
     const [sheetsByLevel, setSheetsByLevel] = useState<SheetByLevel[]>([]);
     const [sheetsByGenre, setSheetsByGenre] = useState<SheetByGenre[]>([]);
     const [incompleteSheetCount, setIncompleteSheetCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const errorHandler = useErrorHandler();
+    const {handleError} = useErrorHandler();
 
     // TODO: extract data fetching to custom hook
     useEffect(() => {
@@ -45,7 +45,7 @@ function Dashboard() {
                 setIncompleteSheetCount(result.data[2][0].count);
             }
             catch (error: unknown) {
-                errorHandler(error);
+                handleError(error, { onUnauthorised: logout });
             }
             finally {
                 setIsLoading(false);

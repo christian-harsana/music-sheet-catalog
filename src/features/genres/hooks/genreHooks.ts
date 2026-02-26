@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import * as genreService from "../services/genreService";
 import type { Genre, GenreFormData } from "../types/genre.type";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { useErrorHandler } from "../../../shared/hooks/utilHooks";
 
 
 export const useGetGenres = () => {
@@ -9,7 +10,8 @@ export const useGetGenres = () => {
     const [genres, setGenres] = useState<Genre[]>([]);
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {token} = useContext(AuthContext);
+    const {token, logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
 
     useEffect(() => {
 
@@ -22,12 +24,10 @@ export const useGetGenres = () => {
                 setGenres(result.data);
             }
             catch (error: unknown) {
-
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                console.error(errorMessage); // TODO: Create error handlers
+                handleError(error, { onUnauthorised: logout });
             }
             finally {
-                setIsLoading(false)
+                setIsLoading(false);
             };
         }
 
@@ -46,6 +46,8 @@ export const useGetGenres = () => {
 export const useCreateGenre = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
 
     const createGenre = async (genreData: GenreFormData, token: string) => {
         
@@ -55,8 +57,7 @@ export const useCreateGenre = () => {
             return result;
         }
         catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            console.error(errorMessage); // TODO: Create error handlers
+             handleError(error, { onUnauthorised: logout });
         }
         finally {
             setIsLoading(false);
@@ -70,6 +71,8 @@ export const useCreateGenre = () => {
 export const useUpdateGenre = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
 
     const updateGenre = async (id: string, genreData: GenreFormData, token: string) => {
         
@@ -79,8 +82,7 @@ export const useUpdateGenre = () => {
             return result;
         }
         catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            console.error(errorMessage); // TODO: Create error handlers
+            handleError(error, { onUnauthorised: logout });
         }
         finally {
             setIsLoading(false);
@@ -94,6 +96,8 @@ export const useUpdateGenre = () => {
 export const useDeleteGenre = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
 
     const deleteGenre = async (id: string, token: string) => {
         
@@ -103,8 +107,7 @@ export const useDeleteGenre = () => {
             return result;
         }
         catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            console.error(errorMessage); // TODO: Create error handlers
+            handleError(error, { onUnauthorised: logout });
         }
         finally {
             setIsLoading(false);

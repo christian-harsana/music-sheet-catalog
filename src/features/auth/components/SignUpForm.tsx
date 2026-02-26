@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router";
 import { UIContext } from "../../../contexts/UIContext";
 import { api } from "../../../shared/utils/api";
 import IconSpinner from "../../../shared/components/IconSpinner";
+import { useErrorHandler } from "../../../shared/hooks/utilHooks";
 
 type signUpFormDataType = {
     email: string;
@@ -26,6 +27,7 @@ export default function SignUpForm() {
     const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
     const {addToast} = useContext(UIContext);
     const navigate = useNavigate();
+    const {handleError} = useErrorHandler();
     
 
     function validateField(name: string, value: string): string {
@@ -137,9 +139,7 @@ export default function SignUpForm() {
                 }
             }
             catch (error: unknown) {
-
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                addToast(errorMessage, "error");
+                handleError(error);
             }
             finally {
                 setIsFormProcessing(false);
