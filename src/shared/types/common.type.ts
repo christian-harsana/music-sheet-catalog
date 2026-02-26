@@ -18,3 +18,12 @@ export type PaginationData = {
     hasNextPage: boolean,
     hasPreviousPage: boolean
 }
+
+
+export type ErrorHandlerOptions = {
+    onUnauthorised?: () => void
+}
+
+export type ErrorContextType = {
+  handleError: (error: unknown, options?: ErrorHandlerOptions) => void
+}

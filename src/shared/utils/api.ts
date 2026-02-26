@@ -1,10 +1,13 @@
+import { HttpError } from "../../errors";
+
 const apiBaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const handleResponse = async (response: Response) => {
 
     if (!response.ok) {
         const error = await response.json();
-        throw new Error(`${response.status} - ${error.message || 'HTTP Error'}`);
+        const errorMessage = error.message || 'HTTP Error';
+        throw new HttpError(response.status, errorMessage);
     }
 
     return response;

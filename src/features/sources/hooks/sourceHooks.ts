@@ -3,6 +3,7 @@ import * as sourceService from "../services/sourceService";
 import type { Source, SourceLookup, SourceFormData } from "../types/source.type";
 import { AuthContext } from "../../../contexts/AuthContext";
 import type { PaginationData } from "../../../shared/types/common.type";
+import { useErrorHandler } from "../../../shared/hooks/utilHooks";
 
 export const useGetSourcesLookup = () => {
 
@@ -52,7 +53,8 @@ export const useGetSources = () => {
     const [sources, setSources] = useState<Source[]>([]);
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {token} = useContext(AuthContext);
+    const {token, logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
     const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const limit = 10;
@@ -76,9 +78,7 @@ export const useGetSources = () => {
                 setPaginationData(result.pagination);
             }
             catch (error: unknown) {
-
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                console.error(errorMessage); // TODO: Create error handlers
+                handleError(error, { onUnauthorised: logout });
             }
             finally {
                 setIsLoading(false);
@@ -107,6 +107,8 @@ export const useGetSources = () => {
 export const useCreateSource = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
 
     const createSource = async (sourceData: SourceFormData, token: string) => {
         
@@ -116,8 +118,7 @@ export const useCreateSource = () => {
             return result;
         }
         catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            console.error(errorMessage); // TODO: Create error handlers
+            handleError(error, { onUnauthorised: logout });
         }
         finally {
             setIsLoading(false);
@@ -131,6 +132,8 @@ export const useCreateSource = () => {
 export const useUpdateSource = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
 
     const updateSource = async (id: string, sourceData: SourceFormData, token: string) => {
         
@@ -140,8 +143,7 @@ export const useUpdateSource = () => {
             return result;
         }
         catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            console.error(errorMessage); // TODO: Create error handlers
+            handleError(error, { onUnauthorised: logout });
         }
         finally {
             setIsLoading(false);
@@ -155,6 +157,8 @@ export const useUpdateSource = () => {
 export const useDeleteSource = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {logout} = useContext(AuthContext);
+    const {handleError} = useErrorHandler();
 
     const deleteSource = async (id: string, token: string) => {
         
@@ -164,8 +168,7 @@ export const useDeleteSource = () => {
             return result;
         }
         catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            console.error(errorMessage); // TODO: Create error handlers
+            handleError(error, { onUnauthorised: logout });
         }
         finally {
             setIsLoading(false);

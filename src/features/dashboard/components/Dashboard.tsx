@@ -5,6 +5,7 @@ import IconSpinner from '../../../shared/components/IconSpinner';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
 import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from '../../../shared/utils/constants';
+import { useErrorHandler } from '../../../shared/hooks/utilHooks';
 
 type SheetByLevel = {
     levelId: string | null;
@@ -21,11 +22,12 @@ type SheetByGenre = {
 
 function Dashboard() {
 
-    const {token} = useContext(AuthContext);
+    const {token, logout} = useContext(AuthContext);
     const [sheetsByLevel, setSheetsByLevel] = useState<SheetByLevel[]>([]);
     const [sheetsByGenre, setSheetsByGenre] = useState<SheetByGenre[]>([]);
     const [incompleteSheetCount, setIncompleteSheetCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const {handleError} = useErrorHandler();
 
     // TODO: extract data fetching to custom hook
     useEffect(() => {
@@ -43,8 +45,7 @@ function Dashboard() {
                 setIncompleteSheetCount(result.data[2][0].count);
             }
             catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                console.error(errorMessage); // TODO: Create error handlers
+                handleError(error, { onUnauthorised: logout });
             }
             finally {
                 setIsLoading(false);

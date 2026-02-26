@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { ErrorContext } from "../../contexts/ErrorContext";
+import type { ErrorContextType } from "../types/common.type";
 
 export const useDebounce = (value: string, delay: number = 300): string => {
 
@@ -11,4 +13,12 @@ export const useDebounce = (value: string, delay: number = 300): string => {
     } ,[value, delay]);
 
     return debouncedValue;
+};
+
+export function useErrorHandler(): ErrorContextType {
+    const context = useContext(ErrorContext);
+
+    if (!context) throw new Error('useErrorHandler must be used within ErrorProvider');
+    
+    return context;
 }

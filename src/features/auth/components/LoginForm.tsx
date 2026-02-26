@@ -1,10 +1,9 @@
 import { useContext, useState, type ChangeEvent, type FocusEvent } from "react";
-// import { Link } from "react-router";
 import { AuthContext } from "../../../contexts/AuthContext";
-import { UIContext } from "../../../contexts/UIContext";
 import { api } from "../../../shared/utils/api";
 import type { AuthUser } from "../../../shared/types/common.type";
 import IconSpinner from "../../../shared/components/IconSpinner";
+import { useErrorHandler } from "../../../shared/hooks/utilHooks";
 
 type loginFormDataType = {
     email: string;
@@ -26,7 +25,7 @@ export default function LoginForm() {
     const [loginFormError, setLoginFormError] = useState<loginFormErrorType>({});
     const [loginFieldTouched, setLoginFieldTouched] = useState<loginFieldTouchedType>({});
     const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
-    const {addToast} = useContext(UIContext);
+    const {handleError} = useErrorHandler();
 
     function validateField(name: string, value: string): string {
 
@@ -131,8 +130,7 @@ export default function LoginForm() {
                 login(user, result.data.token);
             }
             catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                addToast(errorMessage, "error");          
+                handleError(error);         
             }
             finally {
                 setIsFormProcessing(false);

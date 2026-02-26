@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import type { AuthUser } from "../shared/types/common.type";
 import { api } from "../shared/utils/api";
+import { useErrorHandler } from "../shared/hooks/utilHooks";
 
 
 type AuthContextType = {
@@ -30,6 +31,8 @@ export function AuthProvider({children} : {children: ReactNode}) {
     const [token, setToken] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthtenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { handleError } = useErrorHandler();
+
     let navigate = useNavigate();
 
     const login = (user: AuthUser, token: string) => {
@@ -49,6 +52,7 @@ export function AuthProvider({children} : {children: ReactNode}) {
     }
 
     const logout = () => {
+
         setUser(null);
         setToken(null);
         setIsAuthtenticated(false);
@@ -86,14 +90,7 @@ export function AuthProvider({children} : {children: ReactNode}) {
                 setIsAuthtenticated(true);
             }
             catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                console.error(errorMessage);
-
-                let statusCode = parseInt(errorMessage.split("-")[0].trim());
-
-                if (statusCode === 401) {
-                    localStorage.removeItem(`music_sheet_catalog_token`);
-                }
+                handleError(error, { onUnauthorised: logout });
             }
             finally {
                 setIsLoading(false);
