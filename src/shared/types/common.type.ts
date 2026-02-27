@@ -21,9 +21,10 @@ export type PaginationData = {
 
 
 export type ErrorHandlerOptions = {
-    onUnauthorised?: () => void
+    onUnauthorised?: () => void,
+    onError?: (errorMessage: string) => void
 }
 
 export type ErrorContextType = {
-  handleError: (error: unknown, options?: ErrorHandlerOptions) => void
+    handleError: (error: unknown, options?: ErrorHandlerOptions) => void
 }

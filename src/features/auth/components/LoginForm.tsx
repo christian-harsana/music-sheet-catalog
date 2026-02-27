@@ -4,6 +4,7 @@ import { api } from "../../../shared/utils/api";
 import type { AuthUser } from "../../../shared/types/common.type";
 import IconSpinner from "../../../shared/components/IconSpinner";
 import { useErrorHandler } from "../../../shared/hooks/utilHooks";
+import { UIContext } from "../../../contexts/UIContext";
 
 type loginFormDataType = {
     email: string;
@@ -21,6 +22,7 @@ type loginFieldTouchedType = {
 export default function LoginForm() {
 
     const {login} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const [loginFormData, setLoginFormData] = useState<loginFormDataType>({email: "", password: ""});
     const [loginFormError, setLoginFormError] = useState<loginFormErrorType>({});
     const [loginFieldTouched, setLoginFieldTouched] = useState<loginFieldTouchedType>({});
@@ -130,7 +132,10 @@ export default function LoginForm() {
                 login(user, result.data.token);
             }
             catch (error: unknown) {
-                handleError(error);         
+
+                handleError(error, {
+                    onError: (message) => addToast(message, 'error')
+                });         
             }
             finally {
                 setIsFormProcessing(false);

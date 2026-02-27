@@ -41,9 +41,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <UIProvider>
-        <ErrorProvider>
-          <AuthProvider>
+      <ErrorProvider>
+        <AuthProvider>
+          <UIProvider>
             <Routes>
               <Route index element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
               <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
@@ -55,9 +55,9 @@ function App() {
               <Route path="signup" element={<SignUp />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
-          </AuthProvider>
-        </ErrorProvider>
-      </UIProvider>
+          </UIProvider>
+        </AuthProvider>
+      </ErrorProvider>
     </BrowserRouter>
   )
 }

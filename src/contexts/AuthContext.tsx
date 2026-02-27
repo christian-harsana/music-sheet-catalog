@@ -90,7 +90,10 @@ export function AuthProvider({children} : {children: ReactNode}) {
                 setIsAuthtenticated(true);
             }
             catch (error: unknown) {
-                handleError(error, { onUnauthorised: logout });
+
+                handleError(error, { 
+                    onUnauthorised: logout
+                });
             }
             finally {
                 setIsLoading(false);

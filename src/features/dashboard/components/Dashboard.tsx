@@ -6,6 +6,7 @@ import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
 import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from '../../../shared/utils/constants';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';
+import { UIContext } from '../../../contexts/UIContext';
 
 type SheetByLevel = {
     levelId: string | null;
@@ -23,6 +24,7 @@ type SheetByGenre = {
 function Dashboard() {
 
     const {token, logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const [sheetsByLevel, setSheetsByLevel] = useState<SheetByLevel[]>([]);
     const [sheetsByGenre, setSheetsByGenre] = useState<SheetByGenre[]>([]);
     const [incompleteSheetCount, setIncompleteSheetCount] = useState<number>(0);
@@ -45,7 +47,10 @@ function Dashboard() {
                 setIncompleteSheetCount(result.data[2][0].count);
             }
             catch (error: unknown) {
-                handleError(error, { onUnauthorised: logout });
+                handleError(error, { 
+                    onUnauthorised: logout, 
+                    onError: (message) => addToast(message, 'error') 
+                });
             }
             finally {
                 setIsLoading(false);

@@ -4,13 +4,16 @@ import type { Source, SourceLookup, SourceFormData } from "../types/source.type"
 import { AuthContext } from "../../../contexts/AuthContext";
 import type { PaginationData } from "../../../shared/types/common.type";
 import { useErrorHandler } from "../../../shared/hooks/utilHooks";
+import { UIContext } from "../../../contexts/UIContext";
 
 export const useGetSourcesLookup = () => {
 
     const [sourcesLookup, setSourcesLookup] = useState<SourceLookup[]>([]);
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {token} = useContext(AuthContext);
+    const {token, logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
+    const {handleError} = useErrorHandler();
 
     useEffect(() => {
         const fetchSourcesLookup = async () => {
@@ -24,9 +27,10 @@ export const useGetSourcesLookup = () => {
                 setSourcesLookup(result.data);
             }
             catch (error: unknown) {
-
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                console.error(errorMessage); // TODO: Create error handlers
+                handleError(error, { 
+                    onUnauthorised: logout, 
+                    onError: (message) => addToast(message, 'error') 
+                });
             }
             finally {
                 setIsLoading(false);
@@ -53,10 +57,11 @@ export const useGetSources = () => {
     const [sources, setSources] = useState<Source[]>([]);
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {token, logout} = useContext(AuthContext);
-    const {handleError} = useErrorHandler();
     const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const {token, logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
+    const {handleError} = useErrorHandler();
     const limit = 10;
     const totalPages = paginationData?.totalPages; 
 
@@ -78,7 +83,10 @@ export const useGetSources = () => {
                 setPaginationData(result.pagination);
             }
             catch (error: unknown) {
-                handleError(error, { onUnauthorised: logout });
+                handleError(error, { 
+                    onUnauthorised: logout, 
+                    onError: (message) => addToast(message, 'error') 
+                });
             }
             finally {
                 setIsLoading(false);
@@ -108,6 +116,7 @@ export const useCreateSource = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const createSource = async (sourceData: SourceFormData, token: string) => {
@@ -118,7 +127,10 @@ export const useCreateSource = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
@@ -133,6 +145,7 @@ export const useUpdateSource = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const updateSource = async (id: string, sourceData: SourceFormData, token: string) => {
@@ -143,7 +156,10 @@ export const useUpdateSource = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
@@ -158,6 +174,7 @@ export const useDeleteSource = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const deleteSource = async (id: string, token: string) => {
@@ -168,7 +185,10 @@ export const useDeleteSource = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
