@@ -41,8 +41,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <UIProvider>
-        <ErrorProvider>
+      <ErrorProvider>
+        <UIProvider>
           <AuthProvider>
             <Routes>
               <Route index element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
@@ -56,8 +56,8 @@ function App() {
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </AuthProvider>
-        </ErrorProvider>
-      </UIProvider>
+        </UIProvider>
+      </ErrorProvider>
     </BrowserRouter>
   )
 }

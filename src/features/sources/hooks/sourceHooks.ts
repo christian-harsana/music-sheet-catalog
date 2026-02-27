@@ -11,7 +11,9 @@ export const useGetSourcesLookup = () => {
     const [sourcesLookup, setSourcesLookup] = useState<SourceLookup[]>([]);
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {token} = useContext(AuthContext);
+    const {token, logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
+    const {handleError} = useErrorHandler();
 
     useEffect(() => {
         const fetchSourcesLookup = async () => {
@@ -25,9 +27,10 @@ export const useGetSourcesLookup = () => {
                 setSourcesLookup(result.data);
             }
             catch (error: unknown) {
-
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                console.error(errorMessage); // TODO: Create error handlers
+                handleError(error, { 
+                    onUnauthorised: logout, 
+                    onError: (message) => addToast(message, 'error') 
+                });
             }
             finally {
                 setIsLoading(false);
