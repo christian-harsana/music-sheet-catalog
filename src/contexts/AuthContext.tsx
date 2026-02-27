@@ -1,9 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import type { AuthUser } from "../shared/types/common.type";
 import { api } from "../shared/utils/api";
 import { useErrorHandler } from "../shared/hooks/utilHooks";
+import { UIContext } from "./UIContext";
 
 
 type AuthContextType = {
@@ -32,6 +33,7 @@ export function AuthProvider({children} : {children: ReactNode}) {
     const [isAuthenticated, setIsAuthtenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const { handleError } = useErrorHandler();
+    const { addToast } = useContext(UIContext);
 
     let navigate = useNavigate();
 
@@ -90,7 +92,11 @@ export function AuthProvider({children} : {children: ReactNode}) {
                 setIsAuthtenticated(true);
             }
             catch (error: unknown) {
-                handleError(error, { onUnauthorised: logout });
+
+                handleError(error, { 
+                    onUnauthorised: logout, 
+                    onError: (message) => addToast(message, 'error') 
+                });
             }
             finally {
                 setIsLoading(false);

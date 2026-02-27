@@ -3,6 +3,7 @@ import * as levelService from "../services/levelService";
 import type { Level, LevelFormData } from "../types/level.type";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useErrorHandler } from "../../../shared/hooks/utilHooks";
+import { UIContext } from "../../../contexts/UIContext";
 
 
 export const useGetLevels = () => {
@@ -11,6 +12,7 @@ export const useGetLevels = () => {
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const {token, logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     useEffect(() => {
@@ -24,7 +26,10 @@ export const useGetLevels = () => {
                 setLevels(result.data);
             }
             catch (error: unknown) {
-                handleError(error, { onUnauthorised: logout });
+                handleError(error, { 
+                    onUnauthorised: logout, 
+                    onError: (message) => addToast(message, 'error') 
+                });
             }
             finally {
                 setIsLoading(false)
@@ -47,6 +52,7 @@ export const useCreateLevel = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const createLevel = async (levelData: LevelFormData, token: string) => {
@@ -57,7 +63,10 @@ export const useCreateLevel = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
@@ -72,6 +81,7 @@ export const useUpdateLevel = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const updateLevel = async (id: string, levelData: LevelFormData, token: string) => {
@@ -82,7 +92,10 @@ export const useUpdateLevel = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
@@ -97,6 +110,7 @@ export const useDeleteLevel = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const deleteLevel = async (id: string, token: string) => {
@@ -107,7 +121,10 @@ export const useDeleteLevel = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);

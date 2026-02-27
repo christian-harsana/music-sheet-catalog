@@ -19,6 +19,6 @@ export function useErrorHandler(): ErrorContextType {
     const context = useContext(ErrorContext);
 
     if (!context) throw new Error('useErrorHandler must be used within ErrorProvider');
-    
+
     return context;
 }

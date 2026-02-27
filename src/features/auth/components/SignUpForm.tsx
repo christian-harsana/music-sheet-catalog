@@ -139,7 +139,9 @@ export default function SignUpForm() {
                 }
             }
             catch (error: unknown) {
-                handleError(error);
+                handleError(error, {
+                    onError: (message) => addToast(message, 'error')
+                }); 
             }
             finally {
                 setIsFormProcessing(false);

@@ -4,6 +4,7 @@ import * as sheetService from '../services/sheetService'
 import { AuthContext } from '../../../contexts/AuthContext';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { PaginationData } from '../../../shared/types/common.type';
+import { UIContext } from '../../../contexts/UIContext';
 
 type SheetFilter = {
     key: string,
@@ -18,10 +19,11 @@ export const useGetSheets = () => {
     const [sheets, setSheets] = useState<Sheet[]>([]);
     const [refresh, setRefresh] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {token, logout} = useContext(AuthContext);
     const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [filters, setFilters] = useState<SheetFilter>({key: 'all', level: 'all', genre: 'all', examPiece: false, search: ''});
+    const {token, logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const limit = 10;
     const totalPages = paginationData?.totalPages;
     const debouncedFiltersSearch = useDebounce(filters.search, 300);
@@ -59,7 +61,10 @@ export const useGetSheets = () => {
                 setPaginationData(result.pagination);
             }
             catch (error: unknown) {
-                handleError(error, { onUnauthorised: logout });
+                handleError(error, { 
+                    onUnauthorised: logout, 
+                    onError: (message) => addToast(message, 'error') 
+                });
             }
             finally {
                 setIsLoading(false);
@@ -91,6 +96,7 @@ export const useCreateSheet = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const createSheet = async (sheetData: SheetFormData, token: string) => {
@@ -101,7 +107,10 @@ export const useCreateSheet = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
@@ -116,6 +125,7 @@ export const useUpdateSheet = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const updateSheet = async (id: string, sheetData: SheetFormData, token: string) => {
@@ -126,7 +136,10 @@ export const useUpdateSheet = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
@@ -141,6 +154,7 @@ export const useDeleteSheet = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const {logout} = useContext(AuthContext);
+    const {addToast} = useContext(UIContext);
     const {handleError} = useErrorHandler();
 
     const deleteSheet = async (id: string, token: string) => {
@@ -151,7 +165,10 @@ export const useDeleteSheet = () => {
             return result;
         }
         catch (error: unknown) {
-            handleError(error, { onUnauthorised: logout });
+            handleError(error, { 
+                onUnauthorised: logout, 
+                onError: (message) => addToast(message, 'error') 
+            });
         }
         finally {
             setIsLoading(false);
