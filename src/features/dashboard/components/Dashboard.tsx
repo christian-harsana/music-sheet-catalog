@@ -1,13 +1,14 @@
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { api } from '../../../shared/utils/api';
+import Card from '../../../shared/components/Card/Card';
+import StatCard from '../../../shared/components/Card/StatCard';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
 import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from '../../../shared/utils/constants';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';
 import { UIContext } from '../../../contexts/UIContext';
-import { Link } from 'react-router';
 
 type SheetByLevel = {
     levelId: string | null;
@@ -71,129 +72,57 @@ function Dashboard() {
 
     const incompleteSheetCountClass = incompleteSheetCount > 0 ? 'text-red-600' : 'text-green-500';
 
-    // TODO: transform the dashboard widgets into components
     return (
         <div className="flex flex-wrap gap-4">
-            <div className="w-full">
-                <div className="px-5 py-4 w-full h-full rounded-md border border-gray-300">
-
-                    <div className="flex gap-4 justify-between">
-                        <h2 className="mb-2 text-md font-semibold text-gray-900">Total Sheets</h2>
-                        <div>
-                            <Link to="/sheets" className="px-2 py-0.5 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-xs text-gray-50">
-                                View Collection
-                            </Link>
-                        </div>
-                    </div>
-
-                    {
-                        isLoading ? 
-                            (
-                                <div className="flex justify-center">
-                                    <IconSpinner color="dark"/>
-                                </div>
-                            ) : (
-                                <div className="flex flex-nowrap gap-4">
-                                    <div>
-                                        <div className="text-4xl font-bold">{totalSheetCount}</div>
-                                        <div className="text-sm text-gray-500">in your collection</div>
-                                    </div>
-                                    <div className="pl-4 border-l border-l-gray-300">
-                                        <div className={`text-4xl font-bold ${incompleteSheetCountClass}`}>
-                                            {incompleteSheetCount}
-                                        </div>
-                                        <div className="text-sm text-gray-500">with missing details</div>
-                                    </div>
-                                </div>
-                            )         
-                    }    
-                </div>
+            <div className="w-full xl:w-[calc(34%-0.75rem)]">
+                <StatCard 
+                    title="Total Sheets"
+                    cta="View Collection"
+                    ctaHref="/sheets"
+                    isLoading={isLoading}
+                    value1={totalSheetCount}
+                    value1SupportingText="in your collection"
+                    value2={incompleteSheetCount}
+                    value2SupportingText="with missing details"
+                    value2Class={incompleteSheetCountClass}
+                />
             </div>
 
-            <div className="w-full sm:w-[calc(33.33%-0.667rem)]">
-                
-                <div className="px-5 py-4 w-full h-full rounded-md border border-gray-300">
-                    <div className="flex gap-4 justify-between">
-                        <h2 className="mb-2 text-md font-semibold text-gray-900">Total Sources</h2>
-                        <div>
-                            <Link to="/sources" className="px-2 py-0.5 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-xs text-gray-50">
-                                Manage
-                            </Link>
-                        </div>
-                    </div>
-
-                    {
-                        isLoading ? 
-                            (
-                                <div className="flex justify-center">
-                                    <IconSpinner color="dark"/>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className={`text-4xl font-bold`}>{totalSourceCount}</div>
-                                    <div className="text-sm text-gray-500">in your collection</div>
-                                </>
-                            )         
-                    } 
-                </div>   
+            <div className="w-full sm:w-[calc(33.33%-0.667rem)] xl:w-[calc(22%-0.75rem)]">
+                <StatCard 
+                    title="Total Sources"
+                    cta="Manage"
+                    ctaHref="/sources"
+                    isLoading={isLoading}
+                    value1={totalSourceCount}
+                    value1SupportingText="in your collection"
+                />
             </div>
 
-            <div className="w-full sm:w-[calc(33.33%-0.667rem)]">
-                <div className="px-5 py-4 w-full h-full rounded-md border border-gray-300">                
-                    <div className="flex gap-4 justify-between">
-                        <h2 className="mb-2 text-md font-semibold text-gray-900">Difficulty Levels</h2>
-                        <div>
-                            <Link to="/levels" className="px-2 py-0.5 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-xs text-gray-50">
-                                Manage
-                            </Link>
-                        </div>
-                    </div>
-
-                    {
-                        isLoading ? 
-                            (
-                                <div className="flex justify-center">
-                                    <IconSpinner color="dark"/>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className={`text-4xl font-bold`}>{totalLevelCount}</div>
-                                    <div className="text-sm text-gray-500">represented</div>
-                                </>
-                            )         
-                    }    
-                </div>
+            <div className="w-full sm:w-[calc(33.33%-0.667rem)] xl:w-[calc(22%-0.75rem)]">
+                <StatCard 
+                    title="Difficulty Levels"
+                    cta="Manage"
+                    ctaHref="/levels"
+                    isLoading={isLoading}
+                    value1={totalLevelCount}
+                    value1SupportingText="represented"
+                />
             </div>
                 
-            <div className="w-full sm:w-[calc(33.33%-0.667rem)]">
-                <div className="px-5 py-4 w-full h-full rounded-md border border-gray-300">
-                    <div className="flex gap-4 justify-between">
-                        <h2 className="mb-2 text-md font-semibold text-gray-900">Genres</h2>
-                        <div>
-                            <Link to="/genres" className="px-2 py-0.5 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-xs text-gray-50">
-                                Manage
-                            </Link>
-                        </div>
-                    </div>
-
-                    {
-                        isLoading ? 
-                            (
-                                <div className="flex justify-center">
-                                    <IconSpinner color="dark"/>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className={`text-4xl font-bold`}>{totalGenreCount}</div>
-                                    <div className="text-sm text-gray-500">represented</div>
-                                </>
-                            )         
-                    }    
-                </div>
+            <div className="w-full sm:w-[calc(33.33%-0.667rem)] xl:w-[calc(22%-0.75rem)]">
+                <StatCard 
+                    title="Genres"
+                    cta="Manage"
+                    ctaHref="/genres"
+                    isLoading={isLoading}
+                    value1={totalGenreCount}
+                    value1SupportingText="represented"
+                />
             </div>
 
             <div className="w-full sm:w-[calc(50%-0.5rem)]">
-                <div className="px-5 py-4 w-full h-full rounded-md border border-gray-300">
+                <Card>
                     <h2 className="mb-2 text-md font-semibold text-gray-900">Sheets by Genre</h2>
                     
                     {
@@ -258,11 +187,11 @@ function Dashboard() {
                                 )
                             )         
                     }     
-                </div>
+                </Card>
             </div>
             
             <div className="w-full sm:w-[calc(50%-0.5rem)]">
-                <div className="px-5 py-4 w-full h-full rounded-md border border-gray-300">
+                <Card>
                     <h2 className="mb-2 text-md font-semibold text-gray-900">Sheets by Level</h2>
 
                     {
@@ -322,11 +251,11 @@ function Dashboard() {
                                         </div>
                                     </>
                                 ) : (
-                                    <p>There is current no data.</p>
+                                    <p>There is currently no data.</p>
                                 )
                             )         
                     }
-                </div>
+                </Card>
             </div>
         </div>
     )
