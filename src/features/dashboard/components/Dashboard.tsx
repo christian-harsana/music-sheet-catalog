@@ -1,75 +1,22 @@
-import { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../../../contexts/AuthContext';
-import { api } from '../../../shared/utils/api';
 import Card from '../../../shared/components/Card/Card';
 import StatCard from '../../../shared/components/Card/StatCard';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
 import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from '../../../shared/utils/constants';
-import { useErrorHandler } from '../../../shared/hooks/utilHooks';
-import { UIContext } from '../../../contexts/UIContext';
-
-type SheetByLevel = {
-    levelId: string | null;
-    levelName: string | null;
-    count: number;
-}
-
-type SheetByGenre = {
-    genreId: string | null;
-    genreName: string | null;
-    count: number;
-}
-
+import { useGetDashboardSummary } from '../hooks/dashboardHooks';
 
 function Dashboard() {
 
-    const {token, logout} = useContext(AuthContext);
-    const {addToast} = useContext(UIContext);
-    const [sheetsByLevel, setSheetsByLevel] = useState<SheetByLevel[]>([]);
-    const [sheetsByGenre, setSheetsByGenre] = useState<SheetByGenre[]>([]);
-    const [incompleteSheetCount, setIncompleteSheetCount] = useState<number>(0);
-    const [totalSheetCount, setTotalSheetCount] = useState<number>(0);
-    const [totalSourceCount, setTotalSourceCount] = useState<number>(0);
-    const [totalLevelCount, setTotalLevelCount] = useState<number>(0);
-    const [totalGenreCount, setTotalGenreCount] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {handleError} = useErrorHandler();
-
-    // TODO: extract data fetching to custom hook
-    useEffect(() => {
-
-        const fetchSummary = async() => {
-                    
-            if (!token) return;
-
-            try {
-                const response = await api.get(`stats`, token);
-                const result = await response.json();
-
-                setSheetsByLevel(result.data[0]);
-                setSheetsByGenre(result.data[1]);
-                setIncompleteSheetCount(result.data[2][0].count);
-                setTotalSheetCount(result.data[3][0].count);
-                setTotalSourceCount(result.data[4][0].count);
-                setTotalLevelCount(result.data[5][0].count);
-                setTotalGenreCount(result.data[6][0].count);
-            }
-            catch (error: unknown) {
-                handleError(error, { 
-                    onUnauthorised: logout, 
-                    onError: (message) => addToast(message, 'error') 
-                });
-            }
-            finally {
-                setIsLoading(false);
-            }
-        }
-
-        fetchSummary();
-    }, [])
-
+    const {sheetsByLevel, 
+            sheetsByGenre, 
+            incompleteSheetCount,
+            totalSheetCount,
+            totalSourceCount,
+            totalLevelCount,
+            totalGenreCount,
+            isLoading } = useGetDashboardSummary();
+    
     const incompleteSheetCountClass = incompleteSheetCount > 0 ? 'text-red-600' : 'text-green-500';
 
     return (
