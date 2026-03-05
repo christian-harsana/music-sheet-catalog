@@ -1,9 +1,5 @@
-import Card from '../../../shared/components/Card/Card';
 import StatCard from '../../../shared/components/Card/StatCard';
-import IconSpinner from '../../../shared/components/IconSpinner';
-import { Cell, Pie, PieChart, Tooltip } from 'recharts';
-import { RechartsDevtools } from '@recharts/devtools';
-import { BG_COLOR_CLASSES, FILL_COLOR_CLASSES } from '../../../shared/utils/constants';
+import CategoryDistributionCard from '../../../shared/components/Card/CategoryDistributionCard';
 import { useGetDashboardSummary } from '../hooks/dashboardHooks';
 
 function Dashboard() {
@@ -18,6 +14,18 @@ function Dashboard() {
             isLoading } = useGetDashboardSummary();
     
     const incompleteSheetCountClass = incompleteSheetCount > 0 ? 'text-red-600' : 'text-green-500';
+
+    const normalisedSheetsByLevel = sheetsByLevel.map(d => ({
+        id: d.levelId,
+        name: d.levelName,
+        count: d.count
+    }));
+
+    const normalisedSheetsByGenre = sheetsByGenre.map(d => ({
+        id: d.genreId,
+        name: d.genreName,
+        count: d.count
+    }));
 
     return (
         <div className="flex flex-wrap gap-4">
@@ -69,140 +77,19 @@ function Dashboard() {
             </div>
 
             <div className="w-full sm:w-[calc(50%-0.5rem)]">
-                <Card>
-                    <h2 className="mb-2 text-md font-semibold text-gray-900">Sheets by Genre</h2>
-                    
-                    {
-                        isLoading ? 
-                            ( 
-                                <div className="flex justify-center">
-                                    <IconSpinner color="dark"/>
-                                </div>
-                            ) : (
-
-                                sheetsByGenre.length ? (
-                                    <>
-                                        <div className="mb-4">
-                                            <PieChart
-                                                style={{
-                                                    width: '100%',
-                                                    maxHeight: '350px',
-                                                    aspectRatio: 1,
-                                                }}
-                                                responsive>
-                                                <Pie
-                                                    data={sheetsByGenre}
-                                                    dataKey={`${'count'}`}
-                                                    cx="50%"
-                                                    cy="50%"
-                                                    outerRadius="50%"
-                                                    fill="#8884d8"
-                                                    isAnimationActive={true}
-                                                >
-                                                    {
-                                                        sheetsByGenre.map((data, index) => (
-                                                            <Cell key={`cell-${data.genreId}`} className={`${FILL_COLOR_CLASSES[index % FILL_COLOR_CLASSES.length]}`} />
-                                                        ))
-                                                    }
-                                                </Pie>
-                                                <Tooltip 
-                                                    formatter={(value: any, _name: any, props: any) => {
-                                                        const genreName = props.payload.genreName ?? "No Genre";
-                                                        return [value, genreName];
-                                                    }}
-                                                />
-                                                <RechartsDevtools />
-                                            </PieChart>
-                                        </div>
-                                        <div className="mb-4">
-                                            <ul className="flex flex-wrap gap-x-5 gap-y-2 justify-center">
-                                                {
-                                                    sheetsByGenre.map((sheet, index) => 
-                                                        <li key={!sheet.genreId ? `0` : sheet.genreId} className="flex gap-2">
-                                                            <div className="self-center">
-                                                                <div className={`w-4 h-4 rounded ${BG_COLOR_CLASSES[index % BG_COLOR_CLASSES.length]}`}></div>
-                                                            </div>
-                                                            <div className="text-left font-semibold">{!sheet.genreName ? `No genre` : sheet.genreName} ({sheet.count})</div>
-                                                        </li>
-                                                    )
-                                                }
-                                            </ul>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <p>There is currently no data.</p>
-                                )
-                            )         
-                    }     
-                </Card>
+                <CategoryDistributionCard
+                    title="Sheets by Genre"
+                    data={normalisedSheetsByGenre}
+                    isLoading={isLoading}
+                />
             </div>
             
             <div className="w-full sm:w-[calc(50%-0.5rem)]">
-                <Card>
-                    <h2 className="mb-2 text-md font-semibold text-gray-900">Sheets by Level</h2>
-
-                    {
-                        isLoading ? 
-                            (
-                                <div className="flex justify-center">
-                                    <IconSpinner color="dark"/>
-                                </div>
-                            ) : (
-                                sheetsByLevel.length ? (
-                                    <>
-                                        <div className="mb-4 mx-auto">
-                                            <PieChart
-                                                style={{
-                                                    width: '100%',
-                                                    maxHeight: '350px',
-                                                    aspectRatio: 1,
-                                                }}
-                                                responsive>
-                                                <Pie
-                                                    data={sheetsByLevel}
-                                                    dataKey={`${'count'}`}
-                                                    cx="50%"
-                                                    cy="50%"
-                                                    outerRadius="50%"
-                                                    fill="#000"
-                                                    isAnimationActive={true}
-                                                >
-                                                    {
-                                                        sheetsByLevel.map((data, index) => (
-                                                            <Cell key={`cell-${data.levelId}`} className={`${FILL_COLOR_CLASSES[index % FILL_COLOR_CLASSES.length]}`} />
-                                                        ))
-                                                    }
-                                                </Pie>
-                                                <Tooltip 
-                                                    formatter={(value: any, _name: any, props: any) => {
-                                                        const levelName = props.payload.levelName ?? "No Level";
-                                                        return [value, levelName];
-                                                    }}
-                                                    />
-                                                <RechartsDevtools />
-                                            </PieChart>
-                                        </div>
-                                        <div className="mb-4">
-                                            <ul className="flex flex-wrap gap-x-5 gap-y-2 justify-center">
-                                                {
-                                                    sheetsByLevel.map((sheet, index) => 
-                                                        <li key={!sheet.levelId ? `0` : sheet.levelId} className="flex gap-2">
-                                                            <div className="self-center">
-                                                                <div className={`w-4 h-4 rounded ${BG_COLOR_CLASSES[index % BG_COLOR_CLASSES.length]}`}></div>
-                                                            </div>
-                                                            <div className="text-left font-semibold">{!sheet.levelName ? `No level` : sheet.levelName} ({sheet.count})</div>
-                                                        </li>
-                                                    )
-                                                }
-                                            </ul>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <p>There is currently no data.</p>
-                                )
-                            )         
-                    }
-                </Card>
+                <CategoryDistributionCard
+                    title="Sheets by Level"
+                    data={normalisedSheetsByLevel}
+                    isLoading={isLoading}
+                />
             </div>
         </div>
     )
