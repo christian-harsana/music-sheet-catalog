@@ -8,9 +8,9 @@ export default function DashboardPage() {
     const {user} = useContext(AuthContext);
     const heading = user?.name ? `Welcome, ${user.name}` : 'Welcome';
     
-
     return(
         <Layout heading={heading}>
+            <p className='mb-4 text-gray-500'>Here's an overview of your collection.</p>
             <Dashboard />
         </Layout>       
     )
