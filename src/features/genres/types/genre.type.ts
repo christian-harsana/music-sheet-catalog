@@ -1,8 +1,8 @@
 export type Genre = {
-    id: string,
-    name: string
-}
+	id: string;
+	name: string;
+};
 
 export type GenreFormData = {
-    name: string
-}
+	name: string;
+};

@@ -1,135 +1,114 @@
-import { useContext, useEffect, useState } from "react";
-import * as levelService from "../services/levelService";
-import type { Level, LevelFormData } from "../types/level.type";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { useErrorHandler } from "../../../shared/hooks/utilHooks";
-import { UIContext } from "../../../contexts/UIContext";
-
+import { useContext, useEffect, useState } from 'react';
+import * as levelService from '../services/levelService';
+import type { Level, LevelFormData } from '../types/level.type';
+import { AuthContext } from '../../../contexts/AuthContext';
+import { useErrorHandler } from '../../../shared/hooks/utilHooks';
+import { UIContext } from '../../../contexts/UIContext';
 
 export const useGetLevels = () => {
+	const [levels, setLevels] = useState<Level[]>([]);
+	const [refresh, setRefresh] = useState<number>(0);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const { token, logout } = useContext(AuthContext);
+	const { addToast } = useContext(UIContext);
+	const { handleError } = useErrorHandler();
 
-    const [levels, setLevels] = useState<Level[]>([]);
-    const [refresh, setRefresh] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const {token, logout} = useContext(AuthContext);
-    const {addToast} = useContext(UIContext);
-    const {handleError} = useErrorHandler();
+	useEffect(() => {
+		const fetchLevels = async () => {
+			if (!token) return;
 
-    useEffect(() => {
+			try {
+				const result = await levelService.getLevels(token);
 
-        const fetchLevels = async () => {
-            if (!token) return;
+				setLevels(result.data);
+			} catch (error: unknown) {
+				handleError(error, {
+					onUnauthorised: logout,
+					onError: (message) => addToast(message, 'error'),
+				});
+			} finally {
+				setIsLoading(false);
+			}
+		};
 
-            try {
-                const result = await levelService.getLevels(token);
-            
-                setLevels(result.data);
-            }
-            catch (error: unknown) {
-                handleError(error, { 
-                    onUnauthorised: logout, 
-                    onError: (message) => addToast(message, 'error') 
-                });
-            }
-            finally {
-                setIsLoading(false)
-            };
-        }
+		fetchLevels();
+	}, [token, refresh]);
 
-        fetchLevels();
-        
-    }, [token, refresh]);
+	const refreshLevels = () => {
+		setRefresh((prev) => prev + 1);
+	};
 
-    const refreshLevels = () => {
-        setRefresh(prev => prev + 1);
-    };
-
-    return { levels, refreshLevels, isLoading };
-}
-
+	return { levels, refreshLevels, isLoading };
+};
 
 export const useCreateLevel = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { logout } = useContext(AuthContext);
+	const { addToast } = useContext(UIContext);
+	const { handleError } = useErrorHandler();
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {logout} = useContext(AuthContext);
-    const {addToast} = useContext(UIContext);
-    const {handleError} = useErrorHandler();
+	const createLevel = async (levelData: LevelFormData, token: string) => {
+		try {
+			setIsLoading(true);
+			const result = await levelService.createLevel(levelData, token);
+			return result;
+		} catch (error: unknown) {
+			handleError(error, {
+				onUnauthorised: logout,
+				onError: (message) => addToast(message, 'error'),
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-    const createLevel = async (levelData: LevelFormData, token: string) => {
-        
-        try {
-            setIsLoading(true);
-            const result = await levelService.createLevel(levelData, token);
-            return result;
-        }
-        catch (error: unknown) {
-            handleError(error, { 
-                onUnauthorised: logout, 
-                onError: (message) => addToast(message, 'error') 
-            });
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { createLevel, isLoading };
-}
-
+	return { createLevel, isLoading };
+};
 
 export const useUpdateLevel = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { logout } = useContext(AuthContext);
+	const { addToast } = useContext(UIContext);
+	const { handleError } = useErrorHandler();
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {logout} = useContext(AuthContext);
-    const {addToast} = useContext(UIContext);
-    const {handleError} = useErrorHandler();
+	const updateLevel = async (id: string, levelData: LevelFormData, token: string) => {
+		try {
+			setIsLoading(true);
+			const result = await levelService.updateLevel(id, levelData, token);
+			return result;
+		} catch (error: unknown) {
+			handleError(error, {
+				onUnauthorised: logout,
+				onError: (message) => addToast(message, 'error'),
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-    const updateLevel = async (id: string, levelData: LevelFormData, token: string) => {
-        
-        try {
-            setIsLoading(true);
-            const result = await levelService.updateLevel(id, levelData, token);
-            return result;
-        }
-        catch (error: unknown) {
-            handleError(error, { 
-                onUnauthorised: logout, 
-                onError: (message) => addToast(message, 'error') 
-            });
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { updateLevel, isLoading };
-}
-
+	return { updateLevel, isLoading };
+};
 
 export const useDeleteLevel = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { logout } = useContext(AuthContext);
+	const { addToast } = useContext(UIContext);
+	const { handleError } = useErrorHandler();
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {logout} = useContext(AuthContext);
-    const {addToast} = useContext(UIContext);
-    const {handleError} = useErrorHandler();
+	const deleteLevel = async (id: string, token: string) => {
+		try {
+			setIsLoading(true);
+			const result = await levelService.deleteLevel(id, token);
+			return result;
+		} catch (error: unknown) {
+			handleError(error, {
+				onUnauthorised: logout,
+				onError: (message) => addToast(message, 'error'),
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-    const deleteLevel = async (id: string, token: string) => {
-        
-        try {
-            setIsLoading(true);
-            const result = await levelService.deleteLevel(id, token);
-            return result;
-        }
-        catch (error: unknown) {
-            handleError(error, { 
-                onUnauthorised: logout, 
-                onError: (message) => addToast(message, 'error') 
-            });
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { deleteLevel, isLoading };
-}
+	return { deleteLevel, isLoading };
+};

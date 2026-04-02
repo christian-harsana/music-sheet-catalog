@@ -1,27 +1,27 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  /* font-size: 10px; */
-  font-weight: 400;
-  /* color-scheme: light dark; */
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	/* font-size: 10px; */
+	font-weight: 400;
+	/* color-scheme: light dark; */
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  margin: 0;
-  /* display: flex;
+	margin: 0;
+	/* display: flex;
   place-items: center stretch; */
-  font-size: 1rem;
-  min-width: 320px;
-  min-height: 100vh;
+	font-size: 1rem;
+	min-width: 320px;
+	min-height: 100vh;
 }
 
 /* h1 {
@@ -51,7 +51,7 @@ h6 {
 } */
 
 button {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 /* a {
@@ -118,7 +118,6 @@ input[type="email"] {
   color: red;
 } */
 
-
 /* @theme {
 
   --animate-fade-in-and-out: fade-in-and-out 5s ease-in-out;
@@ -132,4 +131,3 @@ input[type="email"] {
     }
   }
 } */
-
