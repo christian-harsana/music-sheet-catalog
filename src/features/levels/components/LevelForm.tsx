@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import type { Level, LevelFormData } from '../types/level.type';
 import { useCreateLevel, useUpdateLevel } from '../hooks/levelHooks';
@@ -25,7 +25,7 @@ export default function LevelForm({ level, refreshData }: LevelFormProps) {
 	const [levelFormDataError, setLevelFormDataError] = useState<LevelFormDataError>({});
 	const [levelFormDataTouched, setLevelFormDataTouched] = useState<LevelFormDataTouched>({});
 	const { addToast, closeModal } = useContext(UIContext);
-	const { token } = useContext(AuthContext);
+	const { token } = useAuth();
 	const nameInputRef = useRef<HTMLInputElement>(null);
 	const { createLevel, isLoading: isCreatingLevel } = useCreateLevel();
 	const { updateLevel, isLoading: isUpdatingLevel } = useUpdateLevel();

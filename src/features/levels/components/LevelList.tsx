@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useGetLevels, useDeleteLevel } from '../hooks/levelHooks';
 import { type Level } from '../types/level.type';
 import LevelForm from './LevelForm';
@@ -18,7 +18,7 @@ function DeleteConfirmation({
 	name: string;
 	refreshData: () => void;
 }) {
-	const { token } = useContext(AuthContext);
+	const { token } = useAuth();
 	const { addToast, closeModal } = useContext(UIContext);
 	const { deleteLevel, isLoading } = useDeleteLevel();
 

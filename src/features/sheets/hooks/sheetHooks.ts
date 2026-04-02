@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useDebounce, useErrorHandler } from '../../../shared/hooks/utilHooks';
 import * as sheetService from '../services/sheetService';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { PaginationData } from '../../../shared/types/common.type';
 import { UIContext } from '../../../contexts/UIContext';
@@ -27,7 +27,7 @@ export const useGetSheets = () => {
 		examPiece: false,
 		search: '',
 	});
-	const { token, logout } = useContext(AuthContext);
+	const { token, logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const limit = 10;
 	const totalPages = paginationData?.totalPages;
@@ -105,7 +105,7 @@ export const useGetSheets = () => {
 
 export const useCreateSheet = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 
@@ -129,7 +129,7 @@ export const useCreateSheet = () => {
 
 export const useUpdateSheet = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 
@@ -153,7 +153,7 @@ export const useUpdateSheet = () => {
 
 export const useDeleteSheet = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 

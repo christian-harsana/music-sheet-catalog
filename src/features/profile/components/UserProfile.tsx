@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import type { AuthUser } from '../../../shared/types/common.type';
 import Loading from '../../../shared/components/Loading';
 import { api } from '../../../shared/utils/api';
 
 export default function UserProfile() {
-	const { token } = useContext(AuthContext);
+	const { token } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const [user, setUser] = useState<AuthUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);

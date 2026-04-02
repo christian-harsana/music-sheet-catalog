@@ -1,6 +1,6 @@
 import React, { useContext, type ChangeEvent } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useGetGenres } from '../../genres/hooks/genreHooks';
 import { useGetLevels } from '../../levels/hooks/levelHooks';
 import { useGetSourcesLookup } from '../../sources/hooks/sourceHooks';
@@ -26,7 +26,7 @@ function DeleteConfirmation({
 	name: string;
 	refreshData: () => void;
 }) {
-	const { token } = useContext(AuthContext);
+	const { token } = useAuth();
 	const { addToast, closeModal } = useContext(UIContext);
 	const { deleteSheet, isLoading } = useDeleteSheet();
 

@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import * as sourceService from '../services/sourceService';
 import type { Source, SourceLookup, SourceFormData } from '../types/source.type';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import type { PaginationData } from '../../../shared/types/common.type';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';
 import { UIContext } from '../../../contexts/UIContext';
@@ -10,7 +10,7 @@ export const useGetSourcesLookup = () => {
 	const [sourcesLookup, setSourcesLookup] = useState<SourceLookup[]>([]);
 	const [refresh, setRefresh] = useState<number>(0);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const { token, logout } = useContext(AuthContext);
+	const { token, logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 
@@ -54,7 +54,7 @@ export const useGetSources = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
 	const [currentPage, setCurrentPage] = useState<number>(1);
-	const { token, logout } = useContext(AuthContext);
+	const { token, logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 	const limit = 10;
@@ -104,7 +104,7 @@ export const useGetSources = () => {
 
 export const useCreateSource = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 
@@ -128,7 +128,7 @@ export const useCreateSource = () => {
 
 export const useUpdateSource = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 
@@ -152,7 +152,7 @@ export const useUpdateSource = () => {
 
 export const useDeleteSource = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 

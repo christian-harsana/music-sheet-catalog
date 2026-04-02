@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router';
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Navigation() {
-	const { isAuthenticated, logout } = useContext(AuthContext);
+	const { isAuthenticated, logout } = useAuth();
 	const [isMobileNavVisible, setIsMobileNavVisible] = useState<boolean>(false);
 	const mobileNavClass = isMobileNavVisible ? 'left-0' : '-left-9999';
 

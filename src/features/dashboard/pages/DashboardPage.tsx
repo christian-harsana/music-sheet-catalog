@@ -1,17 +1,15 @@
-import { useContext } from 'react';
 import Layout from '../../../layouts/Layout';
 import Dashboard from '../components/Dashboard';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function DashboardPage() {
+	const { user } = useAuth();
+	const heading = user?.name ? `Welcome, ${user.name}` : 'Welcome';
 
-    const {user} = useContext(AuthContext);
-    const heading = user?.name ? `Welcome, ${user.name}` : 'Welcome';
-    
-    return(
-        <Layout heading={heading}>
-            <p className='mb-4 text-gray-500'>Here's an overview of your collection.</p>
-            <Dashboard />
-        </Layout>       
-    )
+	return (
+		<Layout heading={heading}>
+			<p className="mb-4 text-gray-500">Here's an overview of your collection.</p>
+			<Dashboard />
+		</Layout>
+	);
 }

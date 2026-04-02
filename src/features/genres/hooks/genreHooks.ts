@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import * as genreService from '../services/genreService';
 import type { Genre, GenreFormData } from '../types/genre.type';
-import { AuthContext, useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';
 import { UIContext } from '../../../contexts/UIContext';
 
@@ -43,7 +43,7 @@ export const useGetGenres = () => {
 
 export const useCreateGenre = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 
@@ -67,7 +67,7 @@ export const useCreateGenre = () => {
 
 export const useUpdateGenre = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 
@@ -91,7 +91,7 @@ export const useUpdateGenre = () => {
 
 export const useDeleteGenre = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { logout } = useContext(AuthContext);
+	const { logout } = useAuth();
 	const { addToast } = useContext(UIContext);
 	const { handleError } = useErrorHandler();
 

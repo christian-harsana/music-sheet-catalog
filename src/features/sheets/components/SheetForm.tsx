@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { SourceLookup } from '../../../features/sources/types/source.type';
@@ -52,7 +52,7 @@ export default function SheetForm({
 	const [SheetFormDataError, setSheetFormDataError] = useState<SheetFormDataError>({});
 	const [SheetFormDataTouched, setSheetFormDataTouched] = useState<SheetFormDataTouched>({});
 	const { addToast, closeModal } = useContext(UIContext);
-	const { token } = useContext(AuthContext);
+	const { token } = useAuth();
 	const titleInputRef = useRef<HTMLInputElement>(null);
 
 	const { createSheet, isLoading: isCreatingSheet } = useCreateSheet();

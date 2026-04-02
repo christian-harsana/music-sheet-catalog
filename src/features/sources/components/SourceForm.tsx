@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useCreateSource, useUpdateSource } from '../hooks/sourceHooks';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import type { Source, SourceFormData } from '../types/source.type';
@@ -25,7 +25,7 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 	const [sourceFormDataError, setSourceFormDataError] = useState<SourceFormDataError>({});
 	const [sourceFormDataTouched, setSourceFormDataTouched] = useState<SourceFormDataTouched>({});
 	const { addToast, closeModal } = useContext(UIContext);
-	const { token } = useContext(AuthContext);
+	const { token } = useAuth();
 	const titleInputRef = useRef<HTMLInputElement>(null);
 	const { createSource, isLoading: isCreatingSource } = useCreateSource();
 	const { updateSource, isLoading: isUpdatingSource } = useUpdateSource();
