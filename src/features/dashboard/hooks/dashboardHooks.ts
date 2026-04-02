@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { UIContext } from '../../../contexts/UIContext';
 import { api } from '../../../shared/utils/api';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';

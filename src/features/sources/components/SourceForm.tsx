@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { useCreateSource, useUpdateSource } from '../hooks/sourceHooks';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import type { Source, SourceFormData } from '../types/source.type';

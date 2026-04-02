@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import type { AuthUser } from '../../../shared/types/common.type';
 import Loading from '../../../shared/components/Loading';
 import { api } from '../../../shared/utils/api';

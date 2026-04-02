@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { type Source } from '../types/source.type';
 import Loading from '../../../shared/components/Loading';
 import Modal from '../../../shared/components/Modal';

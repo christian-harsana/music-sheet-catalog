@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import * as sourceService from '../services/sourceService';
 import type { Source, SourceLookup, SourceFormData } from '../types/source.type';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import type { PaginationData } from '../../../shared/types/common.type';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';
 import { UIContext } from '../../../contexts/UIContext';

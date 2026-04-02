@@ -1,5 +1,5 @@
 import { useContext, useState, type ChangeEvent, type FocusEvent } from 'react';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { api } from '../../../shared/utils/api';
 import type { AuthUser } from '../../../shared/types/common.type';
 import IconSpinner from '../../../shared/components/IconSpinner';

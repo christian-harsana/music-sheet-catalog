@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from './contexts/authContext.tsx';
 import { AuthProvider } from './contexts/AuthProvider.tsx';
 import { UIProvider } from './contexts/UIContext.tsx';
 import { ErrorProvider } from './contexts/ErrorContext.tsx';

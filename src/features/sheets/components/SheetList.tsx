@@ -1,6 +1,6 @@
 import React, { useContext, type ChangeEvent } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { useGetGenres } from '../../genres/hooks/genreHooks';
 import { useGetLevels } from '../../levels/hooks/levelHooks';
 import { useGetSourcesLookup } from '../../sources/hooks/sourceHooks';

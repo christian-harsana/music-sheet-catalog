@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import * as levelService from '../services/levelService';
 import type { Level, LevelFormData } from '../types/level.type';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';
 import { UIContext } from '../../../contexts/UIContext';
 

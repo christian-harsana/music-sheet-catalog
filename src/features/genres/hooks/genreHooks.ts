@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import * as genreService from '../services/genreService';
 import type { Genre, GenreFormData } from '../types/genre.type';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { useErrorHandler } from '../../../shared/hooks/utilHooks';
 import { UIContext } from '../../../contexts/UIContext';
 

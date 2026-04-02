@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { SourceLookup } from '../../../features/sources/types/source.type';

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { ReactNode } from 'react';
 import type { AuthUser } from '../shared/types/common.type';
-import { AuthContext } from './AuthContext';
+import { AuthContext } from './authContext';
 import { api } from '../shared/utils/api';
 import { useErrorHandler } from '../shared/hooks/utilHooks';
 

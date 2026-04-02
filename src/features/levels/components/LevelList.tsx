@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { useGetLevels, useDeleteLevel } from '../hooks/levelHooks';
 import { type Level } from '../types/level.type';
 import LevelForm from './LevelForm';

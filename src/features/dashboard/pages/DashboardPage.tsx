@@ -1,6 +1,6 @@
 import Layout from '../../../layouts/Layout';
 import Dashboard from '../components/Dashboard';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 
 export default function DashboardPage() {
 	const { user } = useAuth();

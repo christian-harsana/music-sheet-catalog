@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { UIContext } from '../../../contexts/UIContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/authContext';
 import { useGetGenres, useDeleteGenre } from '../hooks/genreHooks';
 import { type Genre } from '../types/genre.type';
 import Loading from '../../../shared/components/Loading';
