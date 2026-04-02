@@ -20,7 +20,7 @@ type LevelFormProps = {
 
 export default function LevelForm({ level, refreshData }: LevelFormProps) {
 	const levelId = level?.id ?? null;
-	const { id, ...formDefaultData } = level ?? { name: '' };
+	const { id: _id, ...formDefaultData } = level ?? { name: '' };
 	const [levelFormData, setLevelFormData] = useState<LevelFormData>(formDefaultData);
 	const [levelFormDataError, setLevelFormDataError] = useState<LevelFormDataError>({});
 	const [levelFormDataTouched, setLevelFormDataTouched] = useState<LevelFormDataTouched>({});

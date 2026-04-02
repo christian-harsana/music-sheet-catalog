@@ -37,6 +37,22 @@ export default defineConfig([
 		},
 	},
 
+	// Override specific TypeScript rules
+	{
+		files: ['**/*.{ts,tsx}'],
+		rules: {
+			// Ignore no-unused-vars rule for function with _
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{
+					varsIgnorePattern: '^_',
+					argsIgnorePattern: '^_',
+					caughtErrorsIgnorePattern: '^_',
+				},
+			],
+		},
+	},
+
 	// React + React Hooks rules (jsx/tsx files only)
 	{
 		files: ['**/*.{jsx,tsx}'],

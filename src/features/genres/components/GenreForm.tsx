@@ -20,7 +20,7 @@ type GenreFormProps = {
 
 export default function GenreForm({ genre, refreshData }: GenreFormProps) {
 	const genreId = genre?.id ?? null;
-	const { id, ...formDefaultData } = genre ?? { name: '' };
+	const { id: _id, ...formDefaultData } = genre ?? { name: '' };
 	const [genreFormData, setGenreFormData] = useState<GenreFormData>(formDefaultData);
 	const [genreFormDataError, setGenreFormDataError] = useState<GenreFormDataError>({});
 	const [genreFormDataTouched, setGenreFormDataTouched] = useState<GenreFormDataTouched>({});

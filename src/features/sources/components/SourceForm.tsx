@@ -20,7 +20,7 @@ type SourceFormProps = {
 
 export default function SourceForm({ source, refreshData }: SourceFormProps) {
 	const sourceId = source?.id ?? null;
-	const { id, ...formDefaultData } = source ?? { title: '', author: '', format: '' };
+	const { id: _id, ...formDefaultData } = source ?? { title: '', author: '', format: '' };
 	const [sourceFormData, setSourceFormData] = useState<SourceFormData>(formDefaultData);
 	const [sourceFormDataError, setSourceFormDataError] = useState<SourceFormDataError>({});
 	const [sourceFormDataTouched, setSourceFormDataTouched] = useState<SourceFormDataTouched>({});

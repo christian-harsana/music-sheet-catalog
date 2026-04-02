@@ -39,7 +39,13 @@ export default function SheetForm({
 	isLoadingGenre,
 }: SheetFormProp) {
 	const sheetId = sheet?.id ?? null;
-	const { id, sourceTitle, levelName, genreName, ...formDefaultData } = sheet ?? {
+	const {
+		id: _id,
+		sourceTitle: _sourceTitle,
+		levelName: _levelName,
+		genreName: _genreName,
+		...formDefaultData
+	} = sheet ?? {
 		title: '',
 		key: '',
 		composer: '',
