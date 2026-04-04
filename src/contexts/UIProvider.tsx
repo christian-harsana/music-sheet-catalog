@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { NotificationType } from '../shared/types/common.type';
 import Toast from '../shared/components/Toast';
@@ -45,22 +45,22 @@ function ModalOverlay({ children }: { children: ReactNode }) {
 }
 
 export function UIProvider({ children }: { children: ReactNode }) {
-	const [notificationList, setnotificationList] = useState<Notification[]>([]);
+	const [notificationList, seNotificationList] = useState<Notification[]>([]);
 	const [modal, setModal] = useState<ReactNode>(null);
 
-	const addToast = (message: string, type: NotificationType = 'success') => {
+	const addToast = useCallback((message: string, type: NotificationType = 'success') => {
 		const newToast: Notification = {
 			id: self.crypto.randomUUID(),
 			message: message,
 			type: type,
 		};
 
-		setnotificationList((prev) => [...prev, newToast]);
-	};
+		seNotificationList((prev) => [...prev, newToast]);
+	}, []);
 
-	const removeToast = (id: string) => {
-		setnotificationList((prev) => prev.filter((toast) => toast.id !== id));
-	};
+	const removeToast = useCallback((id: string) => {
+		seNotificationList((prev) => prev.filter((toast) => toast.id !== id));
+	}, []);
 
 	const showModal = (content: ReactNode) => {
 		setModal(content);

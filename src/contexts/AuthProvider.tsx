@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { ReactNode } from 'react';
 import type { AuthUser } from '../shared/types/common.type';
@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		navigate('/');
 	};
 
-	const logout = () => {
+	const logout = useCallback(() => {
 		setUser(null);
 		setToken(null);
 		setIsAuthtenticated(false);
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 		// Redirect to login
 		navigate('/login');
-	};
+	}, [navigate]);
 
 	useEffect(() => {
 		const verifyToken = async () => {
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		};
 
 		verifyToken();
-	}, []);
+	}, [handleError, logout]);
 
 	return (
 		<AuthContext.Provider value={{ user, isAuthenticated, isLoading, token, login, logout }}>

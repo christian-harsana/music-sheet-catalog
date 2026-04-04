@@ -35,7 +35,7 @@ export default function UserProfile() {
 		};
 
 		fetchUser();
-	}, [token]);
+	}, [token, addToast]);
 
 	return (
 		<div className="px-5 py-5 w-full h-auto max-w-sm rounded-md border border-gray-300">

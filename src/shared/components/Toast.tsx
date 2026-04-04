@@ -23,7 +23,7 @@ export default function Toast({ id, text, type, removeToast }: ToastProps) {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [id]);
+	}, [id, removeToast]);
 
 	switch (toastType) {
 		case 'error':
