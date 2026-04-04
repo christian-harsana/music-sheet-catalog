@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router';
 import { useAuth } from './contexts/authContext.tsx';
 import { AuthProvider } from './contexts/AuthProvider.tsx';
-import { UIProvider } from './contexts/UIContext.tsx';
-import { ErrorProvider } from './contexts/ErrorContext.tsx';
+import { UIProvider } from './contexts/UIProvider.tsx';
+import { ErrorProvider } from './contexts/ErrorProvider.tsx';
 import DashboardPage from './features/dashboard/pages/DashboardPage.tsx';
 import ProfilePage from './features/profile/pages/ProfilePage.tsx';
 import GenresPage from './features/genres/pages/GenresPage.tsx';

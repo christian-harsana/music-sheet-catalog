@@ -52,9 +52,13 @@ export default function CategoryDistributionCard({
 								))}
 							</Pie>
 							<Tooltip
-								formatter={(value: any, _name: any, props: any) => {
-									const name = props.payload.name ?? 'No category';
-									return [value, name];
+								formatter={(
+									value: number | string | undefined,
+									_name: string | undefined,
+									props: { payload?: { name?: string } },
+								) => {
+									const name = props.payload?.name ?? 'No category';
+									return [value ?? '', name];
 								}}
 							/>
 							<RechartsDevtools />

@@ -4,14 +4,14 @@ import type { ReactNode } from 'react';
 import type { AuthUser } from '../shared/types/common.type';
 import { AuthContext } from './authContext';
 import { api } from '../shared/utils/api';
-import { useErrorHandler } from '../shared/hooks/utilHooks';
+import { useError } from './errorContext';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const [user, setUser] = useState<AuthUser | null>(null);
 	const [token, setToken] = useState<string | null>(null);
 	const [isAuthenticated, setIsAuthtenticated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const { handleError } = useErrorHandler();
+	const { handleError } = useError();
 
 	const navigate = useNavigate();
 

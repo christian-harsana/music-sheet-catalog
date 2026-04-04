@@ -1,17 +1,17 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as genreService from '../services/genreService';
 import type { Genre, GenreFormData } from '../types/genre.type';
 import { useAuth } from '../../../contexts/authContext';
-import { useErrorHandler } from '../../../shared/hooks/utilHooks';
-import { UIContext } from '../../../contexts/UIContext';
+import { useError } from '../../../contexts/errorContext';
+import { useUI } from '../../../contexts/uiContext';
 
 export const useGetGenres = () => {
 	const [genres, setGenres] = useState<Genre[]>([]);
 	const [refresh, setRefresh] = useState<number>(0);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const { token, logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	useEffect(() => {
 		const fetchGenres = async () => {
@@ -44,8 +44,8 @@ export const useGetGenres = () => {
 export const useCreateGenre = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const createGenre = async (genreData: GenreFormData, token: string) => {
 		try {
@@ -68,8 +68,8 @@ export const useCreateGenre = () => {
 export const useUpdateGenre = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const updateGenre = async (id: string, genreData: GenreFormData, token: string) => {
 		try {
@@ -92,8 +92,8 @@ export const useUpdateGenre = () => {
 export const useDeleteGenre = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const deleteGenre = async (id: string, token: string) => {
 		try {

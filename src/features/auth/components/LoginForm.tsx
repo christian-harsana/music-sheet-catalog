@@ -1,10 +1,10 @@
-import { useContext, useState, type ChangeEvent, type FocusEvent } from 'react';
+import { useState, type ChangeEvent, type FocusEvent } from 'react';
 import { useAuth } from '../../../contexts/authContext';
 import { api } from '../../../shared/utils/api';
 import type { AuthUser } from '../../../shared/types/common.type';
 import IconSpinner from '../../../shared/components/IconSpinner';
-import { useErrorHandler } from '../../../shared/hooks/utilHooks';
-import { UIContext } from '../../../contexts/UIContext';
+import { useError } from '../../../contexts/errorContext';
+import { useUI } from '../../../contexts/uiContext';
 
 type loginFormDataType = {
 	email: string;
@@ -21,7 +21,7 @@ type loginFieldTouchedType = {
 
 export default function LoginForm() {
 	const { login } = useAuth();
-	const { addToast } = useContext(UIContext);
+	const { addToast } = useUI();
 	const [loginFormData, setLoginFormData] = useState<loginFormDataType>({
 		email: '',
 		password: '',
@@ -29,7 +29,7 @@ export default function LoginForm() {
 	const [loginFormError, setLoginFormError] = useState<loginFormErrorType>({});
 	const [loginFieldTouched, setLoginFieldTouched] = useState<loginFieldTouchedType>({});
 	const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
-	const { handleError } = useErrorHandler();
+	const { handleError } = useError();
 
 	function validateField(name: string, value: string): string {
 		const error = '';

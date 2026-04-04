@@ -1,5 +1,5 @@
-import React, { useContext, type ChangeEvent } from 'react';
-import { UIContext } from '../../../contexts/UIContext';
+import React, { type ChangeEvent } from 'react';
+import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { useGetGenres } from '../../genres/hooks/genreHooks';
 import { useGetLevels } from '../../levels/hooks/levelHooks';
@@ -27,7 +27,7 @@ function DeleteConfirmation({
 	refreshData: () => void;
 }) {
 	const { token } = useAuth();
-	const { addToast, closeModal } = useContext(UIContext);
+	const { addToast, closeModal } = useUI();
 	const { deleteSheet, isLoading } = useDeleteSheet();
 
 	const handleDelete = async (id: string) => {
@@ -108,7 +108,7 @@ function SheetTable({
 	genresLookup,
 	isLoadingGenre,
 }: SheetTableProps) {
-	const { showModal } = useContext(UIContext);
+	const { showModal } = useUI();
 
 	const showEditForm = (sheet: Sheet) => {
 		showModal(
@@ -300,7 +300,7 @@ function SheetTable({
 const SheetTableMemo = React.memo(SheetTable);
 
 export default function SheetList() {
-	const { showModal } = useContext(UIContext);
+	const { showModal } = useUI();
 	const { genres, isLoading: isLoadingGenre } = useGetGenres();
 	const { levels, isLoading: isLoadingLevel } = useGetLevels();
 	const { sourcesLookup, isLoading: isLoadingSourceLookup } = useGetSourcesLookup();

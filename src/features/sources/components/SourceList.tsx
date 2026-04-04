@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { UIContext } from '../../../contexts/UIContext';
+import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { type Source } from '../types/source.type';
 import Loading from '../../../shared/components/Loading';
@@ -20,7 +19,7 @@ function DeleteConfirmation({
 	refreshData: () => void;
 }) {
 	const { token } = useAuth();
-	const { addToast, closeModal } = useContext(UIContext);
+	const { addToast, closeModal } = useUI();
 	const { deleteSource, isLoading } = useDeleteSource();
 
 	const handleDelete = async (id: string) => {
@@ -79,7 +78,7 @@ function DeleteConfirmation({
 }
 
 export default function SourceList() {
-	const { showModal } = useContext(UIContext);
+	const { showModal } = useUI();
 	const { sources, refreshSources, isLoading, currentPage, totalPages, paginate } = useGetSources();
 
 	const handleAddSource = () => {

@@ -1,5 +1,5 @@
-import { useState, useContext, useRef, useEffect } from 'react';
-import { UIContext } from '../../../contexts/UIContext';
+import { useState, useRef, useEffect } from 'react';
+import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
@@ -57,7 +57,7 @@ export default function SheetForm({
 	const [SheetFormData, setSheetFormData] = useState<SheetFormData>(formDefaultData);
 	const [SheetFormDataError, setSheetFormDataError] = useState<SheetFormDataError>({});
 	const [SheetFormDataTouched, setSheetFormDataTouched] = useState<SheetFormDataTouched>({});
-	const { addToast, closeModal } = useContext(UIContext);
+	const { addToast, closeModal } = useUI();
 	const { token } = useAuth();
 	const titleInputRef = useRef<HTMLInputElement>(null);
 

@@ -1,8 +1,8 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/authContext';
-import { UIContext } from '../../../contexts/UIContext';
+import { useUI } from '../../../contexts/uiContext';
 import { api } from '../../../shared/utils/api';
-import { useErrorHandler } from '../../../shared/hooks/utilHooks';
+import { useError } from '../../../contexts/errorContext';
 
 type SheetByLevel = {
 	levelId: string | null;
@@ -26,8 +26,8 @@ export const useGetDashboardSummary = () => {
 	const [totalLevelCount, setTotalLevelCount] = useState<number>(0);
 	const [totalGenreCount, setTotalGenreCount] = useState<number>(0);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const { handleError } = useErrorHandler();
-	const { addToast } = useContext(UIContext);
+	const { handleError } = useError();
+	const { addToast } = useUI();
 
 	useEffect(() => {
 		const fetchSummary = async () => {

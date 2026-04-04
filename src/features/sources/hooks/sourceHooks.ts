@@ -1,18 +1,18 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as sourceService from '../services/sourceService';
 import type { Source, SourceLookup, SourceFormData } from '../types/source.type';
 import { useAuth } from '../../../contexts/authContext';
+import { useError } from '../../../contexts/errorContext';
 import type { PaginationData } from '../../../shared/types/common.type';
-import { useErrorHandler } from '../../../shared/hooks/utilHooks';
-import { UIContext } from '../../../contexts/UIContext';
+import { useUI } from '../../../contexts/uiContext';
 
 export const useGetSourcesLookup = () => {
 	const [sourcesLookup, setSourcesLookup] = useState<SourceLookup[]>([]);
 	const [refresh, setRefresh] = useState<number>(0);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const { token, logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	useEffect(() => {
 		const fetchSourcesLookup = async () => {
@@ -55,8 +55,8 @@ export const useGetSources = () => {
 	const [paginationData, setPaginationData] = useState<PaginationData | null>(null);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const { token, logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 	const limit = 10;
 	const totalPages = paginationData?.totalPages;
 
@@ -105,8 +105,8 @@ export const useGetSources = () => {
 export const useCreateSource = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const createSource = async (sourceData: SourceFormData, token: string) => {
 		try {
@@ -129,8 +129,8 @@ export const useCreateSource = () => {
 export const useUpdateSource = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const updateSource = async (id: string, sourceData: SourceFormData, token: string) => {
 		try {
@@ -153,8 +153,8 @@ export const useUpdateSource = () => {
 export const useDeleteSource = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const deleteSource = async (id: string, token: string) => {
 		try {

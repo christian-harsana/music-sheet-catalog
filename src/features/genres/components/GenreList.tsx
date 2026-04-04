@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { UIContext } from '../../../contexts/UIContext';
+import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { useGetGenres, useDeleteGenre } from '../hooks/genreHooks';
 import { type Genre } from '../types/genre.type';
@@ -19,7 +18,7 @@ function DeleteConfirmation({
 	refreshData: () => void;
 }) {
 	const { token } = useAuth();
-	const { addToast, closeModal } = useContext(UIContext);
+	const { addToast, closeModal } = useUI();
 	const { deleteGenre, isLoading } = useDeleteGenre();
 
 	const handleDelete = async (id: string) => {
@@ -78,7 +77,7 @@ function DeleteConfirmation({
 }
 
 export default function GenreList() {
-	const { showModal } = useContext(UIContext);
+	const { showModal } = useUI();
 	const { genres, refreshGenres, isLoading } = useGetGenres();
 
 	const handleAddGenre = () => {

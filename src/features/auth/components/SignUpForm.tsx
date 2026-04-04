@@ -1,9 +1,9 @@
-import { useContext, useState, type FocusEvent } from 'react';
+import { useState, type FocusEvent } from 'react';
 import { useNavigate, Link } from 'react-router';
-import { UIContext } from '../../../contexts/UIContext';
 import { api } from '../../../shared/utils/api';
 import IconSpinner from '../../../shared/components/IconSpinner';
-import { useErrorHandler } from '../../../shared/hooks/utilHooks';
+import { useError } from '../../../contexts/errorContext';
+import { useUI } from '../../../contexts/uiContext';
 
 type signUpFormDataType = {
 	email: string;
@@ -28,9 +28,9 @@ export default function SignUpForm() {
 	const [signUpFormError, setSignUpFormError] = useState<signUpFormErrorType>({});
 	const [signUpFormTouched, setSignUpFormTouched] = useState<signUpFormTouched>({});
 	const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
-	const { addToast } = useContext(UIContext);
+	const { addToast } = useUI();
 	const navigate = useNavigate();
-	const { handleError } = useErrorHandler();
+	const { handleError } = useError();
 
 	function validateField(name: string, value: string): string {
 		switch (name) {

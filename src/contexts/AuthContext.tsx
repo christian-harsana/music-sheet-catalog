@@ -19,12 +19,10 @@ export const AuthContext = createContext<AuthContextType>({
 	logout: () => {},
 });
 
-export function useAuth() {
+export function useAuth(): AuthContextType {
 	const context = useContext(AuthContext);
 
-	if (context === undefined) {
-		throw new Error('useAuth must be used within a AuthProvider');
-	}
+	if (!context) throw new Error('useAuth must be used within a AuthProvider');
 
 	return context;
 }

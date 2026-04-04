@@ -1,5 +1,5 @@
-import { useContext, type ReactNode } from 'react';
-import { UIContext } from '../../contexts/UIContext';
+import { type ReactNode } from 'react';
+import { useUI } from '../../contexts/uiContext';
 
 type ModalProps = {
 	title?: string;
@@ -7,7 +7,7 @@ type ModalProps = {
 };
 
 export default function Modal({ title, children }: ModalProps) {
-	const { closeModal } = useContext(UIContext);
+	const { closeModal } = useUI();
 
 	return (
 		<div className="w-[calc(100%-3rem)] max-w-md rounded-md overflow-hidden">

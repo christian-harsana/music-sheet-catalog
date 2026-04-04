@@ -1,10 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { useDebounce, useErrorHandler } from '../../../shared/hooks/utilHooks';
+import { useCallback, useEffect, useState } from 'react';
+import { useDebounce } from '../../../shared/hooks/utilHooks';
 import * as sheetService from '../services/sheetService';
 import { useAuth } from '../../../contexts/authContext';
+import { useError } from '../../../contexts/errorContext';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { PaginationData } from '../../../shared/types/common.type';
-import { UIContext } from '../../../contexts/UIContext';
+import { useUI } from '../../../contexts/uiContext';
 
 type SheetFilter = {
 	key: string;
@@ -28,11 +29,11 @@ export const useGetSheets = () => {
 		search: '',
 	});
 	const { token, logout } = useAuth();
-	const { addToast } = useContext(UIContext);
+	const { addToast } = useUI();
 	const limit = 10;
 	const totalPages = paginationData?.totalPages;
 	const debouncedFiltersSearch = useDebounce(filters.search, 300);
-	const { handleError } = useErrorHandler();
+	const { handleError } = useError();
 
 	const paginate = (pageNumber: number): void => {
 		setCurrentPage(pageNumber);
@@ -106,8 +107,8 @@ export const useGetSheets = () => {
 export const useCreateSheet = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const createSheet = async (sheetData: SheetFormData, token: string) => {
 		try {
@@ -130,8 +131,8 @@ export const useCreateSheet = () => {
 export const useUpdateSheet = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const updateSheet = async (id: string, sheetData: SheetFormData, token: string) => {
 		try {
@@ -154,8 +155,8 @@ export const useUpdateSheet = () => {
 export const useDeleteSheet = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const deleteSheet = async (id: string, token: string) => {
 		try {

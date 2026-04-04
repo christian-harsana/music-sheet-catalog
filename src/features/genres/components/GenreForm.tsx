@@ -1,5 +1,5 @@
-import { useState, useContext, useRef, useEffect } from 'react';
-import { UIContext } from '../../../contexts/UIContext';
+import { useState, useRef, useEffect } from 'react';
+import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { useCreateGenre, useUpdateGenre } from '../hooks/genreHooks';
 import IconSpinner from '../../../shared/components/IconSpinner';
@@ -24,7 +24,7 @@ export default function GenreForm({ genre, refreshData }: GenreFormProps) {
 	const [genreFormData, setGenreFormData] = useState<GenreFormData>(formDefaultData);
 	const [genreFormDataError, setGenreFormDataError] = useState<GenreFormDataError>({});
 	const [genreFormDataTouched, setGenreFormDataTouched] = useState<GenreFormDataTouched>({});
-	const { addToast, closeModal } = useContext(UIContext);
+	const { addToast, closeModal } = useUI();
 	const { token } = useAuth();
 	const nameInputRef = useRef<HTMLInputElement>(null);
 	const { createGenre, isLoading: isCreatingGenre } = useCreateGenre();

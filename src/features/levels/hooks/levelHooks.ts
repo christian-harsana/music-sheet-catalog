@@ -1,17 +1,17 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as levelService from '../services/levelService';
 import type { Level, LevelFormData } from '../types/level.type';
 import { useAuth } from '../../../contexts/authContext';
-import { useErrorHandler } from '../../../shared/hooks/utilHooks';
-import { UIContext } from '../../../contexts/UIContext';
+import { useError } from '../../../contexts/errorContext';
+import { useUI } from '../../../contexts/uiContext';
 
 export const useGetLevels = () => {
 	const [levels, setLevels] = useState<Level[]>([]);
 	const [refresh, setRefresh] = useState<number>(0);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const { token, logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	useEffect(() => {
 		const fetchLevels = async () => {
@@ -44,8 +44,8 @@ export const useGetLevels = () => {
 export const useCreateLevel = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const createLevel = async (levelData: LevelFormData, token: string) => {
 		try {
@@ -68,8 +68,8 @@ export const useCreateLevel = () => {
 export const useUpdateLevel = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const updateLevel = async (id: string, levelData: LevelFormData, token: string) => {
 		try {
@@ -92,8 +92,8 @@ export const useUpdateLevel = () => {
 export const useDeleteLevel = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { logout } = useAuth();
-	const { addToast } = useContext(UIContext);
-	const { handleError } = useErrorHandler();
+	const { addToast } = useUI();
+	const { handleError } = useError();
 
 	const deleteLevel = async (id: string, token: string) => {
 		try {
