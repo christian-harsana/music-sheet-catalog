@@ -32,9 +32,6 @@ export default defineConfig([
 			sourceType: 'commonjs',
 			globals: globals.node,
 		},
-		rules: {
-			'@typescript-eslint/no-require-imports': 'off',
-		},
 	},
 
 	// Override specific TypeScript rules
@@ -69,6 +66,7 @@ export default defineConfig([
 		},
 		rules: {
 			'react/react-in-jsx-scope': 'off',
+			'react/prop-types': 'off',
 		},
 	},
 
