@@ -67,11 +67,12 @@ export default function SheetForm({
 
 	function validateField(field: string, value: string | number | boolean | null): string {
 		switch (field) {
-			case 'title':
+			case 'title': {
 				const title: string = value as string;
 
 				if (!title || title.trim().length < 1) return 'Name is required';
 				break;
+			}
 		}
 
 		return '';

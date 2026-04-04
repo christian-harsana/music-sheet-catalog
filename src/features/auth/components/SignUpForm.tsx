@@ -34,11 +34,12 @@ export default function SignUpForm() {
 
 	function validateField(name: string, value: string): string {
 		switch (name) {
-			case 'email':
+			case 'email': {
 				if (value.length < 1) return 'Email is required';
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailRegex.test(value)) return 'Please provide a valid email';
 				break;
+			}
 
 			case 'password':
 				if (value.length < 1) return 'Password is required';

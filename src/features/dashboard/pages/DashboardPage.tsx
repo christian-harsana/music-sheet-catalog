@@ -8,7 +8,7 @@ export default function DashboardPage() {
 
 	return (
 		<Layout heading={heading}>
-			<p className="mb-4 text-gray-500">Here's an overview of your collection.</p>
+			<p className="mb-4 text-gray-500">Here&#39;s an overview of your collection.</p>
 			<Dashboard />
 		</Layout>
 	);
