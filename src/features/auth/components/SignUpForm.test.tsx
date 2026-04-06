@@ -22,9 +22,9 @@ describe('SignUp Form Component', () => {
 	test('signup form should not be valid when required fields are not filled', () => {
 		render(
 			<BrowserRouter>
-				<ErrorProviders>
+				<ErrorProvider>
 					<SignUpForm />
-				</ErrorProviders>
+				</ErrorProvider>
 			</BrowserRouter>,
 		);
 
