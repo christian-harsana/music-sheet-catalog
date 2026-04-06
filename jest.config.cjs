@@ -1,5 +1,6 @@
 module.exports = {
-	preset: 'ts-jest',
+	preset: 'ts-jest/presets/default-esm',
+	setupFiles: ['./jest.setup.ts'],
 	testEnvironment: 'jest-fixed-jsdom',
 	testEnvironmentOptions: {
 		customExportConditions: [''],
@@ -8,11 +9,16 @@ module.exports = {
 		'^.+\\.tsx?$': [
 			'ts-jest',
 			{
+				useESM: true,
 				tsconfig: {
 					jsx: 'react-jsx',
+					module: 'ESNext',
+    				moduleResolution: 'bundler',
+					types: ['vite/client'],
 				},
 			},
 		],
 	},
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+	extensionsToTreatAsEsm: ['.ts', '.tsx'],
 };
