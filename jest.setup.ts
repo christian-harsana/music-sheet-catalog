@@ -1,3 +1,3 @@
 Object.defineProperty(import.meta, 'env', {
-    value: { VITE_API_BASE_URL: 'http://localhost:3000' }
+	value: { VITE_API_BASE_URL: 'http://localhost:3000' },
 });

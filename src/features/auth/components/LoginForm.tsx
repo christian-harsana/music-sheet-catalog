@@ -6,7 +6,6 @@ import { api } from '../../../shared/utils/api';
 import type { AuthUser } from '../../../shared/types/common.type';
 import IconSpinner from '../../../shared/components/IconSpinner';
 
-
 type loginFormDataType = {
 	email: string;
 	password: string;

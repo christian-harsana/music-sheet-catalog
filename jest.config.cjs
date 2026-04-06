@@ -13,7 +13,7 @@ module.exports = {
 				tsconfig: {
 					jsx: 'react-jsx',
 					module: 'ESNext',
-    				moduleResolution: 'bundler',
+					moduleResolution: 'bundler',
 					types: ['vite/client'],
 				},
 			},
