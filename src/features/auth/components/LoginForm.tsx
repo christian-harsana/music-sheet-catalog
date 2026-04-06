@@ -1,10 +1,11 @@
 import { useState, type ChangeEvent, type FocusEvent } from 'react';
 import { useAuth } from '../../../contexts/authContext';
+import { useError } from '../../../contexts/errorContext';
+import { useUI } from '../../../contexts/uiContext';
 import { api } from '../../../shared/utils/api';
 import type { AuthUser } from '../../../shared/types/common.type';
 import IconSpinner from '../../../shared/components/IconSpinner';
-import { useError } from '../../../contexts/errorContext';
-import { useUI } from '../../../contexts/uiContext';
+
 
 type loginFormDataType = {
 	email: string;

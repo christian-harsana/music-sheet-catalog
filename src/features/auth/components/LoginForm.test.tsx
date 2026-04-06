@@ -3,12 +3,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router';
 import LoginForm from './LoginForm';
+import { ErrorProvider } from '../../../contexts/ErrorProvider';
 
 describe('Login Form Component', () => {
 	test('login form should render and has correct heading', () => {
 		render(
 			<BrowserRouter>
-				<LoginForm />
+				<ErrorProvider>
+					<LoginForm />
+				</ErrorProvider>
 			</BrowserRouter>,
 		);
 
@@ -19,7 +22,9 @@ describe('Login Form Component', () => {
 	test('login form should not be valid when required fields are not filled', () => {
 		render(
 			<BrowserRouter>
-				<LoginForm />
+				<ErrorProvider>
+					<LoginForm />
+				</ErrorProvider>
 			</BrowserRouter>,
 		);
 
