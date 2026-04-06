@@ -1,212 +1,221 @@
-import { useContext, useState, type ChangeEvent, type FocusEvent } from "react";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { api } from "../../../shared/utils/api";
-import type { AuthUser } from "../../../shared/types/common.type";
-import IconSpinner from "../../../shared/components/IconSpinner";
-import { useErrorHandler } from "../../../shared/hooks/utilHooks";
-import { UIContext } from "../../../contexts/UIContext";
+import { useState, type ChangeEvent, type FocusEvent } from 'react';
+import { useAuth } from '../../../contexts/authContext';
+import { useError } from '../../../contexts/errorContext';
+import { useUI } from '../../../contexts/uiContext';
+import { api } from '../../../shared/utils/api';
+import type { AuthUser } from '../../../shared/types/common.type';
+import IconSpinner from '../../../shared/components/IconSpinner';
 
 type loginFormDataType = {
-    email: string;
-    password: string;
-}
+	email: string;
+	password: string;
+};
 
 type loginFormErrorType = {
-    [K in keyof loginFormDataType]?: string;
-}
+	[K in keyof loginFormDataType]?: string;
+};
 
 type loginFieldTouchedType = {
-    [K in keyof loginFormDataType]?: boolean;
-}
+	[K in keyof loginFormDataType]?: boolean;
+};
 
 export default function LoginForm() {
+	const { login } = useAuth();
+	const { addToast } = useUI();
+	const [loginFormData, setLoginFormData] = useState<loginFormDataType>({
+		email: '',
+		password: '',
+	});
+	const [loginFormError, setLoginFormError] = useState<loginFormErrorType>({});
+	const [loginFieldTouched, setLoginFieldTouched] = useState<loginFieldTouchedType>({});
+	const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
+	const { handleError } = useError();
 
-    const {login} = useContext(AuthContext);
-    const {addToast} = useContext(UIContext);
-    const [loginFormData, setLoginFormData] = useState<loginFormDataType>({email: "", password: ""});
-    const [loginFormError, setLoginFormError] = useState<loginFormErrorType>({});
-    const [loginFieldTouched, setLoginFieldTouched] = useState<loginFieldTouchedType>({});
-    const [isFormProcessing, setIsFormProcessing] = useState<boolean>(false);
-    const {handleError} = useErrorHandler();
+	function validateField(name: string, value: string): string {
+		const error = '';
 
-    function validateField(name: string, value: string): string {
+		switch (name) {
+			case 'email':
+				if (value.length < 1) return 'Email is required';
+				break;
 
-        let error = "";
+			case 'password':
+				if (value.length < 1) return 'Password is required';
+				break;
+		}
 
-        switch(name) {
-            case "email":
-                if (value.length < 1) return "Email is required";
-                break;
+		return error;
+	}
 
-            case "password":
-                if (value.length < 1) return "Password is required";
-                break;
-        }
+	function validateForm(loginFormData: loginFormDataType) {
+		const submissionError: loginFormErrorType = {};
 
-        return error;
-    }
+		Object.keys(loginFormData).forEach((name) => {
+			const fieldName = name as keyof loginFormDataType;
+			const error = validateField(name, loginFormData[fieldName]);
 
-    
-    function validateForm(loginFormData: loginFormDataType) {
+			submissionError[fieldName] = error;
+		});
 
-        const submissionError: loginFormErrorType = {};
+		return submissionError;
+	}
 
-        Object.keys(loginFormData).forEach((name) => {
+	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
+		const value = e.target.value;
+		const name = e.target.name as keyof loginFormDataType;
 
-            const fieldName = name as keyof loginFormDataType;
-            const error = validateField(name, loginFormData[fieldName]);
+		setLoginFormData((prev) => ({ ...prev, [name]: value }));
 
-            submissionError[fieldName] = error;
-        });
+		if (loginFieldTouched[name]) {
+			setLoginFormError((prev) => ({ ...prev, [name]: validateField(name, value) }));
+		}
+	}
 
-        return submissionError;
-    }
+	function handleInputBlur(e: FocusEvent<HTMLInputElement>) {
+		const name = e.target.name as keyof loginFormDataType;
+		const value = e.target.value;
 
+		setLoginFieldTouched((prev) => ({ ...prev, [name]: true }));
+		setLoginFormError((prev) => ({ ...prev, [name]: validateField(name, value) }));
+	}
 
-    function handleInputChange(e: ChangeEvent<HTMLInputElement>):void {
+	async function handleLoginFormSubmit(e: React.FormEvent, loginFormData: loginFormDataType) {
+		e.preventDefault();
 
-        const value = e.target.value;
-        const name = e.target.name as keyof loginFormDataType;
+		setIsFormProcessing(true);
 
-        setLoginFormData((prev) => ({...prev, [name]: value}));
+		// Validate Form
+		const formSubmissionError: loginFormErrorType = validateForm(loginFormData);
+		let isErrorExist = false;
 
-        if (loginFieldTouched[name]) {
-            setLoginFormError((prev) => ({...prev, [name]: validateField(name, value)}))
-        }
-    }
+		// Check if there is any error
+		Object.keys(loginFormData).forEach((name) => {
+			isErrorExist = formSubmissionError[name as keyof loginFormDataType]?.length ? true : false;
+		});
 
+		if (isErrorExist) {
+			// Update form states
+			setLoginFormError(formSubmissionError);
+			setLoginFieldTouched({
+				email: true,
+				password: true,
+			});
+			setIsFormProcessing(false);
+		} else {
+			// Update form states
+			setLoginFormError({});
+			setLoginFieldTouched({});
 
-    function handleInputBlur(e: FocusEvent<HTMLInputElement>) {
+			try {
+				const response = await api.post(`auth/login`, loginFormData);
+				const result = await response.json();
 
-        const name = e.target.name as keyof loginFormDataType;
-        const value = e.target.value;
+				// On Success, store token to Context and Local Storage
+				const user: AuthUser = {
+					id: result.data.userId,
+					email: result.data.email,
+					name: result.data.name,
+				};
 
-        setLoginFieldTouched((prev) => ({...prev, [name]: true}));
-        setLoginFormError((prev) => ({...prev, [name]: validateField(name, value)}));
-    }
+				// Store user to Context and local Storage
+				login(user, result.data.token);
+			} catch (error: unknown) {
+				handleError(error, {
+					onError: (message) => addToast(message, 'error'),
+				});
+			} finally {
+				setIsFormProcessing(false);
+			}
+		}
+	}
 
+	return (
+		<form onSubmit={(e) => handleLoginFormSubmit(e, loginFormData)}>
+			<h1 className="mb-4 font-bold text-2xl text-center uppercase">Login</h1>
 
-    async function handleLoginFormSubmit(e: React.FormEvent, loginFormData: loginFormDataType) {
+			<div className="mb-4">
+				<label
+					htmlFor="email"
+					className={`block mb-1 ${loginFormError.email ? 'text-red-600' : ''}`}
+				>
+					Email
+				</label>
+				<input
+					id="email"
+					type="email"
+					name="email"
+					value={loginFormData.email}
+					onChange={(e) => handleInputChange(e)}
+					onBlur={(e) => handleInputBlur(e)}
+					required={true}
+					className={`w-full border rounded-md px-3 py-2 ${loginFormError.email ? 'border-red-600' : 'border-gray-400'}`}
+					{...(loginFormError.email && {
+						'aria-invalid': 'true',
+						'aria-describedby': 'emailError',
+					})}
+				/>
+				{loginFormError.email && (
+					<div id="emailError" className="text-red-600">
+						{loginFormError.email}
+					</div>
+				)}
+			</div>
 
-        e.preventDefault();
+			<div className="mb-4">
+				<label
+					htmlFor="password"
+					className={`block mb-1 ${loginFormError.password ? 'text-red-600' : ''}`}
+				>
+					Password
+				</label>
+				<input
+					id="password"
+					type="password"
+					name="password"
+					value={loginFormData.password}
+					onChange={(e) => handleInputChange(e)}
+					onBlur={(e) => handleInputBlur(e)}
+					required={true}
+					className={`w-full border rounded-md px-3 py-2 ${loginFormError.password ? 'border-red-600' : 'border-gray-400'}`}
+					{...(loginFormError.password && {
+						'aria-invalid': 'true',
+						'aria-describedby': 'passwordError',
+					})}
+				/>
+				{loginFormError.password && (
+					<div id="passwordError" className="text-red-600">
+						{loginFormError.password}
+					</div>
+				)}
+			</div>
 
-        setIsFormProcessing(true);
+			<div className="mb-4">
+				{isFormProcessing ? (
+					<button
+						type="submit"
+						disabled
+						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold uppercase cursor-progress opacity-50"
+					>
+						<IconSpinner />
+						Login...
+					</button>
+				) : (
+					<button
+						type="submit"
+						className="w-full px-3 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold uppercase"
+					>
+						Login
+					</button>
+				)}
+			</div>
 
-        // Validate Form
-        const formSubmissionError: loginFormErrorType = validateForm(loginFormData);
-        let isErrorExist = false;
-
-        // Check if there is any error
-        Object.keys(loginFormData).forEach((name) => {
-            isErrorExist = formSubmissionError[name as keyof loginFormDataType]?.length ? true : false;
-        });
-
-        if (isErrorExist) {
-
-            // Update form states
-            setLoginFormError(formSubmissionError);
-            setLoginFieldTouched({
-                email: true,
-                password: true
-            });
-            setIsFormProcessing(false);
-        }
-        else {
-
-            // Update form states
-            setLoginFormError({});
-            setLoginFieldTouched({});
-
-            try {
-                const response = await api.post(`auth/login`, loginFormData);
-                const result = await response.json();
-
-                // On Success, store token to Context and Local Storage
-                const user: AuthUser = {
-                    id: result.data.userId,
-                    email: result.data.email,
-                    name: result.data.name
-                }
-
-                // Store user to Context and local Storage
-                login(user, result.data.token);
-            }
-            catch (error: unknown) {
-
-                handleError(error, {
-                    onError: (message) => addToast(message, 'error')
-                });         
-            }
-            finally {
-                setIsFormProcessing(false);
-            }
-        }
-    }
-
-    return (
-        <form onSubmit={(e) => handleLoginFormSubmit(e, loginFormData)}>
-            
-            <h1 className="mb-4 font-bold text-2xl text-center uppercase">Login</h1>
-
-            <div className="mb-4">
-                <label htmlFor="email" className={`block mb-1 ${loginFormError.email ? 'text-red-600' : ''}`}>Email</label>
-                <input
-                    id="email" 
-                    type="email"
-                    name="email" 
-                    value={loginFormData.email} 
-                    onChange={(e) => handleInputChange(e)} 
-                    onBlur={(e) => handleInputBlur(e)} 
-                    required={true} 
-                    className={`w-full border rounded-md px-3 py-2 ${loginFormError.email ? 'border-red-600' : 'border-gray-400'}`}
-                    {...(loginFormError.email && {"aria-invalid": "true", "aria-describedby": "emailError"})}
-                /> 
-                { loginFormError.email && <div id="emailError" className="text-red-600">{loginFormError.email}</div> }
-            </div>
-
-            <div className="mb-4">
-                <label htmlFor="password" className={`block mb-1 ${loginFormError.password ? 'text-red-600' : ''}`}>Password</label>
-                <input 
-                    id="password"
-                    type="password"
-                    name="password"  
-                    value={loginFormData.password} 
-                    onChange={(e) => handleInputChange(e)} 
-                    onBlur={(e) => handleInputBlur(e)} 
-                    required={true} 
-                    className={`w-full border rounded-md px-3 py-2 ${loginFormError.password ? 'border-red-600' : 'border-gray-400'}`}
-                    {...(loginFormError.password && {"aria-invalid": "true", "aria-describedby": "passwordError"})}
-                />
-                { loginFormError.password && <div id="passwordError" className="text-red-600">{loginFormError.password}</div> }
-            </div>
-
-            <div className="mb-4">
-                {
-                    isFormProcessing ? (
-                        <button type="submit" 
-                            disabled 
-                            className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold uppercase cursor-progress opacity-50">
-                            <IconSpinner />
-                            Login...
-                        </button>  
-                    ) :
-                    ( 
-                        <button type="submit" 
-                            className="w-full px-3 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold uppercase">
-                            Login
-                        </button> 
-                    )
-                }
-            </div>
-
-            <p className="mb-4 text-center">
-                {/* Don't have an account? <Link to="/signup" className="text-sm text-violet-500 font-semibold underline hover:no-underline">Sign Up</Link> */}
-                <em>
-                    For demonstration purpose you may use the following  
-                    email: <strong>user@demo.app</strong> password: <strong>Demo1234</strong>
-                </em>
-            </p>
-        </form>
-    )
-
+			<p className="mb-4 text-center">
+				{/* Don't have an account? <Link to="/signup" className="text-sm text-violet-500 font-semibold underline hover:no-underline">Sign Up</Link> */}
+				<em>
+					For demonstration purpose you may use the following email: <strong>user@demo.app</strong>{' '}
+					password: <strong>Demo1234</strong>
+				</em>
+			</p>
+		</form>
+	);
 }

@@ -1,17 +1,17 @@
 export type Source = {
-    id: string,
-    title: string,
-    author: string,
-    format: string
-}
+	id: string;
+	title: string;
+	author: string;
+	format: string;
+};
 
 export type SourceLookup = {
-    id: string,
-    title: string
-}
+	id: string;
+	title: string;
+};
 
 export type SourceFormData = {
-    title: string,
-    author: string,
-    format: string
-}
+	title: string;
+	author: string;
+	format: string;
+};

@@ -1,8 +1,8 @@
 export type Level = {
-    id: string,
-    name: string
-}
+	id: string;
+	name: string;
+};
 
 export type LevelFormData = {
-    name: string
-}
+	name: string;
+};
