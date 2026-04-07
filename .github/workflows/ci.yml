@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci:
-    name: Install, Lint & Test
+    name: Install, Lint and Test
     runs-on: ubuntu-latest
 
     steps:
