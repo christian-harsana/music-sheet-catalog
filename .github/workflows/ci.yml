@@ -50,6 +50,14 @@ jobs:
   
       - name: Install Vercell CLI
         run: npm install --global vercel@latest
+
+      - name: Debug token
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "Token is EMPTY"
+          else
+            echo "Token is set"
+          fi
   
       - name: Deploy to Vercel
         run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
