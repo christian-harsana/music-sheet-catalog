@@ -13,6 +13,12 @@ export const getLevels = async (token: string) => {
 	return result;
 };
 
+export const getLevelsLookup = async (token: string) => {
+	const response = await api.get(`level/lookup`, token);
+	const result = await response.json();
+	return result;
+};
+
 export const updateLevel = async (id: string, levelData: LevelFormData, token: string) => {
 	const response = await api.put(`level/${id}`, levelData, token);
 	const result = await response.json();

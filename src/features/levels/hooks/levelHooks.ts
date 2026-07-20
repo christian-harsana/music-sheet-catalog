@@ -1,9 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as levelService from '../services/levelService';
-import type { Level, LevelFormData } from '../types/level.type';
+import type { Level, LevelLookup, LevelFormData } from '../types/level.type';
 import { useAuth } from '../../../contexts/authContext';
 import { useError } from '../../../contexts/errorContext';
 import { useUI } from '../../../contexts/uiContext';
+
+export const useGetLevelsLookup = () => {
+
+	const [levelsLookup, setLevelsLookup] = useState<LevelLookup[]>();
+	const [refresh, setRefresh] = useState<number>(0);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const { token, logout } = useAuth();
+	const { addToast } = useUI();
+	const { handleError } = useError();
+
+	useEffect(() => {
+
+		const fetchLevelsLookup = async () => {
+
+			if (!token) return;
+
+			setIsLoading(true);
+
+			try {
+				const result = await levelService.getLevelsLookup(token);				
+			
+				setLevelsLookup(result.data);
+			}
+			catch (error: unknown) {
+				handleError(error, {
+					onUnauthorised: logout,
+					onError: (message) => addToast(message, 'error'),
+				});
+			}
+			finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchLevelsLookup();
+
+	}, [token, refresh]);
+
+
+	const refreshLevelsLookup = useCallback(() => {
+		setRefresh((prev) => prev + 1);
+	}, []);
+
+	return {
+		levelsLookup,
+		refreshLevelsLookup,
+		isLoading,
+	}
+};
 
 export const useGetLevels = () => {
 	const [levels, setLevels] = useState<Level[]>([]);
