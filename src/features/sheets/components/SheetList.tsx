@@ -12,6 +12,7 @@ import type { Sheet } from '../types/sheet.type';
 import Loading from '../../../shared/components/Loading';
 import Modal from '../../../shared/components/Modal';
 import SheetForm from './SheetForm';
+import SheetImport from './SheetImport';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import Pagination from '../../../shared/components/Pagination';
 import { KEYS } from '../../../shared/utils/constants';
@@ -331,6 +332,21 @@ export default function SheetList() {
 		);
 	};
 
+	const handleImportSheets = () => {
+		showModal(
+			<Modal title={'Import Sheets'}>
+				<SheetImport 
+					sourcesLookup={sourcesLookup}
+					isLoadingSource={isLoadingSourceLookup}
+					levelsLookup={levels}
+					isLoadingLevel={isLoadingLevel}
+					genresLookup={genres}
+					isLoadingGenre={isLoadingGenre}
+				/>
+			</Modal>
+		)
+	}
+
 	const handleFilterChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 		const name = e.target.name;
 		let value;
@@ -486,14 +502,24 @@ export default function SheetList() {
 						</label>
 					</div>
 				</div>
+				
+				<div className='flex flex-wrap gap-3'>
+					<button
+						type="button"
+						onClick={handleAddSheet}
+						className="px-4 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50"
+					>
+						Add Sheet
+					</button>
 
-				<button
-					type="button"
-					onClick={handleAddSheet}
-					className="px-4 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50"
-				>
-					Add Sheet
-				</button>
+					<button
+						type="button"
+						onClick={handleImportSheets}
+						className="px-4 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50"
+					>
+						Import Sheets
+					</button>
+				</div>
 			</div>
 
 			<div className="mb-3">

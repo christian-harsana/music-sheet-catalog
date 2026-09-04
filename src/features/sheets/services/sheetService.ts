@@ -1,11 +1,17 @@
 import { api } from '../../../shared/utils/api';
-import type { SheetFormData } from '../types/sheet.type';
+import type { SheetFormData, SheetImportData } from '../types/sheet.type';
 
 export const createSheet = async (sheetData: SheetFormData, token: string) => {
 	const response = await api.post(`sheet`, sheetData, token);
 	const result = await response.json();
 	return result;
 };
+
+export const importSheets = async (sheetImportData: SheetImportData[], token: string) => {
+	const response = await api.post(`sheet/import`, sheetImportData, token);
+	const result = await response.json();
+	return result;
+}
 
 export const getSheets = async (
 	token: string,

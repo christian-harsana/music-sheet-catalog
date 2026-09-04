@@ -3,7 +3,7 @@ import { useDebounce } from '../../../shared/hooks/utilHooks';
 import * as sheetService from '../services/sheetService';
 import { useAuth } from '../../../contexts/authContext';
 import { useError } from '../../../contexts/errorContext';
-import type { Sheet, SheetFormData } from '../types/sheet.type';
+import type { Sheet, SheetFormData, SheetImportData } from '../types/sheet.type';
 import type { PaginationData } from '../../../shared/types/common.type';
 import { useUI } from '../../../contexts/uiContext';
 
@@ -126,6 +126,30 @@ export const useCreateSheet = () => {
 	};
 
 	return { createSheet, isLoading };
+};
+
+export const useImportSheets = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { logout } = useAuth();
+	const { addToast } = useUI();
+	const { handleError } = useError();
+
+	const importSheets = async (sheetImportData: SheetImportData[], token: string) => {
+		try {
+			setIsLoading(true);
+			const result = await sheetService.importSheets(sheetImportData, token);
+			return result;
+		} catch (error: unknown) {
+			handleError(error, {
+				onUnauthorised: logout,
+				onError: (message) => addToast(message, 'error'),
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	return { importSheets, isLoading };
 };
 
 export const useUpdateSheet = () => {

@@ -21,3 +21,13 @@ export type SheetFormData = {
 	genreId: number | null;
 	examPiece: boolean;
 };
+
+export type SheetImportData = {
+	title: string;
+	key: string | null;
+	composer: string | null;
+	source: string | null;
+	level: string | null;
+	genre: string | null;
+	examPiece: string | null;
+}
