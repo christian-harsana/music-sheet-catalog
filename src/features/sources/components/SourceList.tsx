@@ -4,7 +4,7 @@ import { type Source } from '../types/source.type';
 import Loading from '../../../shared/components/Loading';
 import Modal from '../../../shared/components/Modal';
 import SourceForm from './SourceForm';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 import Pagination from '../../../shared/components/Pagination';
 import { useGetSources, useDeleteSource } from '../hooks/sourceHooks';
 
@@ -46,32 +46,21 @@ function DeleteConfirmation({
 			</p>
 
 			<div className="mt-4 flex flex-nowrap gap-3">
-				{isLoading ? (
-					<button
-						type="button"
-						disabled
-						className="flex flex-nowrap gap-3 justify-center w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Deleting...
-					</button>
-				) : (
-					<button
-						type="button"
-						className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold"
-						onClick={() => handleDelete(id)}
-					>
-						Yes
-					</button>
-				)}
-
-				<button
+				<Button
+					fullWidth={true}
 					type="button"
-					className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-transparent hover:bg-violet-600 text-violet-600 hover:text-gray-50 font-semibold"
-					onClick={closeModal}
-				>
+					loading={isLoading}
+					onClick={() => handleDelete(id)}>
+					{isLoading ? "Deleting..." : "Yes"}
+				</Button>
+
+				<Button
+					fullWidth={true}
+					type="button"
+					variant="secondary"
+					onClick={closeModal}>
 					No
-				</button>
+				</Button>
 			</div>
 		</>
 	);
@@ -109,13 +98,11 @@ export default function SourceList() {
 	return (
 		<>
 			<div className="mb-4">
-				<button
+				<Button
 					type="button"
-					onClick={handleAddSource}
-					className="px-4 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50"
-				>
-					Add Source
-				</button>
+					onClick={handleAddSource}>
+					Add Genre
+				</Button>
 			</div>
 
 			<div className="mb-3">
@@ -200,20 +187,18 @@ export default function SourceList() {
 									</td>
 									<td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
 										<div className="flex flex-nowrap gap-3">
-											<button
+											<Button
 												type="button"
-												className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50"
-												onClick={() => showEditForm(source)}
-											>
+												size="small"
+												onClick={() => showEditForm(source)}>
 												Edit
-											</button>
-											<button
+											</Button>
+											<Button
 												type="button"
-												className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50"
-												onClick={() => showDeleteConfirmation(source.id, source.title)}
-											>
+												size="small"
+												onClick={() => showDeleteConfirmation(source.id, source.title)}>
 												Delete
-											</button>
+											</Button>
 										</div>
 									</td>
 								</tr>

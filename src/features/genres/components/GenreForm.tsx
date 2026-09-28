@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { useCreateGenre, useUpdateGenre } from '../hooks/genreHooks';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 import type { Genre, GenreFormData } from '../types/genre.type';
 
 type GenreFormDataError = {
@@ -163,23 +163,12 @@ export default function GenreForm({ genre, refreshData }: GenreFormProps) {
 			</div>
 
 			<div className="mt-4">
-				{isLoading ? (
-					<button
-						type="submit"
-						disabled
-						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Saving...
-					</button>
-				) : (
-					<button
-						type="submit"
-						className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold"
-					>
-						Save
-					</button>
-				)}
+				<Button
+					fullWidth={true}
+					type="submit"
+					loading={isLoading}>
+					{isLoading ? "Saving..." : "Save"}
+				</Button>
 			</div>
 		</form>
 	);

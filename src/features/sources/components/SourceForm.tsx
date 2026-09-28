@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { useCreateSource, useUpdateSource } from '../hooks/sourceHooks';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 import type { Source, SourceFormData } from '../types/source.type';
 
 type SourceFormDataError = {
@@ -226,23 +226,12 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 			</div>
 
 			<div className="mt-4">
-				{isLoading ? (
-					<button
-						type="submit"
-						disabled
-						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Saving...
-					</button>
-				) : (
-					<button
-						type="submit"
-						className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold"
-					>
-						Save
-					</button>
-				)}
+				<Button
+					fullWidth={true}
+					type="submit"
+					loading={isLoading}>
+					{isLoading ? "Saving..." : "Save"}
+				</Button>
 			</div>
 		</form>
 	);

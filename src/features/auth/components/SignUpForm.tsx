@@ -1,7 +1,7 @@
 import { useState, type FocusEvent } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { api } from '../../../shared/utils/api';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 import { useError } from '../../../contexts/errorContext';
 import { useUI } from '../../../contexts/uiContext';
 
@@ -232,23 +232,13 @@ export default function SignUpForm() {
 			</div>
 
 			<div className="mb-4">
-				{isFormProcessing ? (
-					<button
-						type="submit"
-						disabled
-						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold uppercase cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Registering...
-					</button>
-				) : (
-					<button
-						type="submit"
-						className="w-full px-3 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold uppercase"
-					>
-						Register
-					</button>
-				)}
+				<Button
+					fullWidth={true}
+					type="submit"
+					loading={isFormProcessing}
+					className="uppercase">
+					{isFormProcessing ? "Registering..." : "Register"}
+				</Button>
 			</div>
 
 			<p className="mb-4 text-center">

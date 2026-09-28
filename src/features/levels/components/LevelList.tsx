@@ -5,7 +5,7 @@ import { type Level } from '../types/level.type';
 import LevelForm from './LevelForm';
 import Loading from '../../../shared/components/Loading';
 import Modal from '../../../shared/components/Modal';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 
 // TODO: Turn delete confirmation into reusable component
 function DeleteConfirmation({
@@ -45,32 +45,21 @@ function DeleteConfirmation({
 			</p>
 
 			<div className="mt-4 flex flex-nowrap gap-3">
-				{isLoading ? (
-					<button
-						type="button"
-						disabled
-						className="flex flex-nowrap gap-3 justify-center w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Deleting...
-					</button>
-				) : (
-					<button
-						type="button"
-						className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold"
-						onClick={() => handleDelete(id)}
-					>
-						Yes
-					</button>
-				)}
-
-				<button
+				<Button
+					fullWidth={true}
 					type="button"
-					className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-transparent hover:bg-violet-600 text-violet-600 hover:text-gray-50 font-semibold"
-					onClick={closeModal}
-				>
+					loading={isLoading}
+					onClick={() => handleDelete(id)}>
+					{isLoading ? "Deleting..." : "Yes"}
+				</Button>
+
+				<Button
+					fullWidth={true}
+					type="button"
+					variant="secondary"
+					onClick={closeModal}>
 					No
-				</button>
+				</Button>
 			</div>
 		</>
 	);
@@ -107,13 +96,11 @@ export default function LevelList() {
 	return (
 		<>
 			<div className="mb-4">
-				<button
+				<Button
 					type="button"
-					onClick={handleAddLevel}
-					className="px-4 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50"
-				>
+					onClick={handleAddLevel}>
 					Add Level
-				</button>
+				</Button>
 			</div>
 
 			<table
@@ -169,20 +156,18 @@ export default function LevelList() {
 								</td>
 								<td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
 									<div className="flex flex-nowrap gap-3">
-										<button
+										<Button
 											type="button"
-											className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50"
-											onClick={() => showEditForm(level)}
-										>
+											size="small"
+											onClick={() => showEditForm(level)}>
 											Edit
-										</button>
-										<button
+										</Button>
+										<Button
 											type="button"
-											className="px-2 py-1 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-sm text-gray-50"
-											onClick={() => showDeleteConfirmation(level.id, level.name)}
-										>
+											size="small"
+											onClick={() => showDeleteConfirmation(level.id, level.name)}>
 											Delete
-										</button>
+										</Button>
 									</div>
 								</td>
 							</tr>

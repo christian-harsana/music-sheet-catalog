@@ -13,7 +13,10 @@ export default function Modal({ title, children }: ModalProps) {
 		<div className="w-[calc(100%-3rem)] max-w-md rounded-md overflow-hidden">
 			<div className="flex flex-nowrap gap-3 justify-between px-5 py-3 bg-gray-300 text-gray-900">
 				{title && <h3 className="font-semibold">{title}</h3>}
-				<button type="button" onClick={closeModal}>
+				<button 
+					type="button"
+					className="not-disabled:cursor-pointer" 
+					onClick={closeModal}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 384 512"
