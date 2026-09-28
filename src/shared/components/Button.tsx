@@ -1,38 +1,45 @@
-import type { ReactNode } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
+import { twMerge } from 'tailwind-merge';
 import IconSpinner from "./IconSpinner";
 
-
-type ButtonProps = {
+type ButtonCommonProps = {
     children: ReactNode;
     fullWidth?: boolean;
     variant?: 'primary' | 'secondary';
     size?: 'small' | 'medium';
-    tag?: 'button' | 'a';
-    href?: string;
-    target?: '_blank'
-    type?: 'submit' | 'button';
-    state?: 'working' | 'disabled';
-    handleClick?: () => void;
 };
 
-export default function Button({children, fullWidth, tag, href, target, type, variant, size, state, handleClick}: ButtonProps) {
+type ButtonAsButtonProps = ButtonCommonProps & 
+    Omit<ComponentPropsWithRef<'button'>, 'type'> & {
+    tag?: 'button';
+    type: 'submit' | 'button' | 'reset';
+    loading?: boolean;
+};
 
-    const baseClasses = 'flex flex-nowrap justify-center gap-3 border rounded-md font-semibold';
+type ButtonAsLinkProps = ButtonCommonProps & 
+    Omit<ComponentPropsWithRef<'a'>, 'href'> & {
+    tag: 'a';
+    href: string;
+};
+
+type ButtonProps = ButtonAsButtonProps | ButtonAsLinkProps;
+
+function getStyleClasses(
+    fullWidth: ButtonCommonProps['fullWidth'], 
+    variant: ButtonCommonProps['variant'], 
+    size: ButtonCommonProps['size'],
+    className: string | undefined) {
+
+    const baseClasses = 'inline-flex flex-nowrap justify-center gap-3 border rounded-md focus:outline-3 focus:outline-offset-1 focus:outline-violet-300 font-semibold align-middle transition-transform not-disabled:cursor-pointer not-disabled:active:scale-[0.98]';
     const mediumClasses = 'px-4 py-2';
     const smallClasses = 'px-3 py-2';
-    const primaryClasses = 'border-violet-500 enabled:hover:border-violet-600 bg-violet-500 enabled:hover:bg-violet-600 text-gray-50'; 
-    const secondaryClasses = 'border-violet-600 enabled:hover:border-violet-600 bg-transparent enabled:hover:bg-violet-600 text-violet-600 enabled:hover:text-gray-50';
-    const workingClasses = 'cursor-progress opacity-50';
-    const disabledClasses = 'opacity-50 disabled:cursor-not-allowed';
+    const primaryClasses = 'border-violet-500 not-disabled:hover:border-violet-600 bg-violet-500 not-disabled:hover:bg-violet-600 not-disabled:active:bg-violet-700 text-gray-50'; 
+    const secondaryClasses = 'border-violet-600 not-disabled:hover:border-violet-600 bg-transparent not-disabled:hover:bg-violet-600 not-disabled:active:bg-violet-700 text-violet-600 not-disabled:hover:text-gray-50';
 
     let styleClasses = baseClasses;
-    let isFullWidth = fullWidth ?? false;
-    let isWorking = false;
-    let isDisabled = false;
-    let buttonType = type ?? "button";
 
-    if (isFullWidth) {
-       styleClasses = `${styleClasses} w-full`; 
+    if (fullWidth) {
+        styleClasses = `${styleClasses} w-full`; 
     }
 
     switch(size) {
@@ -53,40 +60,54 @@ export default function Button({children, fullWidth, tag, href, target, type, va
             styleClasses = `${styleClasses} ${primaryClasses}`;
     }
 
-    switch(state) {
-        case 'working':
-            styleClasses = `${styleClasses} ${workingClasses}`;
-            isWorking = true;
-            isDisabled = true;
-            break;
+    return twMerge(styleClasses, className);
+}
 
-        case 'disabled':
-            styleClasses = `${styleClasses} ${disabledClasses}`;
-            isDisabled = true;
-            break; 
-    }
 
-    if (tag === 'a') {
+export default function Button(props: ButtonProps) {
+
+    if (props.tag === 'a') {
+
+        const {children, fullWidth, variant, size, tag, href, target, rel, className, ...rest} = props;
+        let styleClasses = getStyleClasses(fullWidth, variant, size, className);
+        let relValue = rel ?? '';
+        
+        relValue = target === '_blank' ? `${relValue} noopener noreferrer`.trim() : relValue;
+       
         return (
             <a 
+                className={styleClasses}
                 href={href}
                 target={target}
-                className={styleClasses}
+                rel={relValue}
+                {...rest}
             >
                 {children}
             </a>
         )
     }
 
+    const {children, fullWidth, variant, size, tag, type, loading, disabled, className, ...rest} = props;
+
+    const isLoading = loading ?? false;
+    const isDisabled = isLoading || (disabled ?? false) ? true : false;
+    
+    const loadingClasses = 'cursor-progress opacity-50';
+    const disabledClasses = 'opacity-50 disabled:cursor-not-allowed';
+
+    let styleClasses = getStyleClasses(fullWidth, variant, size, className);
+    if (isLoading) styleClasses = `${styleClasses} ${loadingClasses}`;
+    if (isDisabled) styleClasses = `${styleClasses} ${disabledClasses}`;
+
 	return (
 		<button
-            type={buttonType}
-            onClick={handleClick}
+            type={type}
             className={styleClasses}
-            disabled={isDisabled}
-            aria-busy={isWorking}
+            disabled={isDisabled} 
+            aria-busy={isLoading}
+            {...rest}
             >
-            {isWorking ? <IconSpinner/> : null}
+            {isLoading ? <IconSpinner/> : null}
             {children}
         </button>
 	);
