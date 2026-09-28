@@ -32,7 +32,7 @@ function getStyleClasses(
 
     const baseClasses = 'inline-flex flex-nowrap justify-center gap-3 border rounded-md focus:outline-3 focus:outline-offset-1 focus:outline-violet-300 font-semibold align-middle transition-transform not-disabled:cursor-pointer not-disabled:active:scale-[0.98]';
     const mediumClasses = 'px-4 py-2';
-    const smallClasses = 'px-3 py-2';
+    const smallClasses = 'px-2 py-1 text-xs';
     const primaryClasses = 'border-violet-500 not-disabled:hover:border-violet-600 bg-violet-500 not-disabled:hover:bg-violet-600 not-disabled:active:bg-violet-700 text-gray-50'; 
     const secondaryClasses = 'border-violet-600 not-disabled:hover:border-violet-600 bg-transparent not-disabled:hover:bg-violet-600 not-disabled:active:bg-violet-700 text-violet-600 not-disabled:hover:text-gray-50';
 

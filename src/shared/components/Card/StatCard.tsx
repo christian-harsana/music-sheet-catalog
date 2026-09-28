@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { Link } from 'react-router';
+import Button from '../../../../src/shared/components/Button'
 import Card from './Card';
 import IconSpinner from '../IconSpinner';
 
@@ -38,13 +38,13 @@ export default function StatCard({
 				</h2>
 				{cta && ctaHref && (
 					<div>
-						<Link
-							to={ctaHref}
+						<Button
+							tag="a"
+							href={ctaHref}
 							aria-label={`${cta} for ${title}`}
-							className="px-2 py-0.5 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-xs text-gray-50"
-						>
+							size="small">
 							{cta}
-						</Link>
+						</Button>
 					</div>
 				)}
 			</div>
