@@ -12,7 +12,7 @@ type ButtonCommonProps = {
 type ButtonAsButtonProps = ButtonCommonProps & 
     Omit<ComponentPropsWithRef<'button'>, 'type'> & {
     tag?: 'button';
-    type: 'submit' | 'button' | 'reset';
+    type?: 'submit' | 'button' | 'reset';
     loading?: boolean;
 };
 
@@ -30,7 +30,7 @@ function getStyleClasses(
     size: ButtonCommonProps['size'],
     className: string | undefined) {
 
-    const baseClasses = 'inline-flex flex-nowrap justify-center gap-3 border rounded-md focus:outline-3 focus:outline-offset-1 focus:outline-violet-300 font-semibold align-middle transition-transform not-disabled:cursor-pointer not-disabled:active:scale-[0.98]';
+    const baseClasses = 'inline-flex flex-nowrap justify-center gap-3 border rounded-md focus:outline-3 focus:outline-offset-2 focus:outline-violet-500 font-semibold align-middle transition-transform not-disabled:cursor-pointer not-disabled:active:scale-[0.98]';
     const mediumClasses = 'px-4 py-2';
     const smallClasses = 'px-2 py-1 text-xs';
     const primaryClasses = 'border-violet-500 not-disabled:hover:border-violet-600 bg-violet-500 not-disabled:hover:bg-violet-600 not-disabled:active:bg-violet-700 text-gray-50'; 
@@ -87,17 +87,18 @@ export default function Button(props: ButtonProps) {
         )
     }
 
-    const {children, fullWidth, variant, size, tag, type, loading, disabled, className, ...rest} = props;
+    const {children, fullWidth, variant, size, tag, type = 'button', loading, disabled, className, ...rest} = props;
 
     const isLoading = loading ?? false;
-    const isDisabled = isLoading || (disabled ?? false) ? true : false;
+    const isDisabled = isLoading || (disabled ?? false);
     
     const loadingClasses = 'cursor-progress opacity-50';
-    const disabledClasses = 'opacity-50 disabled:cursor-not-allowed';
+    const disabledClasses = 'disabled:bg-gray-200 disabled:border-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed';
 
     let styleClasses = getStyleClasses(fullWidth, variant, size, className);
+    styleClasses = `${styleClasses} ${disabledClasses}`;
+
     if (isLoading) styleClasses = `${styleClasses} ${loadingClasses}`;
-    if (isDisabled) styleClasses = `${styleClasses} ${disabledClasses}`;
 
 	return (
 		<button
