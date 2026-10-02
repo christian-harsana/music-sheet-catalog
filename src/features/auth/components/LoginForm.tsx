@@ -5,6 +5,7 @@ import { useUI } from '../../../contexts/uiContext';
 import { api } from '../../../shared/utils/api';
 import type { AuthUser } from '../../../shared/types/common.type';
 import Button from '../../../shared/components/Button';
+import TextInput from '../../../shared/components/TextInput';
 
 type loginFormDataType = {
 	email: string;
@@ -162,6 +163,25 @@ export default function LoginForm() {
 			</div>
 
 			<div className="mb-4">
+				<TextInput
+					 />
+			</div>
+
+			<div className="mb-4">
+				<TextInput
+					invalid={true}
+					value="Invalid input"
+					 />
+			</div>
+
+			<div className="mb-4">
+				<TextInput
+					disabled
+					value="disabled input"
+					 />
+			</div>
+
+			<div className="mb-4">
 				<label
 					htmlFor="password"
 					className={`block mb-1 ${loginFormError.password ? 'text-red-600' : ''}`}
@@ -191,6 +211,17 @@ export default function LoginForm() {
 
 			<div className="mb-4">
 				<Button
+					fullWidth={true}
+					type="submit"
+					loading={isFormProcessing}
+					className="uppercase">
+					{isFormProcessing ? "Login..." : "Login"}
+				</Button>
+			</div>
+
+			<div className="mb-4">
+				<Button
+					disabled
 					fullWidth={true}
 					type="submit"
 					loading={isFormProcessing}
