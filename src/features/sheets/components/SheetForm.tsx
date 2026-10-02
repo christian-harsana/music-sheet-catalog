@@ -9,6 +9,7 @@ import type { Level } from '../../../features/levels/types/level.type';
 import type { Genre } from '../../../features/genres/types/genre.type';
 import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
 import { KEYS } from '../../../shared/utils/constants';
+import TextInput from '../../../shared/components/TextInput';
 
 type SheetFormDataError = {
 	[K in keyof SheetFormData]?: string;
@@ -200,23 +201,20 @@ export default function SheetForm({
 					</span>
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="sheetTitle"
 					name="title"
 					value={SheetFormData.title}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					required={true}
+					required
 					ref={titleInputRef}
-					className={`w-full border rounded-md px-3 py-2 ${SheetFormDataError.title ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(SheetFormDataError.title && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'sheetTitleError',
-					})}
+					invalid={!!SheetFormDataError.title}
+					aria-describedby={SheetFormDataError.title ? 'sheetTitleError' : undefined}
 				/>
 				{SheetFormDataError.title && (
-					<div id="sheetTitleError" className="text-red-600">
+					<div id="sheetTitleError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
 						{SheetFormDataError.title}
 					</div>
 				)}
@@ -263,21 +261,18 @@ export default function SheetForm({
 					Composer
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="sheetComposer"
 					name="composer"
 					value={SheetFormData.composer}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					className={`w-full border rounded-md px-3 py-2 ${SheetFormDataError.composer ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(SheetFormDataError.composer && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'sheetComposerError',
-					})}
+					invalid={!!SheetFormDataError.composer}
+					aria-describedby={SheetFormDataError.composer ? 'sheetComposerError' : undefined}
 				/>
 				{SheetFormDataError.title && (
-					<div id="sheetComposerError" className="text-red-600">
+					<div id="sheetComposerError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
 						{SheetFormDataError.composer}
 					</div>
 				)}

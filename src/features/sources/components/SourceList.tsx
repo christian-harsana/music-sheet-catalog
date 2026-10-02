@@ -101,7 +101,7 @@ export default function SourceList() {
 				<Button
 					type="button"
 					onClick={handleAddSource}>
-					Add Genre
+					Add Source
 				</Button>
 			</div>
 

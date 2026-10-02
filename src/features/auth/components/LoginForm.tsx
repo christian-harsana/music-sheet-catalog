@@ -141,44 +141,23 @@ export default function LoginForm() {
 				>
 					Email
 				</label>
-				<input
+
+				<TextInput
 					id="email"
 					type="email"
 					name="email"
 					value={loginFormData.email}
 					onChange={(e) => handleInputChange(e)}
 					onBlur={(e) => handleInputBlur(e)}
-					required={true}
-					className={`w-full border rounded-md px-3 py-2 ${loginFormError.email ? 'border-red-600' : 'border-gray-400'}`}
-					{...(loginFormError.email && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'emailError',
-					})}
+					required
+					invalid={!!loginFormError.email}
+					aria-describedby={loginFormError.email ? "emailError" : undefined}
 				/>
 				{loginFormError.email && (
-					<div id="emailError" className="text-red-600">
+					<div id="emailError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{loginFormError.email}
 					</div>
 				)}
-			</div>
-
-			<div className="mb-4">
-				<TextInput
-					 />
-			</div>
-
-			<div className="mb-4">
-				<TextInput
-					invalid={true}
-					value="Invalid input"
-					 />
-			</div>
-
-			<div className="mb-4">
-				<TextInput
-					disabled
-					value="disabled input"
-					 />
 			</div>
 
 			<div className="mb-4">
@@ -188,22 +167,19 @@ export default function LoginForm() {
 				>
 					Password
 				</label>
-				<input
+				<TextInput
 					id="password"
 					type="password"
 					name="password"
 					value={loginFormData.password}
 					onChange={(e) => handleInputChange(e)}
 					onBlur={(e) => handleInputBlur(e)}
-					required={true}
-					className={`w-full border rounded-md px-3 py-2 ${loginFormError.password ? 'border-red-600' : 'border-gray-400'}`}
-					{...(loginFormError.password && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'passwordError',
-					})}
+					required
+					invalid={!!loginFormError.password}
+					aria-describedby={loginFormError.password ? "passwordError" : undefined}
 				/>
 				{loginFormError.password && (
-					<div id="passwordError" className="text-red-600">
+					<div id="passwordError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{loginFormError.password}
 					</div>
 				)}
@@ -211,17 +187,6 @@ export default function LoginForm() {
 
 			<div className="mb-4">
 				<Button
-					fullWidth={true}
-					type="submit"
-					loading={isFormProcessing}
-					className="uppercase">
-					{isFormProcessing ? "Login..." : "Login"}
-				</Button>
-			</div>
-
-			<div className="mb-4">
-				<Button
-					disabled
 					fullWidth={true}
 					type="submit"
 					loading={isFormProcessing}

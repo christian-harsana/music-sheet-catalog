@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
+import TextInput from '../../../shared/components/TextInput';
 import Button from '../../../shared/components/Button';
 import type { Level, LevelFormData } from '../types/level.type';
 import { useCreateLevel, useUpdateLevel } from '../hooks/levelHooks';
@@ -140,23 +141,20 @@ export default function LevelForm({ level, refreshData }: LevelFormProps) {
 					</span>
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="levelName"
 					name="name"
 					value={levelFormData.name}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					required={true}
+					required
 					ref={nameInputRef}
-					className={`w-full border rounded-md px-3 py-2 ${levelFormDataError.name ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(levelFormDataError.name && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'levelNameError',
-					})}
+					invalid={!!levelFormDataError.name}
+					aria-describedby={levelFormDataError.name ? 'levelNameError' : undefined}
 				/>
 				{levelFormDataError.name && (
-					<div id="levelNameError" className="text-red-600">
+					<div id="levelNameError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
 						{levelFormDataError.name}
 					</div>
 				)}

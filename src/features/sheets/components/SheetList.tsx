@@ -16,6 +16,7 @@ import SheetForm from './SheetForm';
 import IconSpinner from '../../../shared/components/IconSpinner';
 import Pagination from '../../../shared/components/Pagination';
 import { KEYS } from '../../../shared/utils/constants';
+import TextInput from '../../../shared/components/TextInput';
 
 // TODO: Turn delete confirmation into reusable component
 function DeleteConfirmation({
@@ -342,14 +343,14 @@ export default function SheetList() {
 			<div className="mb-4 flex flex-wrap gap-3 justify-between">
 				<div className="flex flex-wrap gap-3">
 					<div className="relative w-3xs">
-						<input
+						<TextInput
 							type="text"
 							id="sheetSearch"
 							name="search"
 							value={filters.search}
 							placeholder="Search title or source"
 							onChange={handleFilterChange}
-							className={`w-full border rounded-md ps-3 pe-10 py-2 border-gray-400 bg-gray-50`}
+							className='pe-10'
 						/>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
