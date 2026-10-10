@@ -10,6 +10,7 @@ import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
 import { KEYS } from '../../../shared/utils/constants';
 import TextInput from '../../../shared/components/TextInput';
 import Select from '../../../shared/components/Select';
+import Checkbox from '../../../shared/components/Checkbox';
 
 type SheetFormDataError = {
 	[K in keyof SheetFormData]?: string;
@@ -313,19 +314,13 @@ export default function SheetForm({
 			</div>
 
 			<div className="mb-4">
-				<label htmlFor="sheetExamPiece" className="flex flex-nowrap items-start">
-					<span className="mt-0.5 mr-2">
-						<input
-							type="checkbox"
-							id="sheetExamPiece"
-							name="examPiece"
-							onChange={handleInputChange}
-							checked={SheetFormData.examPiece ?? false}
-							className="block size-5 border rounded-md border-gray-400 bg-gray-50"
-						/>
-					</span>
-					Exam piece
-				</label>
+				<Checkbox
+					label='Exam piece'
+					id="sheetExamPiece"
+					name="examPiece"
+					onChange={handleInputChange}
+					checked={SheetFormData.examPiece ?? false}
+				/>
 			</div>
 
 			<div className="mt-4">

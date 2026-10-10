@@ -17,6 +17,7 @@ import Pagination from '../../../shared/components/Pagination';
 import { KEYS } from '../../../shared/utils/constants';
 import TextInput from '../../../shared/components/TextInput';
 import Select from '../../../shared/components/Select';
+import Checkbox from '../../../shared/components/Checkbox';
 
 // TODO: Turn delete confirmation into reusable component
 function DeleteConfirmation({
@@ -414,19 +415,13 @@ export default function SheetList() {
 					</div>
 
 					<div className="self-center">
-						<label htmlFor="examPieceFilter" className="flex flex-nowrap items-start">
-							<span className="mt-0.5 mr-2">
-								<input
-									type="checkbox"
-									id="examPieceFilter"
-									name="examPiece"
-									onChange={handleFilterChange}
-									checked={filters.examPiece}
-									className="block size-5 border rounded-md border-gray-400 bg-gray-50"
-								/>
-							</span>
-							Exam piece
-						</label>
+						<Checkbox
+							label='Exam piece'
+							id="examPieceFilter"
+							name="examPiece"
+							onChange={handleFilterChange}
+							checked={filters.examPiece}
+						/>
 					</div>
 				</div>
 
