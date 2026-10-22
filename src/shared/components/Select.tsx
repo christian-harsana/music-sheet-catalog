@@ -16,7 +16,7 @@ export default function Select<T>(props: SelectProps<T>) {
 
     const {options, getOptionValue, getOptionLabel, placeholder = 'Please select', placeholderValue = '', loading = false, disabled = false, invalid, className, ...rest} = props;
 
-    const baseClasses = 'block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-500 bg-gray-50 focus-visible:outline-offset-2 focus-visible:outline-3 focus-visible:outline-violet-600 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed';
+    const baseClasses = 'block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-500 bg-gray-50 text-gray-950 focus-visible:outline-offset-2 focus-visible:outline-3 focus-visible:outline-violet-600 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed';
     const baseIconClasses = 'absolute top-1/2 -translate-y-1/2 right-3 pointer-events-none';
     
     const isDisabled = loading || disabled;

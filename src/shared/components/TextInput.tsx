@@ -10,7 +10,7 @@ export default function TextInput(props: TextInputProps) {
     
     const {type = 'text', invalid, className, disabled, ...rest} = props;
     
-    const baseClasses = 'w-full min-w-0 border rounded-md px-3 py-2 bg-gray-50 focus-visible:outline-offset-2 focus-visible:outline-3 placeholder:text-gray-500'; 
+    const baseClasses = 'w-full min-w-0 border rounded-md px-3 py-2 bg-gray-50 text-gray-950 focus-visible:outline-offset-2 focus-visible:outline-3 placeholder:text-gray-500'; 
     const disabledClasses = 'disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed';
 
     let styleClasses = `${baseClasses} ${disabledClasses}`;
