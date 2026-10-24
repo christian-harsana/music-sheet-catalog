@@ -68,9 +68,8 @@ function getStyleClasses(
 
 export default function Button(props: ButtonProps) {
 	if (props.tag === 'a') {
-		const { children, fullWidth, variant, size, tag, href, target, rel, className, ...rest } =
-			props;
-		let styleClasses = getStyleClasses(fullWidth, variant, size, className);
+		const { children, fullWidth, variant, size, href, target, rel, className, ...rest } = props;
+		const styleClasses = getStyleClasses(fullWidth, variant, size, className);
 		let relValue = rel ?? '';
 
 		relValue = target === '_blank' ? `${relValue} noopener noreferrer`.trim() : relValue;
@@ -87,7 +86,6 @@ export default function Button(props: ButtonProps) {
 		fullWidth,
 		variant,
 		size,
-		tag,
 		type = 'button',
 		loading,
 		disabled,
