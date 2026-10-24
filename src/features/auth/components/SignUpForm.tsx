@@ -161,7 +161,7 @@ export default function SignUpForm() {
 					onBlur={(e) => handleInputBlur(e)}
 					required
 					invalid={!!signUpFormError.email}
-					aria-describedby={signUpFormError.email ? "emailError" : undefined}
+					aria-describedby={signUpFormError.email ? 'emailError' : undefined}
 				/>
 
 				{signUpFormError.email && (
@@ -186,7 +186,7 @@ export default function SignUpForm() {
 					onChange={(e) => handleInputChange(e)}
 					onBlur={(e) => handleInputBlur(e)}
 					invalid={!!signUpFormError.name}
-					aria-describedby={signUpFormError.name ? "nameError" : undefined}
+					aria-describedby={signUpFormError.name ? 'nameError' : undefined}
 				/>
 
 				{signUpFormError.name && (
@@ -216,7 +216,7 @@ export default function SignUpForm() {
 					required
 					minLength={8}
 					invalid={!!signUpFormError.password}
-					aria-describedby={signUpFormError.password ? "passwordError" :  undefined}
+					aria-describedby={signUpFormError.password ? 'passwordError' : undefined}
 				/>
 
 				{signUpFormError.password && (
@@ -227,12 +227,8 @@ export default function SignUpForm() {
 			</div>
 
 			<div className="mb-4">
-				<Button
-					fullWidth={true}
-					type="submit"
-					loading={isFormProcessing}
-					className="uppercase">
-					{isFormProcessing ? "Registering..." : "Register"}
+				<Button fullWidth={true} type="submit" loading={isFormProcessing} className="uppercase">
+					{isFormProcessing ? 'Registering...' : 'Register'}
 				</Button>
 			</div>
 

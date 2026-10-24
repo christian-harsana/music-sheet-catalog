@@ -57,19 +57,11 @@ function DeleteConfirmation({
 			</p>
 
 			<div className="mt-4 flex flex-nowrap gap-3">
-				<Button
-					fullWidth={true}
-					type="button"
-					loading={isLoading}
-					onClick={() => handleDelete(id)}>
-					{isLoading ? "Deleting..." : "Yes"}
+				<Button fullWidth={true} type="button" loading={isLoading} onClick={() => handleDelete(id)}>
+					{isLoading ? 'Deleting...' : 'Yes'}
 				</Button>
 
-				<Button
-					fullWidth={true}
-					type="button"
-					variant="secondary"
-					onClick={closeModal}>
+				<Button fullWidth={true} type="button" variant="secondary" onClick={closeModal}>
 					No
 				</Button>
 			</div>
@@ -265,16 +257,14 @@ function SheetTable({
 							</td>
 							<td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
 								<div className="flex flex-nowrap gap-3">
-									<Button
-										type="button"
-										size="small"
-										onClick={() => showEditForm(sheet)}>
+									<Button type="button" size="small" onClick={() => showEditForm(sheet)}>
 										Edit
 									</Button>
 									<Button
 										type="button"
 										size="small"
-										onClick={() => showDeleteConfirmation(sheet.id, sheet.title)}>
+										onClick={() => showDeleteConfirmation(sheet.id, sheet.title)}
+									>
 										Delete
 									</Button>
 								</div>
@@ -343,8 +333,7 @@ export default function SheetList() {
 		<>
 			<div className="mb-4 flex flex-wrap gap-3 justify-between">
 				<div className="flex flex-wrap gap-3">
-					<div className='w-3xs'>
-
+					<div className="w-3xs">
 						{/* Search Bar Component */}
 						<div className="relative">
 							<TextInput
@@ -354,7 +343,7 @@ export default function SheetList() {
 								value={filters.search}
 								placeholder="Search title or source"
 								onChange={handleFilterChange}
-								className='pe-10'
+								className="pe-10"
 							/>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -370,12 +359,12 @@ export default function SheetList() {
 					</div>
 
 					<div className="w-3xs">
-						<Select 
+						<Select
 							options={KEYS}
 							getOptionLabel={(o) => o.label}
-							getOptionValue={(o) => o.value} 
-							placeholder='All keys'
-							placeholderValue='all'
+							getOptionValue={(o) => o.value}
+							placeholder="All keys"
+							placeholderValue="all"
 							id="keyFilter"
 							name="key"
 							onChange={handleFilterChange}
@@ -383,14 +372,13 @@ export default function SheetList() {
 						/>
 					</div>
 
-
 					<div className="w-3xs">
 						<Select
 							options={levels}
 							getOptionLabel={(o) => o.name}
 							getOptionValue={(o) => o.id}
-							placeholder='All levels'
-							placeholderValue='all'
+							placeholder="All levels"
+							placeholderValue="all"
 							loading={isLoadingLevel}
 							id="levelFilter"
 							name="level"
@@ -404,8 +392,8 @@ export default function SheetList() {
 							options={genres}
 							getOptionLabel={(o) => o.name}
 							getOptionValue={(o) => o.id}
-							placeholder='All genres'
-							placeholderValue='all'
+							placeholder="All genres"
+							placeholderValue="all"
 							loading={isLoadingGenre}
 							id="genreFilter"
 							name="genre"
@@ -416,7 +404,7 @@ export default function SheetList() {
 
 					<div className="self-center">
 						<Checkbox
-							label='Exam piece'
+							label="Exam piece"
 							id="examPieceFilter"
 							name="examPiece"
 							onChange={handleFilterChange}
@@ -425,9 +413,7 @@ export default function SheetList() {
 					</div>
 				</div>
 
-				<Button
-					type="button"
-					onClick={handleAddSheet}>
+				<Button type="button" onClick={handleAddSheet}>
 					Add Sheet
 				</Button>
 			</div>

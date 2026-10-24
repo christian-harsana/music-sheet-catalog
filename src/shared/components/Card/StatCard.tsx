@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import Button from '../../../../src/shared/components/Button'
+import Button from '../../../../src/shared/components/Button';
 import Card from './Card';
 import IconSpinner from '../IconSpinner';
 
@@ -38,11 +38,7 @@ export default function StatCard({
 				</h2>
 				{cta && ctaHref && (
 					<div>
-						<Button
-							tag="a"
-							href={ctaHref}
-							aria-label={`${cta} for ${title}`}
-							size="small">
+						<Button tag="a" href={ctaHref} aria-label={`${cta} for ${title}`} size="small">
 							{cta}
 						</Button>
 					</div>

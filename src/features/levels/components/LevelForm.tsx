@@ -154,18 +154,15 @@ export default function LevelForm({ level, refreshData }: LevelFormProps) {
 					aria-describedby={levelFormDataError.name ? 'levelNameError' : undefined}
 				/>
 				{levelFormDataError.name && (
-					<div id="levelNameError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
+					<div id="levelNameError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{levelFormDataError.name}
 					</div>
 				)}
 			</div>
 
 			<div className="mt-4">
-				<Button
-					fullWidth={true}
-					type="submit"
-					loading={isLoading}>
-					{isLoading ? "Saving..." : "Save"}
+				<Button fullWidth={true} type="submit" loading={isLoading}>
+					{isLoading ? 'Saving...' : 'Save'}
 				</Button>
 			</div>
 		</form>

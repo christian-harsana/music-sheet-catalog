@@ -215,7 +215,7 @@ export default function SheetForm({
 					aria-describedby={SheetFormDataError.title ? 'sheetTitleError' : undefined}
 				/>
 				{SheetFormDataError.title && (
-					<div id="sheetTitleError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
+					<div id="sheetTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{SheetFormDataError.title}
 					</div>
 				)}
@@ -226,7 +226,7 @@ export default function SheetForm({
 					Key
 				</label>
 
-				<Select 
+				<Select
 					options={KEYS}
 					getOptionLabel={(o) => o.label}
 					getOptionValue={(o) => o.value}
@@ -234,7 +234,7 @@ export default function SheetForm({
 					name="key"
 					onChange={handleInputChange}
 					value={SheetFormData.key ?? ''}
-				/>				
+				/>
 			</div>
 
 			<div className="mb-4">
@@ -256,7 +256,7 @@ export default function SheetForm({
 					aria-describedby={SheetFormDataError.composer ? 'sheetComposerError' : undefined}
 				/>
 				{SheetFormDataError.title && (
-					<div id="sheetComposerError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
+					<div id="sheetComposerError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{SheetFormDataError.composer}
 					</div>
 				)}
@@ -267,7 +267,7 @@ export default function SheetForm({
 					Source
 				</label>
 
-				<Select 
+				<Select
 					options={sourcesLookup}
 					getOptionLabel={(o) => o.title}
 					getOptionValue={(o) => o.id}
@@ -315,7 +315,7 @@ export default function SheetForm({
 
 			<div className="mb-4">
 				<Checkbox
-					label='Exam piece'
+					label="Exam piece"
 					id="sheetExamPiece"
 					name="examPiece"
 					onChange={handleInputChange}
@@ -324,11 +324,8 @@ export default function SheetForm({
 			</div>
 
 			<div className="mt-4">
-				<Button
-					fullWidth={true}
-					type="submit"
-					loading={isLoading}>
-					{isLoading ? "Saving..." : "Save"}
+				<Button fullWidth={true} type="submit" loading={isLoading}>
+					{isLoading ? 'Saving...' : 'Save'}
 				</Button>
 			</div>
 		</form>

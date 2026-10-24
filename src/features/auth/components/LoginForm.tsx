@@ -151,7 +151,7 @@ export default function LoginForm() {
 					onBlur={(e) => handleInputBlur(e)}
 					required
 					invalid={!!loginFormError.email}
-					aria-describedby={loginFormError.email ? "emailError" : undefined}
+					aria-describedby={loginFormError.email ? 'emailError' : undefined}
 				/>
 				{loginFormError.email && (
 					<div id="emailError" className="mt-1 text-red-600 text-sm" aria-live="polite">
@@ -176,7 +176,7 @@ export default function LoginForm() {
 					onBlur={(e) => handleInputBlur(e)}
 					required
 					invalid={!!loginFormError.password}
-					aria-describedby={loginFormError.password ? "passwordError" : undefined}
+					aria-describedby={loginFormError.password ? 'passwordError' : undefined}
 				/>
 				{loginFormError.password && (
 					<div id="passwordError" className="mt-1 text-red-600 text-sm" aria-live="polite">
@@ -186,12 +186,8 @@ export default function LoginForm() {
 			</div>
 
 			<div className="mb-4">
-				<Button
-					fullWidth={true}
-					type="submit"
-					loading={isFormProcessing}
-					className="uppercase">
-					{isFormProcessing ? "Login..." : "Login"}
+				<Button fullWidth={true} type="submit" loading={isFormProcessing} className="uppercase">
+					{isFormProcessing ? 'Login...' : 'Login'}
 				</Button>
 			</div>
 

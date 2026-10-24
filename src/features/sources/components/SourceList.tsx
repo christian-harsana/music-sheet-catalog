@@ -46,19 +46,11 @@ function DeleteConfirmation({
 			</p>
 
 			<div className="mt-4 flex flex-nowrap gap-3">
-				<Button
-					fullWidth={true}
-					type="button"
-					loading={isLoading}
-					onClick={() => handleDelete(id)}>
-					{isLoading ? "Deleting..." : "Yes"}
+				<Button fullWidth={true} type="button" loading={isLoading} onClick={() => handleDelete(id)}>
+					{isLoading ? 'Deleting...' : 'Yes'}
 				</Button>
 
-				<Button
-					fullWidth={true}
-					type="button"
-					variant="secondary"
-					onClick={closeModal}>
+				<Button fullWidth={true} type="button" variant="secondary" onClick={closeModal}>
 					No
 				</Button>
 			</div>
@@ -98,9 +90,7 @@ export default function SourceList() {
 	return (
 		<>
 			<div className="mb-4">
-				<Button
-					type="button"
-					onClick={handleAddSource}>
+				<Button type="button" onClick={handleAddSource}>
 					Add Source
 				</Button>
 			</div>
@@ -187,16 +177,14 @@ export default function SourceList() {
 									</td>
 									<td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
 										<div className="flex flex-nowrap gap-3">
-											<Button
-												type="button"
-												size="small"
-												onClick={() => showEditForm(source)}>
+											<Button type="button" size="small" onClick={() => showEditForm(source)}>
 												Edit
 											</Button>
 											<Button
 												type="button"
 												size="small"
-												onClick={() => showDeleteConfirmation(source.id, source.title)}>
+												onClick={() => showDeleteConfirmation(source.id, source.title)}
+											>
 												Delete
 											</Button>
 										</div>

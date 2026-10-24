@@ -154,18 +154,15 @@ export default function GenreForm({ genre, refreshData }: GenreFormProps) {
 					aria-describedby={genreFormDataError.name ? 'genreNameError' : undefined}
 				/>
 				{genreFormDataError.name && (
-					<div id="genreNameError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
+					<div id="genreNameError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{genreFormDataError.name}
 					</div>
 				)}
 			</div>
 
 			<div className="mt-4">
-				<Button
-					fullWidth={true}
-					type="submit"
-					loading={isLoading}>
-					{isLoading ? "Saving..." : "Save"}
+				<Button fullWidth={true} type="submit" loading={isLoading}>
+					{isLoading ? 'Saving...' : 'Save'}
 				</Button>
 			</div>
 		</form>

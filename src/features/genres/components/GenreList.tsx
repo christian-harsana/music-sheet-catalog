@@ -45,19 +45,11 @@ function DeleteConfirmation({
 			</p>
 
 			<div className="mt-4 flex flex-nowrap gap-3">
-				<Button
-					fullWidth={true}
-					type="button"
-					loading={isLoading}
-					onClick={() => handleDelete(id)}>
-					{isLoading ? "Deleting..." : "Yes"}
+				<Button fullWidth={true} type="button" loading={isLoading} onClick={() => handleDelete(id)}>
+					{isLoading ? 'Deleting...' : 'Yes'}
 				</Button>
 
-				<Button
-					fullWidth={true}
-					type="button"
-					variant="secondary"
-					onClick={closeModal}>
+				<Button fullWidth={true} type="button" variant="secondary" onClick={closeModal}>
 					No
 				</Button>
 			</div>
@@ -96,9 +88,7 @@ export default function GenreList() {
 	return (
 		<>
 			<div className="flex justify-between gap-4 mb-4">
-				<Button
-					type="button"
-					onClick={handleAddGenre}>
+				<Button type="button" onClick={handleAddGenre}>
 					Add Genre
 				</Button>
 			</div>
@@ -156,16 +146,14 @@ export default function GenreList() {
 								</td>
 								<td role="cell" className="block px-3 pt-2 pb-4 md:table-cell md:pt-2 md:pb-2">
 									<div className="flex flex-nowrap gap-3">
-										<Button
-											type="button"
-											size="small"
-											onClick={() => showEditForm(genre)}>
+										<Button type="button" size="small" onClick={() => showEditForm(genre)}>
 											Edit
 										</Button>
 										<Button
 											type="button"
 											size="small"
-											onClick={() => showDeleteConfirmation(genre.id, genre.name)}>
+											onClick={() => showDeleteConfirmation(genre.id, genre.name)}
+										>
 											Delete
 										</Button>
 									</div>

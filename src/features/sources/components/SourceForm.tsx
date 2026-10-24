@@ -159,7 +159,7 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					aria-describedby={sourceFormDataError.title ? 'sourceTitleError' : undefined}
 				/>
 				{sourceFormDataError.title && (
-					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
+					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{sourceFormDataError.title}
 					</div>
 				)}
@@ -185,7 +185,7 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					aria-describedby={sourceFormDataError.author ? 'sourceTitleError' : undefined}
 				/>
 				{sourceFormDataError.author && (
-					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
+					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{sourceFormDataError.author}
 					</div>
 				)}
@@ -211,18 +211,15 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					aria-describedby={sourceFormDataError.format ? 'sourceTitleError' : undefined}
 				/>
 				{sourceFormDataError.format && (
-					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live='polite'>
+					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{sourceFormDataError.format}
 					</div>
 				)}
 			</div>
 
 			<div className="mt-4">
-				<Button
-					fullWidth={true}
-					type="submit"
-					loading={isLoading}>
-					{isLoading ? "Saving..." : "Save"}
+				<Button fullWidth={true} type="submit" loading={isLoading}>
+					{isLoading ? 'Saving...' : 'Save'}
 				</Button>
 			</div>
 		</form>
