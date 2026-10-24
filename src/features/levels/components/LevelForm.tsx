@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import TextInput from '../../../shared/components/TextInput';
+import Button from '../../../shared/components/Button';
 import type { Level, LevelFormData } from '../types/level.type';
 import { useCreateLevel, useUpdateLevel } from '../hooks/levelHooks';
 
@@ -140,46 +141,29 @@ export default function LevelForm({ level, refreshData }: LevelFormProps) {
 					</span>
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="levelName"
 					name="name"
 					value={levelFormData.name}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					required={true}
+					required
 					ref={nameInputRef}
-					className={`w-full border rounded-md px-3 py-2 ${levelFormDataError.name ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(levelFormDataError.name && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'levelNameError',
-					})}
+					invalid={!!levelFormDataError.name}
+					aria-describedby={levelFormDataError.name ? 'levelNameError' : undefined}
 				/>
 				{levelFormDataError.name && (
-					<div id="levelNameError" className="text-red-600">
+					<div id="levelNameError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{levelFormDataError.name}
 					</div>
 				)}
 			</div>
 
 			<div className="mt-4">
-				{isLoading ? (
-					<button
-						type="submit"
-						disabled
-						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Saving...
-					</button>
-				) : (
-					<button
-						type="submit"
-						className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold"
-					>
-						Save
-					</button>
-				)}
+				<Button fullWidth={true} type="submit" loading={isLoading}>
+					{isLoading ? 'Saving...' : 'Save'}
+				</Button>
 			</div>
 		</form>
 	);

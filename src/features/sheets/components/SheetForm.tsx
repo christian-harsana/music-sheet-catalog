@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 import type { Sheet, SheetFormData } from '../types/sheet.type';
 import type { SourceLookup } from '../../../features/sources/types/source.type';
 import type { Level } from '../../../features/levels/types/level.type';
 import type { Genre } from '../../../features/genres/types/genre.type';
 import { useCreateSheet, useUpdateSheet } from '../hooks/sheetHooks';
 import { KEYS } from '../../../shared/utils/constants';
+import TextInput from '../../../shared/components/TextInput';
+import Select from '../../../shared/components/Select';
+import Checkbox from '../../../shared/components/Checkbox';
 
 type SheetFormDataError = {
 	[K in keyof SheetFormData]?: string;
@@ -199,23 +202,20 @@ export default function SheetForm({
 					</span>
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="sheetTitle"
 					name="title"
 					value={SheetFormData.title}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					required={true}
+					required
 					ref={titleInputRef}
-					className={`w-full border rounded-md px-3 py-2 ${SheetFormDataError.title ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(SheetFormDataError.title && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'sheetTitleError',
-					})}
+					invalid={!!SheetFormDataError.title}
+					aria-describedby={SheetFormDataError.title ? 'sheetTitleError' : undefined}
 				/>
 				{SheetFormDataError.title && (
-					<div id="sheetTitleError" className="text-red-600">
+					<div id="sheetTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{SheetFormDataError.title}
 					</div>
 				)}
@@ -226,32 +226,15 @@ export default function SheetForm({
 					Key
 				</label>
 
-				<div className="relative">
-					<select
-						id="sheetKey"
-						name="key"
-						onChange={handleInputChange}
-						value={SheetFormData.key ?? ''}
-						className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
-					>
-						<option value="">Please Select</option>
-						{KEYS.map((key, index) => (
-							<option key={`key-${index}`} value={key}>
-								{key}
-							</option>
-						))}
-					</select>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 384 512"
-						aria-hidden="true"
-						width="10"
-						className="absolute top-3.5 right-3"
-					>
-						{/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
-						<path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-					</svg>
-				</div>
+				<Select
+					options={KEYS}
+					getOptionLabel={(o) => o.label}
+					getOptionValue={(o) => o.value}
+					id="sheetKey"
+					name="key"
+					onChange={handleInputChange}
+					value={SheetFormData.key ?? ''}
+				/>
 			</div>
 
 			<div className="mb-4">
@@ -262,21 +245,18 @@ export default function SheetForm({
 					Composer
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="sheetComposer"
 					name="composer"
 					value={SheetFormData.composer}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					className={`w-full border rounded-md px-3 py-2 ${SheetFormDataError.composer ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(SheetFormDataError.composer && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'sheetComposerError',
-					})}
+					invalid={!!SheetFormDataError.composer}
+					aria-describedby={SheetFormDataError.composer ? 'sheetComposerError' : undefined}
 				/>
 				{SheetFormDataError.title && (
-					<div id="sheetComposerError" className="text-red-600">
+					<div id="sheetComposerError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{SheetFormDataError.composer}
 					</div>
 				)}
@@ -287,39 +267,16 @@ export default function SheetForm({
 					Source
 				</label>
 
-				<div className="relative">
-					<select
-						id="sheetSource"
-						name="sourceId"
-						onChange={handleInputChange}
-						value={SheetFormData.sourceId ?? ''}
-						className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
-						disabled={isLoadingSource}
-					>
-						<option value="">Please Select</option>
-						{sourcesLookup.map((source: SourceLookup) => (
-							<option key={`source-${source.id}`} value={source.id}>
-								{source.title}
-							</option>
-						))}
-					</select>
-					{isLoadingSource ? (
-						<span className="absolute top-3 right-3">
-							<IconSpinner color={'dark'} />
-						</span>
-					) : (
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 384 512"
-							aria-hidden="true"
-							width="10"
-							className="absolute top-3.5 right-3"
-						>
-							{/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
-							<path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-						</svg>
-					)}
-				</div>
+				<Select
+					options={sourcesLookup}
+					getOptionLabel={(o) => o.title}
+					getOptionValue={(o) => o.id}
+					loading={isLoadingSource}
+					id="sheetSource"
+					name="sourceId"
+					onChange={handleInputChange}
+					value={SheetFormData.sourceId ?? ''}
+				/>
 			</div>
 
 			<div className="mb-4">
@@ -327,39 +284,16 @@ export default function SheetForm({
 					Level
 				</label>
 
-				<div className="relative">
-					<select
-						id="sheetLevel"
-						name="levelId"
-						onChange={handleInputChange}
-						value={SheetFormData.levelId ?? ''}
-						className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
-						disabled={isLoadingLevel}
-					>
-						<option value="">Please Select</option>
-						{levelsLookup.map((level: Level) => (
-							<option key={`level-${level.id}`} value={level.id}>
-								{level.name}
-							</option>
-						))}
-					</select>
-					{isLoadingLevel ? (
-						<span className="absolute top-3 right-3">
-							<IconSpinner color={'dark'} />
-						</span>
-					) : (
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 384 512"
-							aria-hidden="true"
-							width="10"
-							className="absolute top-3.5 right-3"
-						>
-							{/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
-							<path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-						</svg>
-					)}
-				</div>
+				<Select
+					options={levelsLookup}
+					getOptionLabel={(o) => o.name}
+					getOptionValue={(o) => o.id}
+					loading={isLoadingLevel}
+					id="sheetLevel"
+					name="levelId"
+					onChange={handleInputChange}
+					value={SheetFormData.levelId ?? ''}
+				/>
 			</div>
 
 			<div className="mb-4">
@@ -367,76 +301,32 @@ export default function SheetForm({
 					Genre
 				</label>
 
-				<div className="relative">
-					<select
-						id="sheetGenre"
-						name="genreId"
-						onChange={handleInputChange}
-						value={SheetFormData.genreId ?? ''}
-						className="block appearance-none w-full border rounded-md ps-3 pe-8 py-2 border-gray-400 bg-gray-50"
-						disabled={isLoadingGenre}
-					>
-						<option value="">Please Select</option>
-						{genresLookup.map((genre: Genre) => (
-							<option key={`genre-${genre.id}`} value={genre.id}>
-								{genre.name}
-							</option>
-						))}
-					</select>
-
-					{isLoadingGenre ? (
-						<span className="absolute top-3 right-3">
-							<IconSpinner color={'dark'} />
-						</span>
-					) : (
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 384 512"
-							aria-hidden="true"
-							width="10"
-							className="absolute top-3.5 right-3"
-						>
-							{/* !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc. */}
-							<path d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-						</svg>
-					)}
-				</div>
+				<Select
+					options={genresLookup}
+					getOptionLabel={(o) => o.name}
+					getOptionValue={(o) => o.id}
+					loading={isLoadingGenre}
+					id="sheetGenre"
+					name="genreId"
+					onChange={handleInputChange}
+					value={SheetFormData.genreId ?? ''}
+				/>
 			</div>
 
 			<div className="mb-4">
-				<label htmlFor="sheetExamPiece" className="flex flex-nowrap items-start">
-					<span className="mt-0.5 mr-2">
-						<input
-							type="checkbox"
-							id="sheetExamPiece"
-							name="examPiece"
-							onChange={handleInputChange}
-							checked={SheetFormData.examPiece ?? false}
-							className="block size-5 border rounded-md border-gray-400 bg-gray-50"
-						/>
-					</span>
-					Exam piece
-				</label>
+				<Checkbox
+					label="Exam piece"
+					id="sheetExamPiece"
+					name="examPiece"
+					onChange={handleInputChange}
+					checked={SheetFormData.examPiece ?? false}
+				/>
 			</div>
 
 			<div className="mt-4">
-				{isLoading ? (
-					<button
-						type="submit"
-						disabled
-						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Saving...
-					</button>
-				) : (
-					<button
-						type="submit"
-						className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold"
-					>
-						Save
-					</button>
-				)}
+				<Button fullWidth={true} type="submit" loading={isLoading}>
+					{isLoading ? 'Saving...' : 'Save'}
+				</Button>
 			</div>
 		</form>
 	);

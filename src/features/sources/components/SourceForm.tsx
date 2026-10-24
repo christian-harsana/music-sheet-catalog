@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { useCreateSource, useUpdateSource } from '../hooks/sourceHooks';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 import type { Source, SourceFormData } from '../types/source.type';
+import TextInput from '../../../shared/components/TextInput';
 
 type SourceFormDataError = {
 	[K in keyof SourceFormData]?: string;
@@ -144,7 +145,7 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					</span>
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="sourceTitle"
 					name="title"
@@ -152,16 +153,13 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					value={sourceFormData.title}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					required={true}
+					required
 					ref={titleInputRef}
-					className={`w-full border rounded-md px-3 py-2 ${sourceFormDataError.title ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(sourceFormDataError.title && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'sourceTitleError',
-					})}
+					invalid={!!sourceFormDataError.title}
+					aria-describedby={sourceFormDataError.title ? 'sourceTitleError' : undefined}
 				/>
 				{sourceFormDataError.title && (
-					<div id="sourceTitleError" className="text-red-600">
+					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{sourceFormDataError.title}
 					</div>
 				)}
@@ -175,7 +173,7 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					Author
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="sourceAuthor"
 					name="author"
@@ -183,14 +181,11 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					value={sourceFormData.author}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					className={`w-full border rounded-md px-3 py-2 ${sourceFormDataError.author ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(sourceFormDataError.author && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'sourceTitleError',
-					})}
+					invalid={!!sourceFormDataError.author}
+					aria-describedby={sourceFormDataError.author ? 'sourceTitleError' : undefined}
 				/>
 				{sourceFormDataError.author && (
-					<div id="sourceTitleError" className="text-red-600">
+					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{sourceFormDataError.author}
 					</div>
 				)}
@@ -204,7 +199,7 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					Format
 				</label>
 
-				<input
+				<TextInput
 					type="text"
 					id="sourceFormat"
 					name="format"
@@ -212,37 +207,20 @@ export default function SourceForm({ source, refreshData }: SourceFormProps) {
 					value={sourceFormData.format}
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
-					className={`w-full border rounded-md px-3 py-2 ${sourceFormDataError.format ? 'border-red-600' : 'border-gray-400'} bg-gray-50`}
-					{...(sourceFormDataError.format && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'sourceTitleError',
-					})}
+					invalid={!!sourceFormDataError.format}
+					aria-describedby={sourceFormDataError.format ? 'sourceTitleError' : undefined}
 				/>
 				{sourceFormDataError.format && (
-					<div id="sourceTitleError" className="text-red-600">
+					<div id="sourceTitleError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{sourceFormDataError.format}
 					</div>
 				)}
 			</div>
 
 			<div className="mt-4">
-				{isLoading ? (
-					<button
-						type="submit"
-						disabled
-						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Saving...
-					</button>
-				) : (
-					<button
-						type="submit"
-						className="w-full px-3 py-2 border border-violet-600 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold"
-					>
-						Save
-					</button>
-				)}
+				<Button fullWidth={true} type="submit" loading={isLoading}>
+					{isLoading ? 'Saving...' : 'Save'}
+				</Button>
 			</div>
 		</form>
 	);

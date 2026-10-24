@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook';
+
 import eslint from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -10,31 +13,24 @@ import prettierPlugin from 'eslint-plugin-prettier/recommended';
 
 export default defineConfig([
 	// Global ignores
-	globalIgnores(['node_modules/**', 'dist/**', 'build/**', 'coverage/**']),
-
-	// Base JS + TypeScript + React rules
-	eslint.configs.recommended, // cover .js, .cjs, and .mjs files
-	tseslint.configs.recommended, // cover .ts files
-
-	// Browser globals for all files
+	globalIgnores(['node_modules/**', 'dist/**', 'build/**', 'coverage/**']), // Base JS + TypeScript + React rules
+	// cover .js, .cjs, and .mjs files
+	eslint.configs.recommended, // cover .ts files
+	tseslint.configs.recommended, // Browser globals for all files
 	{
 		languageOptions: {
 			sourceType: 'module',
 			ecmaVersion: 'latest',
 			globals: globals.browser,
 		},
-	},
-
-	// Fix for babel.config.cjs, jest.config.cjs etc.
+	}, // Fix for babel.config.cjs, jest.config.cjs etc.
 	{
 		files: ['**/*.cjs'],
 		languageOptions: {
 			sourceType: 'commonjs',
 			globals: globals.node,
 		},
-	},
-
-	// Override specific TypeScript rules
+	}, // Override specific TypeScript rules
 	{
 		files: ['**/*.{ts,tsx}'],
 		rules: {
@@ -48,9 +44,7 @@ export default defineConfig([
 				},
 			],
 		},
-	},
-
-	// React + React Hooks rules (jsx/tsx files only)
+	}, // React + React Hooks rules (jsx/tsx files only)
 	{
 		files: ['**/*.{jsx,tsx}'],
 		extends: [
@@ -68,9 +62,8 @@ export default defineConfig([
 			'react/react-in-jsx-scope': 'off',
 			'react/prop-types': 'off',
 		},
-	},
-
-	// Prettier — must be last
+	}, // Prettier — must be last
 	prettierConfig,
 	prettierPlugin,
+	...storybook.configs['flat/recommended'],
 ]);
