@@ -16,7 +16,7 @@ export default function Navigation() {
 			<button
 				type="button"
 				onClick={handleNavigationToggle}
-				className="p-3 rounded-full hover:bg-violet-500 lg:hidden"
+				className="p-3 rounded-full hover:bg-violet-500 lg:hidden not-disabled:cursor-pointer"
 			>
 				{!isMobileNavVisible ? (
 					// Menu Icon
@@ -173,7 +173,7 @@ export default function Navigation() {
 								<li className="my-1">
 									<button
 										type="button"
-										className="flex flex-nowrap gap-3 rounded-md px-2.5 py-1 w-full hover:bg-gray-400"
+										className="flex flex-nowrap gap-3 rounded-md px-2.5 py-1 w-full hover:bg-gray-400 not-disabled:cursor-pointer"
 										onClick={logout}
 									>
 										<svg

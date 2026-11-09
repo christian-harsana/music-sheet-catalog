@@ -29,4 +29,3 @@ This app allows her to catalog and manage her growing sheet music collection in 
 - Drizzle ORM (BE)
 - PostgreSQL (BE)
 - Vite
-

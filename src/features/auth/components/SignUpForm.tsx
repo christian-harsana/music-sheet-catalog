@@ -1,9 +1,10 @@
 import { useState, type FocusEvent } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { api } from '../../../shared/utils/api';
-import IconSpinner from '../../../shared/components/IconSpinner';
+import Button from '../../../shared/components/Button';
 import { useError } from '../../../contexts/errorContext';
 import { useUI } from '../../../contexts/uiContext';
+import TextInput from '../../../shared/components/TextInput';
 
 type signUpFormDataType = {
 	email: string;
@@ -151,23 +152,20 @@ export default function SignUpForm() {
 					</span>
 				</label>
 
-				<input
+				<TextInput
 					id="email"
 					type="email"
 					name="email"
 					value={signUpFormData.email}
 					onChange={(e) => handleInputChange(e)}
 					onBlur={(e) => handleInputBlur(e)}
-					required={true}
-					className={`w-full border rounded-md px-3 py-2 ${signUpFormError.email ? 'border-red-600' : 'border-gray-400'}`}
-					{...(signUpFormError.email && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'emailError',
-					})}
+					required
+					invalid={!!signUpFormError.email}
+					aria-describedby={signUpFormError.email ? 'emailError' : undefined}
 				/>
 
 				{signUpFormError.email && (
-					<div id="emailError" className="text-red-600">
+					<div id="emailError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{signUpFormError.email}
 					</div>
 				)}
@@ -180,19 +178,19 @@ export default function SignUpForm() {
 				>
 					Name
 				</label>
-				<input
+				<TextInput
 					id="name"
 					type="text"
 					name="name"
 					value={signUpFormData.name}
 					onChange={(e) => handleInputChange(e)}
 					onBlur={(e) => handleInputBlur(e)}
-					className={`w-full border rounded-md px-3 py-2 ${signUpFormError.name ? 'border-red-600' : 'border-gray-400'}`}
-					{...(signUpFormError.name && { 'aria-invalid': 'true', 'aria-describedby': 'nameError' })}
+					invalid={!!signUpFormError.name}
+					aria-describedby={signUpFormError.name ? 'nameError' : undefined}
 				/>
 
 				{signUpFormError.name && (
-					<div id="nameError" className="text-red-600">
+					<div id="nameError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{signUpFormError.name}
 					</div>
 				)}
@@ -208,47 +206,30 @@ export default function SignUpForm() {
 						*
 					</span>
 				</label>
-				<input
+				<TextInput
 					id="password"
 					type="password"
 					name="password"
 					value={signUpFormData.password}
 					onChange={(e) => handleInputChange(e)}
 					onBlur={(e) => handleInputBlur(e)}
-					required={true}
+					required
 					minLength={8}
-					className={`w-full border rounded-md px-3 py-2 ${signUpFormError.password ? 'border-red-600' : 'border-gray-400'}`}
-					{...(signUpFormError.password && {
-						'aria-invalid': 'true',
-						'aria-describedby': 'passwordError',
-					})}
+					invalid={!!signUpFormError.password}
+					aria-describedby={signUpFormError.password ? 'passwordError' : undefined}
 				/>
 
 				{signUpFormError.password && (
-					<div id="passwordError" className="text-red-600">
+					<div id="passwordError" className="mt-1 text-red-600 text-sm" aria-live="polite">
 						{signUpFormError.password}
 					</div>
 				)}
 			</div>
 
 			<div className="mb-4">
-				{isFormProcessing ? (
-					<button
-						type="submit"
-						disabled
-						className="flex flex-nowrap justify-center gap-3 w-full px-3 py-2 border border-violet-500 rounded-md bg-violet-500 text-gray-50 font-semibold uppercase cursor-progress opacity-50"
-					>
-						<IconSpinner />
-						Registering...
-					</button>
-				) : (
-					<button
-						type="submit"
-						className="w-full px-3 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50 font-semibold uppercase"
-					>
-						Register
-					</button>
-				)}
+				<Button fullWidth={true} type="submit" loading={isFormProcessing} className="uppercase">
+					{isFormProcessing ? 'Registering...' : 'Register'}
+				</Button>
 			</div>
 
 			<p className="mb-4 text-center">

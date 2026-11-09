@@ -37,7 +37,7 @@ export default function Pagination({ currentPage, totalPages, paginate }: Pagina
 						<button
 							type="button"
 							onClick={(e) => handlePageNumberClick(e, pageNumber)}
-							className="flex items-center justify-center box-border size-7.5 rounded-full text-sm text-gray-900 hover:bg-gray-300"
+							className="flex items-center justify-center box-border size-7.5 rounded-full text-sm text-gray-900 hover:bg-gray-300 not-disabled:cursor-pointer"
 						>
 							{pageNumber}
 						</button>
