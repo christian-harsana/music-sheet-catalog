@@ -431,16 +431,12 @@ export default function SheetList() {
 				
 				<div className='flex flex-wrap gap-3'>
 					<Button type="button" onClick={handleAddSheet}>
-					Add Sheet
-				</Button>
+						Add Sheet
+					</Button>
 
-					<button
-						type="button"
-						onClick={handleImportSheets}
-						className="px-4 py-2 border border-violet-500 hover:border-violet-600 rounded-md bg-violet-500 hover:bg-violet-600 text-gray-50"
-					>
+					<Button type="button" onClick={handleImportSheets}>
 						Import Sheets
-					</button>
+					</Button>
 				</div>
 			</div>
 
