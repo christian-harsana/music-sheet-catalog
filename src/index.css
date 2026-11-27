@@ -16,7 +16,7 @@
 }
 
 html {
-  scrollbar-gutter: stable;
+	scrollbar-gutter: stable;
 }
 
 body {
@@ -27,7 +27,7 @@ body {
 }
 
 body:has(dialog[open]) {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 /* Check icon: Font Awesome Free v7.3.1, https://fontawesome.com/license/free */
