@@ -1,66 +1,62 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect, useRef, useId } from "react";
 import { twMerge } from "tailwind-merge";
 
 type SideDrawerProps = {
     title?: string;
     width?: 'narrow' | 'medium' | 'wide';
     isOpen: boolean;
-    handleClose: () => void;
+    onClose: () => void;
     children: ReactNode;
 }
 
 export default function SideDrawer(props: SideDrawerProps) {
 
-    const {title, width = 'medium', isOpen, handleClose, children} = props;
+    const WIDTH_CLASSES = { narrow: 'w-xs', medium: 'w-md', wide: 'w-xl' } as const;
+    const {title, width = 'medium', isOpen, onClose, children} = props;
+    
+    const widthClass = WIDTH_CLASSES[width];
+    const drawerPanelClasses = 'flex h-full flex-col p-3';
+    const drawerHeaderClasses = 'flex shrink-0 flex-nowrap gap-3 justify-between px-2 pb-2 border-b border-gray-300';
+    const drawerTitleClasses = 'mb-0 font-semibold text-xl';
+    const drawerCloseButtonClasses = 'flex justify-center items-center w-7 h-7 not-disabled:cursor-pointer rounded-full focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-violet-500';
+    const drawerBodyClasses = 'flex-1 overflow-y-auto overflow-x-hidden px-2 py-3';
+    const dialogClasses = twMerge(
+        'fixed inset-y-0 right-0 left-auto z-60 h-dvh max-h-dvh bg-gray-50 text-gray-900 overflow-x-hidden motion-reduce:transition-none',
+        'transition-[display,overlay,translate] translate-x-full open:translate-x-0 duration-300 transition-discrete starting:open:translate-x-full',
+        'backdrop:bg-black/75 backdrop:opacity-0',
+        'backdrop:transition-[opacity] open:backdrop:opacity-100 backdrop:duration-300 backdrop:transition-discrete starting:open:backdrop:opacity-0 motion-reduce:backdrop:transition-none',
+        widthClass
+    );
 
-    let widthClass = '';
+    const titleId = useId();
+    const dialogRef = useRef<HTMLDialogElement>(null);
 
-    switch (width) {
-        case 'narrow':
-            widthClass = 'w-xs';
-            break;
-
-        case 'medium': 
-            widthClass = 'w-md';
-            break;
-
-        case 'wide':
-            widthClass = 'w-xl';
-            break;
+    const handleDrawerClose = () => {
+        dialogRef.current?.close();
     }
 
-    const drawerContainerClasses = twMerge(
-        'fixed inset-0 z-60 w-screen h-screen transition-[visibility] duration-300',
-        isOpen ? 'visible' : 'invisible pointer-events-none'
-    );
+    useEffect(() => {
 
-    const drawerOverlayClasses = twMerge(
-        'absolute inset-0 z-10 w-screen h-screen bg-black/75 transition-opacity duration-300',
-        isOpen ? 'opacity-100' : 'opacity-0'
-    );
+        const drawer = dialogRef.current;
+        if (!drawer) return;
 
-    const drawerPanelClasses = twMerge(
-        'absolute top-0 right-0 z-20 h-screen p-3 bg-gray-50 text-gray-900 overflow-y-auto overflow-x-hidden transition-transform duration-300',
-        widthClass,
-        isOpen ? 'translate-x-0' : 'translate-x-full'
-    );
+        if (isOpen && !drawer.open) drawer.showModal();
+        if (!isOpen && drawer.open) drawer.close();
 
-    const drawerHeaderClasses = 'flex flex-nowrap gap-3 justify-between px-2 pb-2 border-b border-gray-300';
-    const drawerTitleClasses = 'mb-0 font-semibold text-xl';
-    const drawerBodyClasses = 'relative px-2 py-3'
+    }, [isOpen]);
 
     return (
-        // Side Drawer Container
-        <div className={drawerContainerClasses} aria-hidden={!isOpen}>
-
-            {/* Overlay */}
-            <div className={drawerOverlayClasses} onClick={handleClose}></div>
-
-            {/* Drawer Panel */}
-            <div className={drawerPanelClasses} >
+        <dialog 
+            className={dialogClasses} 
+            ref={dialogRef} 
+            aria-labelledby={titleId}
+            onClose={onClose}
+            onClick={(e) => { if (e.target === e.currentTarget) handleDrawerClose() }}
+        >
+            <div className={drawerPanelClasses}>
                 <header className={drawerHeaderClasses}>
-                    <h3 className={drawerTitleClasses}>{title}</h3>
-                    <button type="button" className="flex justify-center items-center w-7 h-7 not-disabled:cursor-pointer rounded-full focus:outline-3 focus:outline-offset-2 focus:outline-violet-500" onClick={handleClose}>
+                    <h2 className={drawerTitleClasses}>{title}</h2>
+                    <button type="button" className={drawerCloseButtonClasses} onClick={handleDrawerClose}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 384 512"
@@ -79,6 +75,6 @@ export default function SideDrawer(props: SideDrawerProps) {
                     {children}
                 </div>
             </div>
-        </div>
+        </dialog>
     )
 }

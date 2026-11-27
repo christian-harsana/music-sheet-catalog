@@ -1,4 +1,4 @@
-import React, { type ChangeEvent } from 'react';
+import React, { useState, type ChangeEvent } from 'react';
 import { useUI } from '../../../contexts/uiContext';
 import { useAuth } from '../../../contexts/authContext';
 import { useGetGenres } from '../../genres/hooks/genreHooks';
@@ -18,6 +18,8 @@ import { KEYS } from '../../../shared/utils/constants';
 import TextInput from '../../../shared/components/TextInput';
 import Select from '../../../shared/components/Select';
 import Checkbox from '../../../shared/components/Checkbox';
+// import SideDrawer from '../../../shared/components/SideDrawer';
+
 
 // TODO: Turn delete confirmation into reusable component
 function DeleteConfirmation({
@@ -280,6 +282,9 @@ function SheetTable({
 const SheetTableMemo = React.memo(SheetTable);
 
 export default function SheetList() {
+0
+	// const [isImportDrawerOpen, setIsImportDrawerOpen] = useState<boolean>(false);
+
 	const { showModal } = useUI();
 	const { genres, isLoading: isLoadingGenre } = useGetGenres();
 	const { levels, isLoading: isLoadingLevel } = useGetLevels();
@@ -294,6 +299,10 @@ export default function SheetList() {
 		filters,
 		filterSheets,
 	} = useGetSheets();
+
+	// const handleToggleImportDrawer = () => {
+	// 	setIsImportDrawerOpen(!isImportDrawerOpen);
+	// }
 
 	const handleAddSheet = () => {
 		showModal(
@@ -413,9 +422,15 @@ export default function SheetList() {
 					</div>
 				</div>
 
-				<Button type="button" onClick={handleAddSheet}>
-					Add Sheet
-				</Button>
+				<div className="flex flex-wrap gap-3">
+					<Button type="button" onClick={handleAddSheet}>
+						Add Sheet
+					</Button>
+
+					{/* <Button type="button" onClick={handleToggleImportDrawer}>
+						Import Sheet
+					</Button> */}
+				</div>
 			</div>
 
 			<div className="mb-3">
@@ -433,6 +448,13 @@ export default function SheetList() {
 			</div>
 
 			<Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
+		
+			{/* <SideDrawer title="test" 
+				isOpen={isImportDrawerOpen}
+				onClose={handleToggleImportDrawer}
+				>
+				<p>...</p>
+			</SideDrawer> */}
 		</>
 	);
 }
